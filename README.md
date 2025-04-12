@@ -1,4 +1,4 @@
-# os-project
+# OS simulator ;)
 
 ## general specification
 
