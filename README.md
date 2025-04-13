@@ -9,22 +9,23 @@ there are two functions that returns int values, that correspond to the id code 
     interruptControl: triggered when a external event occurs.
     sysCall: triggered when a process's event occurs.
 
-from the integer obtained from one of the functions the core activate the responsible thread and the scheduler of the next process.
+from the integer obtained from one of the functions, the core activate the responsible thread (with the scheduling of the next process).
+the possible origins of events are:
 
-    possible origins of the events:
-        - processInterrupt (triggered by processCreate() and the end of I/O operation)
-        - semaphoreP (treatment of process locking)
-        - semaphoreV (treatment of process unlocking)
-        - DiskRequest (I/O request)
-        - DiskFinish (sinalization of I/O end)
-        - PrintRequest (printing call)
-        - PrintFinish (end of printing)
-        - memLoadReq (loading memory request)
-        - memLoadFinish (end of load from memory)t
-        - fsRequest (file system request)
-        - fsFinish (end of fs request)
-        - processCreate (create a process on BCP)
-        - processFinish (pop a process of BCP)
+    
+    - processInterrupt (triggered by processCreate() and the end of I/O operation)
+    - semaphoreP (treatment of process locking)
+    - semaphoreV (treatment of process unlocking)
+    - DiskRequest (I/O request)
+    - DiskFinish (sinalization of I/O end)
+    - PrintRequest (printing call)
+    - PrintFinish (end of printing)
+    - memLoadReq (loading memory request)
+    - memLoadFinish (end of load from memory)t
+    - fsRequest (file system request)
+    - fsFinish (end of fs request)
+    - processCreate (create a process on BCP)
+    - processFinish (pop a process of BCP)
 
 ## system functionality
 
