@@ -4,28 +4,28 @@
 
 the project aims to be an OS core simulator, with a graphic interface that allows choices (system control) from who executes the simulation.
 
-there are two functions that returns int values, that correspond to the id code of each thread implemented:
+we must implement the core from the implementation of the following threads. the call for one of them are going to be managed by two functions that returns integer values, that correspond to the id code of each thread implemented:
 
     interruptControl: triggered when a external event occurs.
     sysCall: triggered when a process's event occurs.
 
-from the integer obtained from one of the functions, the core activate the responsible thread (with the scheduling of the next process).
-the possible origins of events are:
+from the integer obtained from one of the functions, the core activate the relative thread (with the scheduling of the next process).
+the possible origins of the events are (the n° identify each event):
 
     
-    - processInterrupt (triggered by processCreate() and the end of I/O operation)
-    - semaphoreP (treatment of process locking)
-    - semaphoreV (treatment of process unlocking)
-    - DiskRequest (I/O request)
-    - DiskFinish (sinalization of I/O end)
-    - PrintRequest (printing call)
-    - PrintFinish (end of printing)
-    - memLoadReq (loading memory request)
-    - memLoadFinish (end of load from memory)t
-    - fsRequest (file system request)
-    - fsFinish (end of fs request)
-    - processCreate (create a process on BCP)
-    - processFinish (pop a process of BCP)
+    - processInterrupt (1) -> triggered by processCreate() and the end of I/O operation
+    - semaphoreP (10) -> treatment of process locking
+    - semaphoreV (11) -> treatment of process unlocking
+    - DiskRequest (4) -> I/O request
+    - DiskFinish (5) -> sinalization of I/O end
+    - PrintRequest (14) -> printing call
+    - PrintFinish (15) -> end of printing
+    - memLoadReq (6) -> loading memory request
+    - memLoadFinish (7) -> end of load from memory
+    - fsRequest (8) -> file system request
+    - fsFinish (9) -> end of fs request
+    - processCreate (2) -> create a process on BCP
+    - processFinish (3) -> pop a process of BCP
 
 ## system functionality
 
