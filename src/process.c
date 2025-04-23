@@ -13,19 +13,36 @@ void init_BCP(Process **BCP) {
   }
 }
 
-Process *create_process(int pid, const char *name, int priority) {
+int search_BCP(Process **BCP, int process_pid){
+  if (*BCP == NULL) {
+    return FAILURE;
+  }
+
+  for(int i=0;i<MAX_PROCESSES;i++){
+    printf("Searching PID %d...\n", (*BCP)[i].pid);
+    if((*BCP)[i].pid == process_pid){
+      return i;
+    }
+  }
+  return FAILURE;
+}
+
+Process *create_process(Process **BCP, int pid, const char *name, int priority) {
+  //Ensuring Unique PID at Process Creation //In order to avoid effortless.
+  if(search_BCP(BCP, pid) != FAILURE) return NULL; //PID already present in BCP
+
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
     fprintf(stderr, "Memory allocation failed\n");
     return NULL;
   }
-  process->pid = pid;
+  
+  process->pid = pid; // Creating Processes
   process->state = READY;
   process->pc = 0;
   process->name = strdup(name);
   process->priority = priority;
-  process->counter_rw = 0;
-  
+  process->counter_rw = 0; // As long as the process's been created, insert at BCP
   return process;
 }
 
@@ -45,24 +62,32 @@ int add_process_to_BCP(Process *process, Process **BCP) {
   return FAILURE;
 }
 
-int rmv_process_of_BCP(Process *process, Process **BCP) {
-  if (*BCP == NULL) {
+int rmv_process_of_BCP(int removing_pid, Process **BCP) {
+  if (*BCP == NULL) { //BCP not allocated, return Failure.
     return FAILURE;
   }
 
-  for (int i = 0; i < MAX_PROCESSES; i++) {
-    if ((*BCP)[i].pid == process->pid) {
-      (*BCP)[i].pid = EMPTY_BCP_ENTRY; // Mark as empty
-      return SUCCESS;
-    }
+  int idx = search_BCP(BCP, removing_pid);
+  if(idx != FAILURE){
+    printf("PID %d Presente na BCP\n", removing_pid);
+    //If PID present in BCP, get the index and remove;
+    (*BCP)[idx].pid = EMPTY_BCP_ENTRY;
+    return SUCCESS;
   }
-
-  return FAILURE;
+  return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
 }
 
-void destroy_process(Process *process) {
-  if (process != NULL) {
-    free(process->name);
-    free(process);
+void destroy_process(Process *process) { //Pointing some things about this to be discussed later
+  if (process != NULL) { // Remove from BCP  -> Kill process?
+    free(process->name); // Kill_Process, grep pid and then update at BCP?
+    free(process); 
   }
 }
+
+int change_process_state(Process **BCP, int process_pid, ProcessState state){
+  int idx = search_BCP(BCP, process_pid);
+  if(idx == FAILURE) return FAILURE;
+  (*BCP)[idx].state = state;
+  return SUCCESS;
+}
+

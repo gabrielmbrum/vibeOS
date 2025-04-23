@@ -4,7 +4,7 @@
 #define MAX_PROCESSES 5
 #define EMPTY_BCP_ENTRY -1
 #define SUCCESS 1
-#define FAILURE 0
+#define FAILURE -1
 
 typedef enum _process__state {
   EXEC = 1,
@@ -20,6 +20,11 @@ typedef struct {
   char *name;
   int priority;
   int counter_rw;
+  int segment_id;
+  int segment_size;
+  unsigned *semaphores;
+  // Insert segment and semaphores list
+  // Handle with the changes, semaphores created randomly. 
 } Process;
 
 /*
@@ -39,7 +44,7 @@ void init_BCP(Process **BCP);
   * Returns a pointer to the newly created process.
 
 */
-Process *create_process(int pid, const char *name, int priority);
+Process *create_process(Process **BCP, int pid, const char *name, int priority);
 
 
 /*
@@ -60,7 +65,7 @@ int add_process_to_BCP(Process *process, Process **BCP);
   * Returns SUCCESS if the process was removed successfully, or FAILURE if the process was not found.
 
 */
-int rmv_process_of_BCP(Process *process, Process **BCP);
+int rmv_process_of_BCP(int removing_pid, Process **BCP);
 
 /*
 
@@ -70,5 +75,9 @@ int rmv_process_of_BCP(Process *process, Process **BCP);
 
 */
 void destroy_process(Process *process);
+
+int change_process_state(Process **BCP, int process_pid, ProcessState state);
+
+int search_BCP(Process **BCP, int process_pid);
 
 #endif
