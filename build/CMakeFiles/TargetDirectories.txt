@@ -1,3 +1,0 @@
-/home/brum/os-proj/build/CMakeFiles/vibeOS.dir
-/home/brum/os-proj/build/CMakeFiles/edit_cache.dir
-/home/brum/os-proj/build/CMakeFiles/rebuild_cache.dir
