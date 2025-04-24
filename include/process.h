@@ -6,25 +6,26 @@
 #define SUCCESS 1
 #define FAILURE -1
 
+#include "memory.h"
+
 typedef enum _process__state {
-  EXEC = 1,
+  RUNNING = 1,
   READY = 2,
   WAITING = 3,
   TERMINATED = 4
 } ProcessState;
 
 typedef struct {
-  int  pid;
+  int pid;
   ProcessState state;
-  int  pc;
+  int pc;
   char *name;
   int priority;
   int counter_rw;
   int segment_id;
   int segment_size;
-  unsigned *semaphores;
-  // Insert segment and semaphores list
-  // Handle with the changes, semaphores created randomly. 
+  char *semaphores;
+  Page *page_table;
 } Process;
 
 /*
@@ -35,7 +36,7 @@ typedef struct {
   * The function takes a pointer to a pointer to the BCP as an argument.
 
 */
-void init_BCP(Process **BCP);
+void init_BCP();
 
 /*
 
@@ -44,7 +45,7 @@ void init_BCP(Process **BCP);
   * Returns a pointer to the newly created process.
 
 */
-Process *create_process(Process **BCP, int pid, const char *name, int priority);
+Process *create_process(int pid, const char *name, int priority);
 
 
 /*
@@ -55,7 +56,7 @@ Process *create_process(Process **BCP, int pid, const char *name, int priority);
   * Returns SUCCESS if the process was added successfully, or FAILURE if the BCP is full.
 
 */
-int add_process_to_BCP(Process *process, Process **BCP);
+int add_process_to_BCP(Process *process);
 
 
 /*
@@ -65,7 +66,7 @@ int add_process_to_BCP(Process *process, Process **BCP);
   * Returns SUCCESS if the process was removed successfully, or FAILURE if the process was not found.
 
 */
-int rmv_process_of_BCP(int removing_pid, Process **BCP);
+int rmv_process_of_BCP(int removing_pid);
 
 /*
 
@@ -76,8 +77,22 @@ int rmv_process_of_BCP(int removing_pid, Process **BCP);
 */
 void destroy_process(Process *process);
 
-int change_process_state(Process **BCP, int process_pid, ProcessState state);
+/*
 
-int search_BCP(Process **BCP, int process_pid);
+  * Change the state of a process in the BCP.
+  * The function searches for the process by its PID and updates its state.
+  * Returns SUCCESS if the state was changed successfully, or FAILURE if the process was not found.
+
+*/
+int change_process_state(int process_pid, ProcessState state);
+
+/*
+
+  * Search for a process in the BCP by its PID.
+  * The function returns the index of the process in the BCP if found, or FAILURE if not found.
+  * This function is used internally by other functions to locate processes in the BCP.
+
+*/
+int search_BCP(int process_pid);
 
 #endif
