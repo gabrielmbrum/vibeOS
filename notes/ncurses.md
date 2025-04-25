@@ -9,6 +9,7 @@ sudo apt-get install libncurses5-dev libncursesw5-dev
 🏗️ 2. Compilando seu programa
 ```bash
 gcc meu_programa.c -o meu_programa -lncurses #-lncurses é obrigtória para linkar com a lib
+./meu_programa
 ```
 ---
 
