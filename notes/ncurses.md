@@ -68,25 +68,26 @@ delwin(win);                        // Destroi a janela
 
 🧩 8. Funções extras úteis
 
-Função	                Descrição
-clear()	                Limpa a tela
-erase()            	    Apaga sem atualizar
-curs_set(0)	            Oculta o cursor
-timeout(ms)	            Espera tempo limitado por tecla
-nodelay(stdscr, TRUE)	Não bloqueia no getch()
-getmaxyx(win, y, x)	    Obtém tamanho da janela
+Função - 	                Descrição  
+clear()	-                 Limpa a tela  
+erase() -           	    Apaga sem atualizar  
+curs_set(0)	-             Oculta o cursor  
+timeout(ms)	-             Espera tempo limitado por tecla  
+nodelay(stdscr, TRUE) - 	Não bloqueia no getch()  
+getmaxyx(win, y, x) -	    Obtém tamanho da janela  
 
 ---
 
 🔧 Principais funcionalidades
-🔧 Categoria -> Funções comuns -> Descrição rápida
-🧱 Inicialização -> initscr(), endwin() -> Prepara/finaliza o uso da tela com ncurses.
-👀 Entrada/saída -> printw(), scanw(), getch() -> Escreve e lê do terminal como printf/scanf, mas com controle de tela.
-🎯 Posicionamento -> move(y, x), mvprintw(y, x, ...) -> Move o cursor para uma posição antes de escrever.
-🎨 Cores e atributos -> start_color(), init_pair(), attron(), attroff() -> Ativa cores e efeitos (negrito, reverso, etc.).
-📦 Janelas -> newwin(), delwin(), wprintw(), wrefresh() -> Divide a tela em múltiplas áreas independentes.
-🖱️ Teclas especiais -> keypad(win, TRUE) -> Permite ler setas, F1–F12, etc., como constantes (KEY_UP, KEY_LEFT, etc.).
-🔁 Atualização da tela -> refresh(), clear(), erase() -> Controla o que é mostrado no terminal.
-🕹️ Controle de cursor -> noecho(), cbreak(), curs_set(0) -> Liga/desliga eco de teclas, modo raw, cursor invisível etc.
-⌛ Timeout e espera -> timeout(ms), nodelay() -> Controla o comportamento de espera por teclas.
-🧾 Menus, forms, panels -> (via libs extras) -> Permite criar menus com navegação, formulários, e sobreposição de janelas.
+
+🔧 Categoria -> Funções comuns -> Descrição rápida.  
+🧱 Inicialização -> initscr(), endwin() -> Prepara/finaliza o uso da tela com ncurses.  
+👀 Entrada/saída -> printw(), scanw(), getch() -> Escreve e lê do terminal como printf/scanf, mas com controle de tela.  
+🎯 Posicionamento -> move(y, x), mvprintw(y, x, ...) -> Move o cursor para uma posição antes de escrever.  
+🎨 Cores e atributos -> start_color(), init_pair(), attron(), attroff() -> Ativa cores e efeitos (negrito, reverso, etc.).  
+📦 Janelas -> newwin(), delwin(), wprintw(), wrefresh() -> Divide a tela em múltiplas áreas independentes.  
+🖱️ Teclas especiais -> keypad(win, TRUE) -> Permite ler setas, F1–F12, etc., como constantes (KEY_UP, KEY_LEFT, etc.).  
+🔁 Atualização da tela -> refresh(), clear(), erase() -> Controla o que é mostrado no terminal.  
+🕹️ Controle de cursor -> noecho(), cbreak(), curs_set(0) -> Liga/desliga eco de teclas, modo raw, cursor invisível etc.  
+⌛ Timeout e espera -> timeout(ms), nodelay() -> Controla o comportamento de espera por teclas.  
+🧾 Menus, forms, panels -> (via libs extras) -> Permite criar menus com navegação, formulários, e sobreposição de janelas.  
