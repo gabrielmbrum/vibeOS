@@ -27,10 +27,24 @@ int main(int argc, char *argv[]){
 
   initscr();	
   curs_set(0);		
-  janela_menu = create_newwin(20, 59, 0, 1);
-  janela_I_O = create_newwin(10, 59, 20, 1);
+  janela_menu = create_newwin(18, 59, 0, 1);
+  janela_I_O = create_newwin(12, 59, 18, 1);
   janela_memory = create_newwin(15, 59, 0, 61);
   janela_process = create_newwin(15, 59, 15, 61);
+
+  mvwprintw(janela_menu, 0, 2, "%s", "MENU");
+  mvwprintw(janela_menu, 1, 1, "%s", "Arte com ascii");
+  mvwprintw(janela_menu, 3, 1, "%s", "Insira a versão Syst desejada:");
+  wrefresh(janela_menu);
+
+  mvwprintw(janela_I_O, 0, 2, "%s", "I/O");
+  wrefresh(janela_I_O);
+
+  mvwprintw(janela_memory, 0, 2, "%s", "MEMORY");
+  wrefresh(janela_memory);
+
+  mvwprintw(janela_process, 0, 2, "%s", "PROCESS");
+  wrefresh(janela_process);
 
   int c = getch();
 
