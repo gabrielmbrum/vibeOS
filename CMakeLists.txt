@@ -9,7 +9,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 add_executable(vibeOS
   src/main.c
   src/process.c
-  src/debug.c
+  src/debug.c 
+  src/kernel.c 
 )
 
 # Configurar diretórios de include
