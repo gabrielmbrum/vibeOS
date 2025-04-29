@@ -2,8 +2,9 @@
 #include "../include/debug.h"
 #include "../include/commons.h"
 #include "../include/kernel.h"
+#include "../include/interface.h"
 
-int main () {
+int main () {  
   Process *p1, *p2, *p3, *p4;
   p1 = create_process(1, "sexta-feira", 0);
   p2=create_process(2, "play-tv", 0);

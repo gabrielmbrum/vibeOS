@@ -153,6 +153,30 @@ src/debug.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/debug.c.s
 .PHONY : src/debug.c.s
 
+src/interface.o: src/interface.c.o
+.PHONY : src/interface.o
+
+# target to build an object file
+src/interface.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/interface.c.o
+.PHONY : src/interface.c.o
+
+src/interface.i: src/interface.c.i
+.PHONY : src/interface.i
+
+# target to preprocess a source file
+src/interface.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/interface.c.i
+.PHONY : src/interface.c.i
+
+src/interface.s: src/interface.c.s
+.PHONY : src/interface.s
+
+# target to generate assembly for a file
+src/interface.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/interface.c.s
+.PHONY : src/interface.c.s
+
 src/kernel.o: src/kernel.c.o
 .PHONY : src/kernel.o
 
@@ -237,6 +261,9 @@ help:
 	@echo "... src/debug.o"
 	@echo "... src/debug.i"
 	@echo "... src/debug.s"
+	@echo "... src/interface.o"
+	@echo "... src/interface.i"
+	@echo "... src/interface.s"
 	@echo "... src/kernel.o"
 	@echo "... src/kernel.i"
 	@echo "... src/kernel.s"

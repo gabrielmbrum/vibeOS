@@ -73,6 +73,45 @@ CMakeFiles/vibeOS.dir/src/debug.c.o: /home/midori_torres/vibeOS/src/debug.c \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
 
+CMakeFiles/vibeOS.dir/src/interface.c.o: /home/midori_torres/vibeOS/src/interface.c \
+  /home/midori_torres/vibeOS/include/interface.h \
+  /usr/include/curses.h \
+  /usr/include/features-time64.h \
+  /usr/include/features.h \
+  /usr/include/ncurses_dll.h \
+  /usr/include/stdc-predef.h \
+  /usr/include/stdint.h \
+  /usr/include/stdio.h \
+  /usr/include/unctrl.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+  /usr/include/x86_64-linux-gnu/bits/floatn.h \
+  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+  /usr/include/x86_64-linux-gnu/bits/long-double.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
+  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/time64.h \
+  /usr/include/x86_64-linux-gnu/bits/timesize.h \
+  /usr/include/x86_64-linux-gnu/bits/types.h \
+  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
+  /usr/include/x86_64-linux-gnu/bits/typesizes.h \
+  /usr/include/x86_64-linux-gnu/bits/wchar.h \
+  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
+  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
+  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
+  /usr/include/x86_64-linux-gnu/sys/cdefs.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h \
+  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h
+
 CMakeFiles/vibeOS.dir/src/kernel.c.o: /home/midori_torres/vibeOS/src/kernel.c \
   /home/midori_torres/vibeOS/include/commons.h \
   /home/midori_torres/vibeOS/include/debug.h \
@@ -295,6 +334,22 @@ CMakeFiles/vibeOS.dir/src/process.c.o: /home/midori_torres/vibeOS/src/process.c 
 
 /home/midori_torres/vibeOS/src/kernel.c:
 
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h:
+
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
+
+/usr/include/x86_64-linux-gnu/bits/stdint-least.h:
+
+/usr/include/stdint.h:
+
+/usr/include/curses.h:
+
+/home/midori_torres/vibeOS/include/interface.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h:
 
 /usr/include/x86_64-linux-gnu/sys/types.h:
@@ -343,6 +398,8 @@ CMakeFiles/vibeOS.dir/src/process.c.o: /home/midori_torres/vibeOS/src/process.c 
 
 /usr/include/alloca.h:
 
+/home/midori_torres/vibeOS/src/interface.c:
+
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /home/midori_torres/vibeOS/include/commons.h:
@@ -366,6 +423,8 @@ CMakeFiles/vibeOS.dir/src/process.c.o: /home/midori_torres/vibeOS/src/process.c 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
+
+/usr/include/ncurses_dll.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/clockid_t.h:
 
@@ -394,6 +453,8 @@ CMakeFiles/vibeOS.dir/src/process.c.o: /home/midori_torres/vibeOS/src/process.c 
 /usr/include/stdc-predef.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdlib-float.h:
+
+/usr/include/unctrl.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 

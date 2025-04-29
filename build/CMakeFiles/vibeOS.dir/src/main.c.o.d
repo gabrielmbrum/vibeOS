@@ -65,4 +65,12 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /home/midori_torres/vibeOS/src/../include/kernel.h \
  /home/midori_torres/vibeOS/src/../include/commons.h \
- /home/midori_torres/vibeOS/src/../include/debug.h
+ /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/interface.h \
+ /usr/include/curses.h /usr/include/ncurses_dll.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h /usr/include/unctrl.h \
+ /usr/include/curses.h

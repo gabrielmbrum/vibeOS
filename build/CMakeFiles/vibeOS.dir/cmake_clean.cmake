@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/vibeOS.dir/src/debug.c.o"
   "CMakeFiles/vibeOS.dir/src/debug.c.o.d"
+  "CMakeFiles/vibeOS.dir/src/interface.c.o"
+  "CMakeFiles/vibeOS.dir/src/interface.c.o.d"
   "CMakeFiles/vibeOS.dir/src/kernel.c.o"
   "CMakeFiles/vibeOS.dir/src/kernel.c.o.d"
   "CMakeFiles/vibeOS.dir/src/main.c.o"
