@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/vibeOS.dir/src/main.c.o CMakeFiles/vibeOS.dir/src/process.c.o CMakeFiles/vibeOS.dir/src/debug.c.o CMakeFiles/vibeOS.dir/src/kernel.c.o -o vibeOS 
