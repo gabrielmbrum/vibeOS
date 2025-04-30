@@ -23,7 +23,7 @@ int main () {
 
   print_BCP(&kernel->BCP);
 
-  choose_process();
+  schedule();
 
   print_BCP(&kernel->BCP);
 
