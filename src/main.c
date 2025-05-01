@@ -1,9 +1,11 @@
+#include "../include/commons.h"
 #include "../include/process.h"
 #include "../include/debug.h"
-#include "../include/commons.h"
 #include "../include/kernel.h"
+#include "../include/program.h"
+#include "../include/instruction.h"
 
-int main () {
+void luigi_test() {
   Process *p1, *p2, *p3, *p4;
   p1 = create_process(1, "sexta-feira", 0);
   p2=create_process(2, "play-tv", 0);
@@ -30,5 +32,22 @@ int main () {
   print_BCP(&kernel->BCP);
 
   printf("FINISHED \n");
+}
+
+void brum_test() {
+  Program *program = read_program("../programs/prog1");
+  if (program == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  print_program(program);
+
+  free_program(program);
+}
+
+int main () {
+
+  brum_test();
+
   return 0;
 }

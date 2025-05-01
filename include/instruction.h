@@ -13,10 +13,14 @@ typedef enum _opcode {
 
 typedef struct _instruction {
   Opcode opcode; 
-  int value; // it can be the disk track or the semaphore char id
+  int value; // it can be the disk track or the semaphore char id or time spend
   char semaphore_name;
 } Instruction;
 
 Instruction* instruction_builder(const char *name, const char *runtime_str);
+
+void print_instruction(const Instruction instruction);
+
+void print_instructions(const Instruction *instructions, int total_instructions);
 
 #endif
