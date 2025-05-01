@@ -1,4 +1,8 @@
 #include <ncurses.h>
+#include <string.h>
+#include <stdlib.h>
+#include <curses.h>
+
 WINDOW *create_newwin(int height, int width, int starty, int startx);
 
 WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_PID);
