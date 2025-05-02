@@ -1,0 +1,24 @@
+sint5
+1
+1
+4
+s t
+
+read k
+P(s)
+read k
+read k
+read k
+read k
+read k
+exec 500
+V(s)
+P(s)
+read k
+P(t)
+exec 20000
+read k
+read k
+V(t)
+V(s)
+exec 500

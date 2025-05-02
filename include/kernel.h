@@ -9,7 +9,6 @@ typedef struct Scheduler{
   int QUANTUM_TIME;
 }Scheduler;
 
-
 typedef struct Kernel{
     Process *BCP;
     Scheduler *scheduler;

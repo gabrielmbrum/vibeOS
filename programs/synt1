@@ -1,19 +1,23 @@
-sint2
-2
+sint1
 1
-32
+1
+4
 s t
 
-exec 1000
-read 20
+exec 40
+P(s)
+exec 800
+read k
 exec 400
-read 30
+print 100
+read k
 exec 500
+V(s)
 P(s)
 exec 200
 P(t)
 exec 20000
-write 20
+write l
 print 150
 V(t)
 V(s)

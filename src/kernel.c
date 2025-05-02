@@ -15,38 +15,38 @@ void init_BCP() {
         kernel->BCP[i].pid = EMPTY_BCP_ENTRY; // Define o slot como vazio
     }
     kernel->process_amount = 0;
-  }
+}
   
-  int search_BCP(int process_pid){
-    if (kernel->BCP == NULL) {
-      return FAILURE;
-    }
-  
-    for(int i=0;i<MAX_PROCESSES;i++){
-      if(kernel->BCP[i].pid == process_pid){
-        return i;
-      }
-    }
-    return FAILURE;
-  } 
-  
-  int add_process_to_BCP(Process *process) {
-    if (kernel->BCP == NULL) {
-      init_BCP();
-    }
-    
-    for (int i = 0; i < MAX_PROCESSES; i++) {
-      if (kernel->BCP[i].pid == EMPTY_BCP_ENTRY) { // Assuming pid 0 means empty slot
-        kernel->BCP[i] = *process;
-        free(process);
-        kernel->process_amount ++;
-        return SUCCESS;
-      }
-    }
-  
+int search_BCP(int process_pid){
+  if (kernel->BCP == NULL) {
     return FAILURE;
   }
-  // Inclua para ter a definição completa
+
+  for(int i=0;i<MAX_PROCESSES;i++){
+    if(kernel->BCP[i].pid == process_pid){
+      return i;
+    }
+  }
+  return FAILURE;
+} 
+  
+int add_process_to_BCP(Process *process) {
+  if (kernel->BCP == NULL) {
+    init_BCP();
+  }
+  
+  for (int i = 0; i < MAX_PROCESSES; i++) {
+    if (kernel->BCP[i].pid == EMPTY_BCP_ENTRY) { // Assuming pid 0 means empty slot
+      kernel->BCP[i] = *process;
+      free(process);
+      kernel->process_amount ++;
+      return SUCCESS;
+    }
+  }
+
+  return FAILURE;
+}
+// Inclua para ter a definição completa
 
 void init_Kernel() {
     if (kernel != NULL) {
@@ -75,28 +75,29 @@ void init_Kernel() {
     kernel->scheduler->QUANTUM_TIME = 2;
 }
 
-  int rmv_process_of_BCP(int removing_pid) {
-    if (kernel->BCP == NULL) { //BCP not allocated, return Failure.
-      return FAILURE;
-    }
-  
-    int idx = search_BCP(removing_pid);
-    if(idx != FAILURE){
-      printf("PID %d Presente na BCP\n", removing_pid);
-      //If PID present in BCP, get the index and remove;
-      kernel->BCP[idx].pid = EMPTY_BCP_ENTRY;
-      return SUCCESS;
-    }
-    return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
+int rmv_process_of_BCP(int removing_pid) {
+  if (kernel->BCP == NULL) { //BCP not allocated, return Failure.
+    return FAILURE;
   }
-  
-  void destroy_process(Process *process) { //Pointing some things about this to be discussed later
-    if (process != NULL) { // Remove from BCP  -> Kill process?
-      free(process->name); // Kill_Process, grep pid and then update at BCP?
-      free(process); 
-    }
+
+  int idx = search_BCP(removing_pid);
+  if(idx != FAILURE){
+    printf("PID %d Presente na BCP\n", removing_pid);
+    //If PID present in BCP, get the index and remove;
+    kernel->BCP[idx].pid = EMPTY_BCP_ENTRY;
+    return SUCCESS;
   }
-    int get_max_rw_process(){
+  return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
+}
+  
+void destroy_process(Process *process) { //Pointing some things about this to be discussed later
+  if (process != NULL) { // Remove from BCP  -> Kill process?
+    free(process->name); // Kill_Process, grep pid and then update at BCP?
+    free(process); 
+  }
+}
+
+int get_max_rw_process(){
       int idx = -1, max_rw=0;
       
       for(int i=0;i<kernel->process_amount;i++){
@@ -109,12 +110,13 @@ void init_Kernel() {
           }
       }
       return idx;
-  }
+}
 
-  void change_process_state(Process **process, ProcessState state){
-    (*process)->state = state;
-  }
-  void context_switch(Process *next, char *arg){
+void change_process_state(Process **process, ProcessState state){
+  (*process)->state = state;
+}
+
+void context_switch (Process *next, char *arg){
     Process *running_process = kernel->scheduler->running_process;
 
     if(running_process->runtime == kernel->scheduler->QUANTUM_TIME){
@@ -135,11 +137,12 @@ void init_Kernel() {
   }
     kernel->scheduler->running_process = next;
     change_process_state(&next, RUNNING);
-  }
+}
 
-  int counter = 0;
-  void schedule() {
-    while (counter < 5) {
+int counter = 0;
+
+void schedule() {
+  while (counter < 5) {
         Process *current = kernel->scheduler->running_process;
 
         // Verifica se current é NULL ANTES de usá-lo

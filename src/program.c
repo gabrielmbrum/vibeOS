@@ -15,13 +15,12 @@ Program* read_program(const char *filename) {
   Program *program = malloc(sizeof(Program));
 
   char line[BUFFER_READER_SIZE];
-  puts("reading header....");
+  //puts("reading header....");
   // reading header
   fgets(line, BUFFER_READER_SIZE, file);
   line[strcspn(line, "\n")] = '\0'; // remove newline character
   
   program->header.name = strdup(line); // strdup allocates memory and copies the string
-  
   
   fgets(line, BUFFER_READER_SIZE, file);
   line[strcspn(line, "\n")] = '\0'; 
@@ -36,20 +35,24 @@ Program* read_program(const char *filename) {
   program->header.segment_size = atoi(line);
   
   fgets(line, BUFFER_READER_SIZE, file);
+  //printf("\n\tsemaphores line: %s", line);
   line[strcspn(line, "\n")] = '\0';
   program->header.semaphores = malloc(sizeof(char) * (strlen(line) + 1));
+  strcpy(program->header.semaphores, "");
   for (int i = 0; i < (int) strlen(line); i++) {
     if (line[i] != ' ') {
       char *aux = malloc(sizeof(char) * 2); aux[0] = line[i]; aux[1] = '\0';
       strcat(program->header.semaphores, aux);
+      //printf("\n\t\tsemaphore list in char %d -> sem: %s | aux: %s\n", i, program->header.semaphores, aux);
     }
   }
   //printf("semaphores: %s[FIM]\n", program->header.semaphores);
-  puts("header readed :>");
+  //puts("header readed :>");
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 
-  puts("reading instructions....");
+  //puts("reading instructions....");
+  //printf("reading instructions of process %s\n", program->header.name);
   // reading instructions
   program->instructions = malloc(sizeof(Instruction) * MAX_INSTRUCTIONS);
   int instruction_count = 0;
@@ -61,11 +64,12 @@ Program* read_program(const char *filename) {
     int i = 0, j = 0;
     for (; i < (int) strlen(line); i++) {
       if (line[i] == ' ') {
-        name[i] = '\0';
         break;
       }
       name[i] = line[i];
+      //printf("name[%d]: %c ", i, name[i]);
     }
+    name[i] = '\0';
 
     // getting the value
     char *runtime_str = malloc(sizeof(line) - i);
@@ -73,11 +77,12 @@ Program* read_program(const char *filename) {
       runtime_str[j] = line[i + j + 1];
     }
     runtime_str[j] = '\0';    
-    //printf("[instruction %d] name:%s & value: %s\n", instruction_count, name, runtime_str);
+    // printf("\n\tsizeofs: line(%d) %s, name(%d) %s, runtime_str(%d) %s\n", (int) strlen(line), line, (int) strlen(name), name, (int) strlen(runtime_str), runtime_str);
+    // printf("\n\n\t[instruction %d] name:%s & value: %s\n\n", instruction_count, name, runtime_str);
 
     Instruction *instruction = instruction_builder(name, runtime_str);
     program->instructions[instruction_count] = *instruction;
-    //print_instruction(program->instructions[instruction_count]);
+    // print_instruction(program->instructions[instruction_count]);
     instruction_count++;
 
     free(name);
@@ -86,7 +91,7 @@ Program* read_program(const char *filename) {
   }
   //printf("instructions cont: %d\n", instruction_count);
   program->instructions_count = instruction_count;
-  puts("instructions readed :>");
+  //puts("instructions readed :>");
 
   fclose(file);
 

@@ -7,7 +7,7 @@ Instruction* instruction_builder(const char *name, const char *runtime_str) {
     fprintf(stderr, "Memory allocation failed\n");
     return NULL;
   }
-
+  
   instruction->semaphore_name = '\0'; // Initialize semaphore_name to null
   
   switch (name[0]) {
@@ -49,10 +49,10 @@ void print_instruction(const Instruction instruction) {
           printf("EXEC %d\n", instruction.value);
           break;
       case READ:
-          printf("READ %d\n", instruction.value);
+          printf("READ %c\n", instruction.value);
           break;
       case WRITE:
-          printf("WRITE %d\n", instruction.value);
+          printf("WRITE %c\n", instruction.value);
           break;
       case WAIT:
           printf("WAIT %d\n", instruction.value);
