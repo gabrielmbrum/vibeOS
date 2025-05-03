@@ -99,6 +99,17 @@ WINDOW *menu(WINDOW *local_win){
   return local_win;
 }
 
+// WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_output, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_scheduler){
+
+//   janela_menu = create_newwin(9, 59, 0, 1,"MENU");
+//   janela_menu = menu(janela_menu);
+//   janela_output = create_newwin(5, 59, 9, 1," OUTPUT ");
+//   janela_scheduler = create_newwin(16, 59, 14, 1," SCHEDULER ");
+//   janela_memory = create_newwin(10, 59, 0, 61," MEMORY ");
+//   janela_process = create_newwin(10, 59, 10, 61, " PROCESS ");
+//   janela_I_O = create_newwin(10, 59, 20, 61," I/O ");
+// }
+
 // int main(int argc, char *argv[]){
 //   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
 //   int num = 0; // number of current inputs in the process display array

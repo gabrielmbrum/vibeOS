@@ -8,15 +8,20 @@
 
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
-  p1 = create_process(1, "sexta-feira", 0);
-  p2=create_process(2, "play-tv", 0);
-  p3=create_process(3, "nóstacomo", 0);
-  p4= create_process(4, "xambão", 0);
+  p1 = processCreate(1, "sexta-feira", 0);
+  p2=processCreate(2, "play-tv", 0);
+  p3=processCreate(3, "nóstacomo", 0);
+  p4= processCreate(4, "xambão", 0);
 
   p1->counter_rw = 10;
   p2->counter_rw = 5;
   p3->counter_rw = 11;
   p4->counter_rw = 11;
+
+  p1->runtime_execution = 10;
+  p2->runtime_execution = 5;
+  p3->runtime_execution = 11;
+  p4->runtime_execution = 11;
 
   init_Kernel();
   add_process_to_BCP(p1);
@@ -24,13 +29,13 @@ void luigi_test() {
   add_process_to_BCP(p3);
   add_process_to_BCP(p4);
 
-  print_BCP(&kernel->BCP);
+  print_BCP(&kernel->BCP, kernel->process_amount);
 
   schedule();
+  puts("");
+  //print_BCP(&kernel->BCP);
 
-  print_BCP(&kernel->BCP);
-
-  print_BCP(&kernel->BCP);
+  //print_BCP(&kernel->BCP);
 
   printf("FINISHED \n");
 }
@@ -89,10 +94,10 @@ int main () {
       displayprocessos[i] = (char*)malloc((MAX_INPUT_STR) * sizeof(char));
   }
 
-    // initialize introduction window
-    initscr();	
-    curs_set(0);		
-    janela_intro();
+  // initialize introduction window
+  initscr();	
+  curs_set(0);		
+  janela_intro();
 
   janela_menu = create_newwin(9, 59, 0, 1,"MENU");
   janela_menu = menu(janela_menu);
@@ -118,6 +123,6 @@ int main () {
   // close lncurses window
   endwin();			
   
-  brum_test();
+  luigi_test();
   return 0;
 }

@@ -2,7 +2,7 @@
 #include "../include/commons.h"
  // Global variable to hold the BCP
 
- Process *create_process(int pid, const char *name, int priority) {
+ Process *processCreate(int pid, const char *name, int priority) {
   //Ensuring Unique PID at Process Creation //In order to avoid effortless.
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
@@ -16,7 +16,7 @@
   process->name = strdup(name);
   process->priority = priority;
   process->counter_rw = 0; // As long as the process's been created, insert at BCP
-  process->runtime = 0;
+  process->slice_time = 0;
   return process;
 }
 
