@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <curses.h>
 
-WINDOW *create_newwin(int height, int width, int starty, int startx);
+WINDOW *create_newwin(int height, int width, int starty, int startx, char* title);
 
-WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_PID);
+//WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_PID);
 
 WINDOW *delete_window(WINDOW *local_win);
 

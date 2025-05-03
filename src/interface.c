@@ -1,7 +1,8 @@
 #include "../include/interface.h"
 #define MIN_WD_HGH 1
 #define MAX_WD_HGH_PROCESS 8
-#define TAM_MAX_STR 25
+#define MAX_INPUT_STR 25
+#define MAX_OUTPUT_STR 100
 #define POS_X 1
 
 // defines the minimum line to print something in the generic window
@@ -46,12 +47,17 @@ void add_input_list(char **list, char *input, int *num){
   }
 }
 
+// output message operations
+
+
+
 // window operations
-WINDOW *create_newwin(int height, int width, int starty, int startx){
+WINDOW *create_newwin(int height, int width, int starty, int startx, char *title){
   WINDOW *local_win = newwin(height, width, starty, startx);
   refresh();
 
   box(local_win, 0, 0);
+  mvwprintw(local_win, 0, 2, "%s", title);
   wrefresh(local_win);		
 
   return local_win;
@@ -103,15 +109,15 @@ WINDOW *init_menu_components(WINDOW *menu){
 }
 
 int main(int argc, char *argv[]){
-  WINDOW *janela_menu, *janela_I_O, *janela_memory, *janela_process, *janela_PID;
+  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
   int num = 0; // number of current inputs in the process display array
 
   //malloc array of processos and input to be displayed in the screen 
   //! This does not represent the total processes in the Simulator, only those that are displayed
-  char *input = malloc((TAM_MAX_STR)*sizeof(char));
+  char *input = malloc((MAX_INPUT_STR)*sizeof(char));
   char **displayprocessos = (char**)malloc(MAX_WD_HGH_PROCESS * sizeof(char*));
   for (int i = 0; i < MAX_WD_HGH_PROCESS; i++) {
-      displayprocessos[i] = (char*)malloc((TAM_MAX_STR) * sizeof(char));
+      displayprocessos[i] = (char*)malloc((MAX_INPUT_STR) * sizeof(char));
   }
 
   // initialize introduction window
@@ -120,25 +126,13 @@ int main(int argc, char *argv[]){
   janela_intro();
 
   // initialize main window and components
-  janela_menu = create_newwin(9, 59, 0, 1);
+  janela_menu = create_newwin(9, 59, 0, 1,"MENU");
   janela_menu = init_menu_components(janela_menu);
-  wrefresh(janela_menu);
-
-  janela_process = create_newwin(10, 59, 9, 1);
-  mvwprintw(janela_process, 0, 2, "%s", " PROCESS ");
-  wrefresh(janela_process);
-
-  janela_memory = create_newwin(11, 59, 19, 1);
-  mvwprintw(janela_memory, 0, 2, "%s", " MEMORY ");
-  wrefresh(janela_memory);
-
-  janela_PID = create_newwin(15, 59, 0, 61);
-  mvwprintw(janela_PID, 0, 2, "%s", " PID ");
-  wrefresh(janela_PID);
-
-  janela_I_O = create_newwin(15, 59, 15, 61);
-  mvwprintw(janela_I_O, 0, 2, "%s", " I/O ");
-  wrefresh(janela_I_O);
+  janela_OUTPUT = create_newwin(5, 59, 9, 1," OUTPUT ");
+  janela_SCHEDULER = create_newwin(16, 59, 14, 1," SCHEDULER ");
+  janela_memory = create_newwin(10, 59, 0, 61," MEMORY ");
+  janela_process = create_newwin(10, 59, 10, 61, " PROCESS ");
+  janela_I_O = create_newwin(10, 59, 20, 61," I/O ");
 
   // change window to get user input
   move(6,34);
@@ -153,19 +147,6 @@ int main(int argc, char *argv[]){
     move(6,34);
     refresh();
   }while(strcmp(input,"q"));
-  
-  //TODO: get the lines to be displayed in other windows
-  //? Define other constants for each window bound?
-  //? Create other array od strings for each window? 
-
-  //TODO: A Platyplus?
-  //? ..
-  //? ..
-
-  //!__======__
-  //TODO: PERRY
-  //? THE
-  //? PLATYPUS
 
   // free memory
   free(input);
