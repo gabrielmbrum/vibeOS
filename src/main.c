@@ -41,41 +41,45 @@ void brum_test() {
     return;
   }
 
-  Program *prog2 = read_program("../programs/synt2");
-  if (prog2 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog2 = read_program("../programs/synt2");
+  // if (prog2 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog3 = read_program("../programs/synt3");
-  if (prog3 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog3 = read_program("../programs/synt3");
+  // if (prog3 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog4 = read_program("../programs/synt4");
-  if (prog4 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog4 = read_program("../programs/synt4");
+  // if (prog4 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog5 = read_program("../programs/synt5");
-  if (prog5 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog5 = read_program("../programs/synt5");
+  // if (prog5 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  print_program(prog1);
-  print_program(prog2);
-  print_program(prog3);
-  print_program(prog4);
-  print_program(prog5);
+  // print_program(prog1);
+  // print_program(prog2);
+  // print_program(prog3);
+  // print_program(prog4);
+  // print_program(prog5);
+
+  Process *proc1 = create_process_from_program(prog1);
+
+  print_process(proc1);
 
   free_program(prog1);
-  free_program(prog2);
-  free_program(prog3);
-  free_program(prog4);
-  free_program(prog5);
+  // free_program(prog2);
+  // free_program(prog3);
+  // free_program(prog4);
+  // free_program(prog5);
 }
 
 int main () {

@@ -42,39 +42,32 @@ Instruction* instruction_builder(const char *name, const char *runtime_str) {
   return instruction;
 }
 
-void print_instruction(const Instruction instruction) {
-  // Print instruction based on opcode
-  switch (instruction.opcode) {
-      case EXEC:
-          printf("EXEC %d\n", instruction.value);
-          break;
-      case READ:
-          printf("READ %c\n", instruction.value);
-          break;
-      case WRITE:
-          printf("WRITE %c\n", instruction.value);
-          break;
-      case WAIT:
-          printf("WAIT %d\n", instruction.value);
-          break;
-      case P:
-          printf("P %c\n", instruction.semaphore_name);
-          break;
-      case V:
-          printf("V %c\n", instruction.semaphore_name);
-          break;
-      case PRINT:
-          printf("PRINT %d\n", instruction.value);
-          break;
-      default:
-          printf("UNKNOWN INSTRUCTION\n");
-          break;
-  }
-}
-
-void print_instructions(const Instruction *instructions, int total_instructions) {
-  for (int i = 0; i < total_instructions; i++) {
-    printf("\t[instruction %d] ", i);
-    print_instruction(instructions[i]);
-  }
-}
+// void print_instruction(const Instruction instruction) {
+//   // Print instruction based on opcode
+//   switch (instruction.opcode) {
+//       case EXEC:
+//           printf("EXEC %d\n", instruction.value);
+//           break;
+//       case READ:
+//           printf("READ %c\n", instruction.value);
+//           break;
+//       case WRITE:
+//           printf("WRITE %c\n", instruction.value);
+//           break;
+//       case WAIT:
+//           printf("WAIT %d\n", instruction.value);
+//           break;
+//       case P:
+//           printf("P %c\n", instruction.semaphore_name);
+//           break;
+//       case V:
+//           printf("V %c\n", instruction.semaphore_name);
+//           break;
+//       case PRINT:
+//           printf("PRINT %d\n", instruction.value);
+//           break;
+//       default:
+//           printf("UNKNOWN INSTRUCTION\n");
+//           break;
+//   }
+// }

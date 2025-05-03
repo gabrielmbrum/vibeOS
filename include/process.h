@@ -7,6 +7,7 @@
 #define FAILURE -1
 
 #include "memory.h"
+#include "program.h"
 
 typedef enum _process__state {
   RUNNING = 1,
@@ -25,8 +26,8 @@ typedef struct {
   int segment_id;
   int segment_size;
   int runtime;
-  char *semaphores;
-  Page *page_table;
+  char *semaphores; 
+  PageTable *page_table;
 } Process;
 
 /*
@@ -36,9 +37,15 @@ typedef struct {
   * Returns a pointer to the newly created process.
 
 */
-
 Process *create_process(int pid, const char *name, int priority);
 
+/*
 
+  * Create a new process from the given program.
+  * The process is initialized with state READY and PC set to 0.
+  * Returns a pointer to the newly created process.
+
+*/
+Process *create_process_from_program(Program *program);
 
 #endif

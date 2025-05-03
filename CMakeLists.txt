@@ -13,6 +13,7 @@ add_executable(vibeOS
   src/kernel.c 
   src/program.c
   src/instruction.c
+  src/memory.c
 )
 
 # Configurar diretórios de include

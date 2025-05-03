@@ -98,7 +98,7 @@ Program* read_program(const char *filename) {
   return program;
 }
 
-void print_program(const Program *program) {
+void print_program(Program *program) {
   if (program == NULL) {
       printf("NULL program\n");
       return;
