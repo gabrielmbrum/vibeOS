@@ -3,7 +3,7 @@
 
 #include "process.h"
 
-void print_BCP(Process **BCP);
+void print_BCP(Process **BCP, int processes);
 const char *state_to_string(ProcessState state);
 const char *opcode_to_string(Opcode opcode);
 void print_page_table(PageTable *page);

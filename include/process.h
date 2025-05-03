@@ -30,8 +30,6 @@ typedef struct {
   PageTable *page_table;
   int slice_time;
   int runtime_execution;
-  char *semaphores;
-  Page *page_table;i
 } Process;
 
 /*

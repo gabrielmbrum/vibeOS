@@ -3,8 +3,6 @@
 
 int global_pid = 0;
 
-Process *create_process(int pid, const char *name, int priority) {
-
 Process *processCreate(int pid, const char *name, int priority) {
   //Ensuring Unique PID at Process Creation //In order to avoid effortless.
   Process *process = (Process *) malloc(sizeof(Process));
