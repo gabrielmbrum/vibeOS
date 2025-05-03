@@ -102,43 +102,71 @@ void midori_test(){
 }
 int main () {
 /*   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
-  int num = 0; // number of current inputs in the process display array
 
+  //! This does not represent the total processes in the Simulator. The arrays contain only the information to be displayed in the screen
+  char **displayProcessos = init_string_array(displayProcessos,DEF_WIN_MAX_PRINTS_BIG,MAX_INPUT_STR);
+  char **displayScheduler = init_string_array(displayScheduler, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
+  char **displayIO = init_string_array(displayIO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  char **displayOUT = init_string_array(displayOUT, (DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR),MAX_OUTPUT_STR);
+  char **displayMEMO = init_string_array(displayMEMO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
   char *input = malloc((MAX_INPUT_STR)*sizeof(char));
-  char **displayprocessos = (char**)malloc(MAX_WD_HGH_PROCESS * sizeof(char*));
-  for (int i = 0; i < MAX_WD_HGH_PROCESS; i++) {
-      displayprocessos[i] = (char*)malloc((MAX_INPUT_STR) * sizeof(char));
-  }
+  strcpy(input,"\0");
+
+  // Malloc the array containing the sizes of the dinamic arrays
+  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS);
+
+  /* 
+  ! INDEX
+  * 0 -> OUtPUT
+  * 1 -> SCHEDULER
+  * 2 -> MEMORY
+  * 3 -> PROCESS
+  * 4 -> I/O
+  
 
   // initialize introduction window
   initscr();	
   curs_set(0);		
   janela_intro();
 
-  janela_menu = create_newwin(9, 59, 0, 1,"MENU");
+  // initialize main window and components
+  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1,"MENU");
   janela_menu = menu(janela_menu);
-  janela_OUTPUT = create_newwin(5, 59, 9, 1," OUTPUT ");
-  janela_SCHEDULER = create_newwin(16, 59, 14, 1," SCHEDULER ");
-  janela_memory = create_newwin(10, 59, 0, 61," MEMORY ");
-  janela_process = create_newwin(10, 59, 10, 61, " PROCESS ");
-  janela_I_O = create_newwin(10, 59, 20, 61," I/O ");
+  janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
+  janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
+  janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
+  janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
+  janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
 
-  do{
-    move(6,34);
+  // change window to get user input
+  move(6,34);
+  curs_set(1);
+
+  // input loop 
+  while(strcmp(input,"q")){
     getstr(input);
-    add_input_list(displayprocessos,input,&num);
-    print_input(janela_process, displayprocessos,&num);
-    clear_input_space(20,6,34);
+    if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
+      //? This implementation is not perfect for every case (example: strings bigger than the screen), but it mostly works
+      print_message(janela_OUTPUT,"Entrada inválida");
+    }else{
+      // handle the correct user input 
+      add_input_list(displayProcessos,input,&sizes[3],(DEF_WIN_HGH_BIG-2));
+      mvwprintw(janela_I_O, POS_Y, POS_X, "%d",sizes[3]);
+      wrefresh(janela_I_O);
+      print_multiple_messages(janela_process, displayProcessos,&sizes[3]); 
+
+    }
+    clear_space(6,34,strlen(input));
     move(6,34);
     refresh();
-  }while(strcmp(input,"q"));
+  }
 
   // free memory
   free(input);
 
   // close lncurses window
-  endwin();			 */ 
-  
+  endwin();		 */	
+
   brum_test();
   return 0;
 }
