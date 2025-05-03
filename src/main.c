@@ -5,6 +5,7 @@
 #include "../include/program.h"
 #include "../include/instruction.h"
 #include "../include/interface.h"
+#include "../include/semaphore.h"
 
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
@@ -47,45 +48,60 @@ void brum_test() {
     return;
   }
 
-  Program *prog2 = read_program("../programs/synt2");
-  if (prog2 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog2 = read_program("../programs/synt2");
+  // if (prog2 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog3 = read_program("../programs/synt3");
-  if (prog3 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog3 = read_program("../programs/synt3");
+  // if (prog3 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog4 = read_program("../programs/synt4");
-  if (prog4 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
+  // Program *prog4 = read_program("../programs/synt4");
+  // if (prog4 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
 
-  Program *prog5 = read_program("../programs/synt5");
-  if (prog5 == NULL) {
+  // Program *prog5 = read_program("../programs/synt5");
+  // if (prog5 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
+
+  // print_program(prog1);
+  // print_program(prog2);
+  // print_program(prog3);
+  // print_program(prog4);
+  // print_program(prog5);
+
+  Process *proc1 = create_process_from_program(prog1);
+
+  print_process(proc1);
+
+  free_program(prog1);
+  // free_program(prog2);
+  // free_program(prog3);
+  // free_program(prog4);
+  // free_program(prog5);
+}
+
+void midori_test(){
+  Program *prog1 = read_program("../programs/synt1");
+  if (prog1 == NULL) {
     fprintf(stderr, "Failed to read program\n");
     return;
   }
 
   print_program(prog1);
-  print_program(prog2);
-  print_program(prog3);
-  print_program(prog4);
-  print_program(prog5);
 
   free_program(prog1);
-  free_program(prog2);
-  free_program(prog3);
-  free_program(prog4);
-  free_program(prog5);
 }
-
 int main () {
-  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
+/*   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
   int num = 0; // number of current inputs in the process display array
 
   char *input = malloc((MAX_INPUT_STR)*sizeof(char));
@@ -121,8 +137,8 @@ int main () {
   free(input);
 
   // close lncurses window
-  endwin();			
+  endwin();			 */ 
   
-  luigi_test();
+  brum_test();
   return 0;
 }

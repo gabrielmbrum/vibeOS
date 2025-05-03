@@ -13,8 +13,10 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/midori_torres/vibeOS/src/interface.c" "CMakeFiles/vibeOS.dir/src/interface.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/interface.c.o.d"
   "/home/midori_torres/vibeOS/src/kernel.c" "CMakeFiles/vibeOS.dir/src/kernel.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/kernel.c.o.d"
   "/home/midori_torres/vibeOS/src/main.c" "CMakeFiles/vibeOS.dir/src/main.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/main.c.o.d"
+  "/home/midori_torres/vibeOS/src/memory.c" "CMakeFiles/vibeOS.dir/src/memory.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/memory.c.o.d"
   "/home/midori_torres/vibeOS/src/process.c" "CMakeFiles/vibeOS.dir/src/process.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/process.c.o.d"
   "/home/midori_torres/vibeOS/src/program.c" "CMakeFiles/vibeOS.dir/src/program.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/program.c.o.d"
+  "/home/midori_torres/vibeOS/src/semaphore.c" "CMakeFiles/vibeOS.dir/src/semaphore.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/semaphore.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

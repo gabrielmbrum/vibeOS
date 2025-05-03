@@ -3,6 +3,8 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /home/midori_torres/vibeOS/src/../include/process.h \
  /home/midori_torres/vibeOS/src/../include/memory.h \
  /home/midori_torres/vibeOS/src/../include/instruction.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+ /home/midori_torres/vibeOS/src/../include/program.h \
  /home/midori_torres/vibeOS/src/../include/debug.h \
  /home/midori_torres/vibeOS/src/../include/process.h \
  /home/midori_torres/vibeOS/src/../include/commons.h /usr/include/stdio.h \
@@ -63,9 +65,9 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /home/midori_torres/vibeOS/src/../include/debug.h \
  /home/midori_torres/vibeOS/src/../include/kernel.h \
  /home/midori_torres/vibeOS/src/../include/commons.h \
- /home/midori_torres/vibeOS/src/../include/debug.h \
  /home/midori_torres/vibeOS/src/../include/program.h \
  /home/midori_torres/vibeOS/src/../include/instruction.h \
  /home/midori_torres/vibeOS/src/../include/interface.h \
@@ -73,6 +75,6 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
- /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h /usr/include/unctrl.h \
- /usr/include/curses.h
+ /usr/include/x86_64-linux-gnu/bits/stdint-least.h /usr/include/unctrl.h \
+ /usr/include/curses.h \
+ /home/midori_torres/vibeOS/src/../include/semaphore.h

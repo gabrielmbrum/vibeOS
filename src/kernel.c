@@ -1,3 +1,13 @@
+/* O kernel.c:
+- controla o "núcleo" do sistema
+- mantêm a lista de processos (BCP)
+- permite que sem_wait e sem_post sejam usados pelas instruções
+
+Funções principais:
+- init_Kernel(): inicializa o kernel
+- init_BCP(): inicializa a lista de processos
+- add_process_to_BCP(): adiciona um processo ao kernel */
+
 #include "../include/process.h"
 #include "../include/commons.h"
 #include "../include/kernel.h"
@@ -90,55 +100,55 @@ int rmv_process_of_BCP(int removing_pid) {
   return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
 }
   
-  void processFinish(Process **process) {
-    (*process)->pid=-1;//Pointing some things about this to be discussed later
-  }
-    int scheduler_POLICY(){
-      int idx = -1, max_rw=0;
-      
-      for(int i=0;i<kernel->process_amount;i++){
-          if(kernel->BCP[i].counter_rw > max_rw && kernel->BCP[i].pid>=0){
-              max_rw = kernel->BCP[i].counter_rw;
-              idx = i;
-          }
-          else if (kernel->BCP[i].counter_rw==max_rw && kernel->BCP[idx].pid > kernel->BCP[i].pid && kernel->BCP[i].pid>=0){
-              idx = i;
-          }
-      }
-      return idx;
-  }
+void processFinish(Process **process) {
+  (*process)->pid=-1;//Pointing some things about this to be discussed later
+}
+  int scheduler_POLICY(){
+    int idx = -1, max_rw=0;
+    
+    for(int i=0;i<kernel->process_amount;i++){
+        if(kernel->BCP[i].counter_rw > max_rw && kernel->BCP[i].pid>=0){
+            max_rw = kernel->BCP[i].counter_rw;
+            idx = i;
+        }
+        else if (kernel->BCP[i].counter_rw==max_rw && kernel->BCP[idx].pid > kernel->BCP[i].pid && kernel->BCP[i].pid>=0){
+            idx = i;
+        }
+    }
+    return idx;
+}
 
-  void change_process_state(Process **process, ProcessState state){
-    (*process)->state = state;
-  }
+void change_process_state(Process **process, ProcessState state){
+  (*process)->state = state;
+}
 
 void context_switch(Process *next, char *arg){
-  Process *running_process = kernel->scheduler->running_process;
+Process *running_process = kernel->scheduler->running_process;
 
-  if(strcmp(arg, "QUANTUM")==0){
-    running_process->slice_time=0;
+if(strcmp(arg, "QUANTUM")==0){
+  running_process->slice_time=0;
+  change_process_state(&running_process, READY);
+}
+
+else if (strcmp(arg, "TERMINATED") == 0) {
+  printf("Process with PID: %d finished execution...\n", running_process->pid);
+  change_process_state(&running_process, TERMINATED);
+  rmv_process_of_BCP(running_process->pid);
+  }
+
+else if (strcmp(arg, "I/O") == 0) {
+    change_process_state(&running_process, WAITING);
+}
+else {
     change_process_state(&running_process, READY);
-  }
+}
+  kernel->scheduler->running_process = next;
+  change_process_state(&next, RUNNING);
+}
 
-  else if (strcmp(arg, "TERMINATED") == 0) {
-    printf("Process with PID: %d finished execution...\n", running_process->pid);
-    change_process_state(&running_process, TERMINATED);
-    rmv_process_of_BCP(running_process->pid);
-    }
-
-  else if (strcmp(arg, "I/O") == 0) {
-      change_process_state(&running_process, WAITING);
-  }
-  else {
-      change_process_state(&running_process, READY);
-  }
-    kernel->scheduler->running_process = next;
-    change_process_state(&next, RUNNING);
-  }
-
-  void processInterrupt(Process *next){ //Quantum atingido. 
-    context_switch(next, "QUANTUM"); //\n
-  }
+void processInterrupt(Process *next){ //Quantum atingido. 
+  context_switch(next, "QUANTUM"); //\n
+}
 
 int counter = 0;
 

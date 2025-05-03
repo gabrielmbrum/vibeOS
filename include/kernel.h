@@ -4,6 +4,7 @@
 #include "process.h"
 #include "commons.h"
 #include "debug.h"
+
 typedef struct Scheduler{
   Process *running_process;
   int QUANTUM_TIME;

@@ -58,4 +58,10 @@ CMakeFiles/vibeOS.dir/src/instruction.c.o: \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+ /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/process.h \
+ /home/midori_torres/vibeOS/src/../include/memory.h \
+ /home/midori_torres/vibeOS/src/../include/instruction.h \
+ /home/midori_torres/vibeOS/src/../include/program.h

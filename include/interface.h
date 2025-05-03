@@ -1,7 +1,6 @@
 #include <ncurses.h>
-#include <string.h>
-#include <stdlib.h>
 #include <curses.h>
+#include "commons.h"
 
 #define MIN_WD_HGH 1
 #define MAX_WD_HGH_PROCESS 8

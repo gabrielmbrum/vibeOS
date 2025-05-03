@@ -1,9 +1,26 @@
+/* O program.c lê um arquivo contendo:
+- Nome do processo
+- Segmento de memória (ID e tamanho)
+- Prioridade
+- Lista de semáforos usados
+- Instruções (como EXEC, READ, WRITE, P, V)
+
+Cria um Program com:
+- Header (metadados)
+- Vetor de Instruction
+
+E tem as funções:
+- read_program(filename): lê o arquivo e monta a estrutura
+- print_program(): imprime o conteúdo do programa
+- free_program(): libera memória alocada */
+
 // ler o arquivo e montar o programa
 // enviar header para process
 // ler as intruçoes e jogar pra instruction_builder()
 // preciso associar essas instructions ao process
 #include "../include/program.h"
 #include "../include/commons.h"
+#include "../include/semaphore.h"
 
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
@@ -46,6 +63,7 @@ Program* read_program(const char *filename) {
       //printf("\n\t\tsemaphore list in char %d -> sem: %s | aux: %s\n", i, program->header.semaphores, aux);
     }
   }
+  init_semaphores(program);
   //printf("semaphores: %s[FIM]\n", program->header.semaphores);
   //puts("header readed :>");
 
@@ -98,7 +116,7 @@ Program* read_program(const char *filename) {
   return program;
 }
 
-void print_program(const Program *program) {
+void print_program(Program *program) {
   if (program == NULL) {
       printf("NULL program\n");
       return;
