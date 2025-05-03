@@ -17,19 +17,24 @@ void luigi_test() {
   p3->counter_rw = 11;
   p4->counter_rw = 11;
 
+  p1->runtime_execution = 10;
+  p2->runtime_execution = 5;
+  p3->runtime_execution = 11;
+  p4->runtime_execution = 11;
+
   init_Kernel();
   add_process_to_BCP(p1);
   add_process_to_BCP(p2);
   add_process_to_BCP(p3);
   add_process_to_BCP(p4);
 
-  print_BCP(&kernel->BCP);
+  print_BCP(&kernel->BCP, kernel->process_amount);
 
   schedule();
+  puts("");
+  //print_BCP(&kernel->BCP);
 
-  print_BCP(&kernel->BCP);
-
-  print_BCP(&kernel->BCP);
+  //print_BCP(&kernel->BCP);
 
   printf("FINISHED \n");
 }

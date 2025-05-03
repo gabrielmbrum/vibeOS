@@ -19,13 +19,13 @@ extern Kernel *kernel;
 
 void init_BCP();
 void init_Kernel();
-void processFinish(Process *process);
+void processFinish(Process **process);
 void processInterrupt(Process *next);
 int add_process_to_BCP(Process *process);
 int rmv_process_of_BCP(int removing_pid);
 int search_BCP(int process_pid);
 void change_process_state(Process **process, ProcessState state);
-int get_max_rw_process();
+int scheduler_POLICY();
 void context_switch();
 void schedule();
 #endif

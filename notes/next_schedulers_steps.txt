@@ -1,0 +1,33 @@
+Corrigir a política de escalonamento: Garantir que processo atual seja devidamente escalonado:
+
+Pega o máximo de read_writes já registrados pelos processos/
+Ideias pra correção:
+verificar estado: se process state = RUNNING, não escolhe  processo./
+Lista de candidatos é uma ideia em potencial. 
+Caso máximo seja corresponde apenas ao processo atual (significa que candidatos = [running_process]), definir o novo número mais alto de rw, 
+para que seja escolhido outro processo. 
+Ideia posterior.
+
+
+int get_max_rw_process(){
+      int candidates[kernel->process_amount], idx=0, max_rw=0;
+
+      for(int i=0;i<kernel->process_amount;i++){
+          if(kernel->BCP[i].counter_rw > max_rw){
+              max_rw = kernel->BCP[i].counter_rw;
+          }
+      }
+
+      for(int i=0;i<kernel->process_amount;i++){
+        if(kernel->BCP[i].counter_rw == max_rw){
+          candidates[idx] = i;
+          idx++;
+        }
+      }
+      int old_pid = 0;
+      for(int i=1;i<idx;i++){
+        if(kernel->BCP[candidates[i]].pid < kernel->BCP[candidates[old_pid]].pid){
+          old_pid = i;
+        }
+      }
+  }
