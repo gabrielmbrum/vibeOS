@@ -1,8 +1,4 @@
 #include "../include/interface.h"
-#define MIN_WD_HGH 1
-#define MAX_WD_HGH_PROCESS 8
-#define TAM_MAX_STR 25
-#define POS_X 1
 
 // defines the minimum line to print something in the generic window
 // defines the maximum line to print something in the process window
@@ -25,12 +21,12 @@ void clear_input_space(int size, int start, int end){
   }
 }
 
-void print_input(WINDOW *local_window, char **list, int *size){
+void print_input(WINDOW *local_win, char **list, int *size){
     for(int i=0;i<*size;i++){
       //! its not pretty but it works :)
-      mvwprintw(local_window, i+1, POS_X, "%s", "                          ");
-      mvwprintw(local_window, i+1, POS_X, "%s", list[i]);
-      wrefresh(local_window);
+      mvwprintw(local_win, i+1, POS_X, "%s", "                          ");
+      mvwprintw(local_win, i+1, POS_X, "%s", list[i]);
+      wrefresh(local_win);
     }
 }
 
@@ -58,6 +54,7 @@ WINDOW *create_newwin(int height, int width, int starty, int startx){
 }
 
 WINDOW *delete_window(WINDOW  *local_win){
+  //removes window border before desalocar(favor nn julgar o comentário) memory to said window
   wborder(local_win, ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ');
 
   wrefresh(local_win);
@@ -88,89 +85,89 @@ WINDOW *janela_intro(){
   return 0;
 }
 
-WINDOW *init_menu_components(WINDOW *menu){
-  mvwprintw(menu, 0, 2, "%s", " MENU ");
-  wrefresh(menu);
-  mvwprintw(menu, 1, 15, "%s", " ___   _____       ____  ____ ");
-  mvwprintw(menu, 2, 15, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
-  mvwprintw(menu, 3, 15, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
-  mvwprintw(menu, 4, 15, "%s", " |___/_/_.__/\\__/\\____/___/ ");
-  mvwprintw(menu, 6, 2, "%s", "Insira a versão Syst desejada:");
-  mvwprintw(menu, 7, 2, "%s", "Pressione q para sair");
-  wrefresh(menu);
+WINDOW *menu(WINDOW *local_win){
+  mvwprintw(local_win, 0, 2, "%s", " MENU ");
+  wrefresh(local_win);
+  mvwprintw(local_win, 1, 15, "%s", " ___   _____       ____  ____ ");
+  mvwprintw(local_win, 2, 15, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
+  mvwprintw(local_win, 3, 15, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
+  mvwprintw(local_win, 4, 15, "%s", " |___/_/_.__/\\__/\\____/___/ ");
+  mvwprintw(local_win, 6, 2, "%s", "Insira a versão Syst desejada:");
+  mvwprintw(local_win, 7, 2, "%s", "Pressione q para sair");
+  wrefresh(local_win);
 
-  return menu;
+  return local_win;
 }
 
-int main(int argc, char *argv[]){
-  WINDOW *janela_menu, *janela_I_O, *janela_memory, *janela_process, *janela_PID;
-  int num = 0; // number of current inputs in the process display array
+// int main(int argc, char *argv[]){
+//   WINDOW *janela_menu, *janela_I_O, *janela_memory, *janela_process, *janela_PID;
+//   int num = 0; // number of current inputs in the process display array
 
-  //malloc array of processos and input to be displayed in the screen 
-  //! This does not represent the total processes in the Simulator, only those that are displayed
-  char *input = malloc((TAM_MAX_STR)*sizeof(char));
-  char **displayprocessos = (char**)malloc(MAX_WD_HGH_PROCESS * sizeof(char*));
-  for (int i = 0; i < MAX_WD_HGH_PROCESS; i++) {
-      displayprocessos[i] = (char*)malloc((TAM_MAX_STR) * sizeof(char));
-  }
+//   //malloc array of processos and input to be displayed in the screen 
+//   //! This does not represent the total processes in the Simulator, only those that are displayed
+//   char *input = malloc((TAM_MAX_STR)*sizeof(char));
+//   char **displayprocessos = (char**)malloc(MAX_WD_HGH_PROCESS * sizeof(char*));
+//   for (int i = 0; i < MAX_WD_HGH_PROCESS; i++) {
+//       displayprocessos[i] = (char*)malloc((TAM_MAX_STR) * sizeof(char));
+//   }
 
-  // initialize introduction window
-  initscr();	
-  curs_set(0);		
-  janela_intro();
+//   // initialize introduction window
+//   initscr();	
+//   curs_set(0);		
+//   janela_intro();
 
-  // initialize main window and components
-  janela_menu = create_newwin(9, 59, 0, 1);
-  janela_menu = init_menu_components(janela_menu);
-  wrefresh(janela_menu);
+//   // initialize main window and components
+//   janela_menu = create_newwin(9, 59, 0, 1);
+//   janela_menu = menu(janela_menu);
+//   wrefresh(janela_menu);
 
-  janela_process = create_newwin(10, 59, 9, 1);
-  mvwprintw(janela_process, 0, 2, "%s", " PROCESS ");
-  wrefresh(janela_process);
+//   janela_process = create_newwin(10, 59, 9, 1);
+//   mvwprintw(janela_process, 0, 2, "%s", " PROCESS ");
+//   wrefresh(janela_process);
 
-  janela_memory = create_newwin(11, 59, 19, 1);
-  mvwprintw(janela_memory, 0, 2, "%s", " MEMORY ");
-  wrefresh(janela_memory);
+//   janela_memory = create_newwin(11, 59, 19, 1);
+//   mvwprintw(janela_memory, 0, 2, "%s", " MEMORY ");
+//   wrefresh(janela_memory);
 
-  janela_PID = create_newwin(15, 59, 0, 61);
-  mvwprintw(janela_PID, 0, 2, "%s", " PID ");
-  wrefresh(janela_PID);
+//   janela_PID = create_newwin(15, 59, 0, 61);
+//   mvwprintw(janela_PID, 0, 2, "%s", " PID ");
+//   wrefresh(janela_PID);
 
-  janela_I_O = create_newwin(15, 59, 15, 61);
-  mvwprintw(janela_I_O, 0, 2, "%s", " I/O ");
-  wrefresh(janela_I_O);
+//   janela_I_O = create_newwin(15, 59, 15, 61);
+//   mvwprintw(janela_I_O, 0, 2, "%s", " I/O ");
+//   wrefresh(janela_I_O);
 
-  // change window to get user input
-  move(6,34);
-  curs_set(1);
+//   // change window to get user input
+//   move(6,34);
+//   curs_set(1);
 
-  // gets the user input, clears the input box and prints the input in another sub-window
-  do{
-    getstr(input);
-    add_input_list(displayprocessos,input,&num);
-    print_input(janela_process, displayprocessos,&num);
-    clear_input_space(20,6,34);
-    move(6,34);
-    refresh();
-  }while(strcmp(input,"q"));
+//   // gets the user input, clears the input box and prints the input in another sub-window
+//   do{
+//     getstr(input);
+//     add_input_list(displayprocessos,input,&num);
+//     print_input(janela_process, displayprocessos,&num);
+//     clear_input_space(20,6,34);
+//     move(6,34);
+//     refresh();
+//   }while(strcmp(input,"q"));
   
-  //TODO: get the lines to be displayed in other windows
-  //? Define other constants for each window bound?
-  //? Create other array od strings for each window? 
+//   //TODO: get the lines to be displayed in other windows
+//   //? Define other constants for each window bound?
+//   //? Create other array od strings for each window? 
 
-  //TODO: A Platyplus?
-  //? ..
-  //? ..
+//   //TODO: A Platyplus?
+//   //? ..
+//   //? ..
 
-  //!__======__
-  //TODO: PERRY
-  //? THE
-  //? PLATYPUS
+//   //!__======__
+//   //TODO: PERRY
+//   //? THE
+//   //? PLATYPUS
 
-  // free memory
-  free(input);
+//   // free memory
+//   free(input);
 
-  // close lncurses window
-  endwin();			
-  return 0;
-}
+//   // close lncurses window
+//   endwin();			
+//   return 0;
+// }

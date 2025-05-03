@@ -156,6 +156,8 @@ vibeOS: CMakeFiles/vibeOS.dir/src/debug.c.o
 vibeOS: CMakeFiles/vibeOS.dir/src/kernel.c.o
 vibeOS: CMakeFiles/vibeOS.dir/src/interface.c.o
 vibeOS: CMakeFiles/vibeOS.dir/build.make
+vibeOS: /usr/lib/x86_64-linux-gnu/libcurses.so
+vibeOS: /usr/lib/x86_64-linux-gnu/libform.so
 vibeOS: CMakeFiles/vibeOS.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/midori_torres/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C executable vibeOS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/vibeOS.dir/link.txt --verbose=$(VERBOSE)
