@@ -17,6 +17,8 @@ add_executable(vibeOS
   src/process.c
   src/debug.c
   src/kernel.c
+  src/program.c
+  src/instruction.c
   src/interface.c
 )
 

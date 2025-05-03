@@ -153,6 +153,30 @@ src/debug.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/debug.c.s
 .PHONY : src/debug.c.s
 
+src/instruction.o: src/instruction.c.o
+.PHONY : src/instruction.o
+
+# target to build an object file
+src/instruction.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/instruction.c.o
+.PHONY : src/instruction.c.o
+
+src/instruction.i: src/instruction.c.i
+.PHONY : src/instruction.i
+
+# target to preprocess a source file
+src/instruction.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/instruction.c.i
+.PHONY : src/instruction.c.i
+
+src/instruction.s: src/instruction.c.s
+.PHONY : src/instruction.s
+
+# target to generate assembly for a file
+src/instruction.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/instruction.c.s
+.PHONY : src/instruction.c.s
+
 src/interface.o: src/interface.c.o
 .PHONY : src/interface.o
 
@@ -249,6 +273,30 @@ src/process.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/process.c.s
 .PHONY : src/process.c.s
 
+src/program.o: src/program.c.o
+.PHONY : src/program.o
+
+# target to build an object file
+src/program.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/program.c.o
+.PHONY : src/program.c.o
+
+src/program.i: src/program.c.i
+.PHONY : src/program.i
+
+# target to preprocess a source file
+src/program.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/program.c.i
+.PHONY : src/program.c.i
+
+src/program.s: src/program.c.s
+.PHONY : src/program.s
+
+# target to generate assembly for a file
+src/program.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/program.c.s
+.PHONY : src/program.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -261,6 +309,9 @@ help:
 	@echo "... src/debug.o"
 	@echo "... src/debug.i"
 	@echo "... src/debug.s"
+	@echo "... src/instruction.o"
+	@echo "... src/instruction.i"
+	@echo "... src/instruction.s"
 	@echo "... src/interface.o"
 	@echo "... src/interface.i"
 	@echo "... src/interface.s"
@@ -273,6 +324,9 @@ help:
 	@echo "... src/process.o"
 	@echo "... src/process.i"
 	@echo "... src/process.s"
+	@echo "... src/program.o"
+	@echo "... src/program.i"
+	@echo "... src/program.s"
 .PHONY : help
 
 

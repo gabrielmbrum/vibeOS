@@ -66,6 +66,8 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /home/midori_torres/vibeOS/src/../include/kernel.h \
  /home/midori_torres/vibeOS/src/../include/commons.h \
  /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOS/src/../include/instruction.h \
  /home/midori_torres/vibeOS/src/../include/interface.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \

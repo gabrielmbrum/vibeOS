@@ -17,6 +17,7 @@ typedef struct _header {
 typedef struct _program {
   Header header;
   Instruction *instructions;
+  int instructions_count;
 } Program;
 
 Program* read_program(const char *filename);
@@ -24,9 +25,5 @@ Program* read_program(const char *filename);
 void free_program(Program *program);
 
 void print_program(const Program *program);
-
-void print_instructions(const Instruction *instructions);
-
-
 
 #endif
