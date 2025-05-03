@@ -7,10 +7,10 @@
 
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
-  p1 = create_process(1, "sexta-feira", 0);
-  p2=create_process(2, "play-tv", 0);
-  p3=create_process(3, "nóstacomo", 0);
-  p4= create_process(4, "xambão", 0);
+  p1 = processCreate(1, "sexta-feira", 0);
+  p2=processCreate(2, "play-tv", 0);
+  p3=processCreate(3, "nóstacomo", 0);
+  p4= processCreate(4, "xambão", 0);
 
   p1->counter_rw = 10;
   p2->counter_rw = 5;
@@ -80,7 +80,7 @@ void brum_test() {
 
 int main () {
 
-  brum_test();
+  luigi_test();
 
   return 0;
 }

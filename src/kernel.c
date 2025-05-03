@@ -90,14 +90,13 @@ int rmv_process_of_BCP(int removing_pid) {
   return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
 }
   
-void destroy_process(Process *process) { //Pointing some things about this to be discussed later
-  if (process != NULL) { // Remove from BCP  -> Kill process?
-    free(process->name); // Kill_Process, grep pid and then update at BCP?
-    free(process); 
+  void processFinish(Process *process) { //Pointing some things about this to be discussed later
+    if (process != NULL) { // Remove from BCP  -> Kill process?
+      free(process->name); // Kill_Process, grep pid and then update at BCP?
+      free(process); 
+    }
   }
-}
-
-int get_max_rw_process(){
+    int get_max_rw_process(){
       int idx = -1, max_rw=0;
       
       for(int i=0;i<kernel->process_amount;i++){
@@ -110,44 +109,49 @@ int get_max_rw_process(){
           }
       }
       return idx;
-}
+  }
 
-void change_process_state(Process **process, ProcessState state){
-  (*process)->state = state;
-}
+  void change_process_state(Process **process, ProcessState state){
+    (*process)->state = state;
+  }
 
-void context_switch (Process *next, char *arg){
-    Process *running_process = kernel->scheduler->running_process;
+void context_switch(Process *next, char *arg){
+  Process *running_process = kernel->scheduler->running_process;
+  running_process->runtime_execution -= running_process->slice_time;
 
-    if(running_process->runtime == kernel->scheduler->QUANTUM_TIME){
-      puts("QUANTUM REACHED");
-      running_process ->runtime = 0; //if runtime process equals quantum, it means the process is coming back and initiating a fully new time-slice
-    }
+  if(strcmp(arg, "QUANTUM")==0){
+    running_process->slice_time=0;
+    change_process_state(&running_process, READY);
+  }
 
-    if (strcmp(arg, "TERMINATED") == 0) {
-      change_process_state(&running_process, TERMINATED);
-  } 
+  if (strcmp(arg, "TERMINATED") == 0) {
+    change_process_state(&running_process, TERMINATED);
+  }
+
   else if (strcmp(arg, "I/O") == 0) {
       change_process_state(&running_process, WAITING);
   }
   else {
-      puts("Entrei no if que coloca de executando pra pronto");
+      puts("Entrei no if que coloca de executando pra pronto\n");
       change_process_state(&running_process, READY);
-      printf("  %d estado", running_process->state);
+      printf("%d estado\n", running_process->state);
   }
     kernel->scheduler->running_process = next;
     change_process_state(&next, RUNNING);
-}
+  }
 
-int counter = 0;
+  void processInterrupt(Process *next){ //Quantum atingido. 
+    context_switch(next, "QUANTUM"); //\n
+  }
 
-void schedule() {
-  while (counter < 5) {
+  int counter = 0;
+  void schedule() {
+    while (counter < 5) {
         Process *current = kernel->scheduler->running_process;
 
         // Verifica se current é NULL ANTES de usá-lo
         if (!current) {
-            int idx = get_max_rw_process();
+            int idx = scheduler_POLICY();
             kernel->scheduler->running_process = &kernel->BCP[idx];
             change_process_state(&kernel->scheduler->running_process, RUNNING);
             print_BCP(&kernel->BCP);
@@ -155,15 +159,17 @@ void schedule() {
         }
 
         // Agora current é garantidamente não-NULL aqui
-        printf("current PID: %d  current time: %d", current->pid, current->runtime);
-        current->runtime++;
+        printf("current PID: %d  current time: %d\n", current->pid, current->slice_time);
+        current->slice_time++;
 
-        if (current->runtime >= kernel->scheduler->QUANTUM_TIME) {
+        if (current->slice_time >= kernel->scheduler->QUANTUM_TIME) {
             int idx = get_max_rw_process();
             Process *next = &kernel->BCP[idx];
-            context_switch(next, "QUANTUM");
+            processInterrupt(next);
         }
-        sleep(1);
+        if(counter % 5 == 0){
+          sleep(1);
+        }
         counter++;
     }
 }

@@ -24,7 +24,8 @@ typedef struct {
   int counter_rw;
   int segment_id;
   int segment_size;
-  int runtime;
+  int slice_time;
+  int runtime_execution;
   char *semaphores;
   Page *page_table;
 } Process;
@@ -37,7 +38,7 @@ typedef struct {
 
 */
 
-Process *create_process(int pid, const char *name, int priority);
+Process *processCreate(int pid, const char *name, int priority);
 
 
 
