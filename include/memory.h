@@ -2,6 +2,7 @@
 #define MEMORY_H
 
 #include "instruction.h"
+#include <stdbool.h>
 
 #define MEM_LENGTH 1024
 #define OS_MEMORY_SIZE 64

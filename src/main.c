@@ -89,7 +89,7 @@ void brum_test() {
 
 int main () {
 
-  luigi_test();
+  brum_test();
 
   return 0;
 }

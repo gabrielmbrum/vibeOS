@@ -14,10 +14,10 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   int num_of_instructions_per_page, iteration_val;
 
   // for each instruction
-  for (int i = 0; i < 13 ; i++) {
+  for (int i = 0; i < instructions_count && page_table->page_count < RESIDENT_SET; i++) {
     // if the instruction is EXEC, it will create a new page
     if (instructions[i].opcode == EXEC) {
-      for (int j = 0; (j < instructions[i].value / 1000  || j == 0) && page_table->page_count < instructions_count; j++) {
+      for (int j = 0; (j < instructions[i].value / 1000  || j == 0) && page_table->page_count < RESIDENT_SET; j++) {
         // 1000 time units = 1 page
           // so if there are more than 1k time units, will be necessary to create for each thousand of units a unique page
         
