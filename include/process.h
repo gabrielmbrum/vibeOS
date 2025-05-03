@@ -28,6 +28,10 @@ typedef struct {
   int runtime;
   char *semaphores; 
   PageTable *page_table;
+  int slice_time;
+  int runtime_execution;
+  char *semaphores;
+  Page *page_table;i
 } Process;
 
 /*
@@ -37,7 +41,10 @@ typedef struct {
   * Returns a pointer to the newly created process.
 
 */
+
 Process *create_process(int pid, const char *name, int priority);
+
+Process *processCreate(int pid, const char *name, int priority);
 
 /*
 
