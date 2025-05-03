@@ -5,12 +5,13 @@
 
 #define MIN_WD_HGH 1
 #define MAX_WD_HGH_PROCESS 8
-#define TAM_MAX_STR 25
+#define MAX_INPUT_STR 25
+#define MAX_OUTPUT_STR 100
 #define POS_X 1
 
-WINDOW *create_newwin(int height, int width, int starty, int startx);
+WINDOW *create_newwin(int height, int width, int starty, int startx, char* title);
 
-WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_PID);
+//WINDOW *init_windows(WINDOW *janela_menu, WINDOW *janela_I_O, WINDOW *janela_memory, WINDOW *janela_process, WINDOW *janela_PID);
 
 WINDOW *delete_window(WINDOW *local_win);
 
