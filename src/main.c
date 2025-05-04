@@ -40,6 +40,8 @@ void luigi_test() {
 }
 
 void brum_test() {
+
+  system("clear");
   Program *prog1 = read_program("../programs/synt1");
   if (prog1 == NULL) {
     fprintf(stderr, "Failed to read program\n");
@@ -77,6 +79,10 @@ void brum_test() {
   // print_program(prog5);
 
   Process *proc1 = create_process_from_program(prog1);
+
+  print_process(proc1);
+
+  refresh_page_table(&proc1->page_table, prog1->instructions, prog1->instructions_count, proc1->page_table->last_instruction_loaded);
 
   print_process(proc1);
 
