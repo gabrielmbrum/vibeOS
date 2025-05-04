@@ -4,6 +4,7 @@
 #include "process.h"
 #include "commons.h"
 #include "debug.h"
+#include "iohandler.h"
 #include <pthread.h>
 #include <stdbool.h>
 typedef struct Scheduler{
@@ -24,7 +25,8 @@ typedef struct Kernel{
     pthread_t input_thread;
     pthread_mutex_t io_mutex;
     pthread_cond_t io_cond;
-
+    FILE *Trail_Buffer;
+    IOQueue *queue_requests;
 }Kernel;
 
 extern Kernel *kernel;

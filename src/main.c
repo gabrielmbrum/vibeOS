@@ -4,6 +4,7 @@
 #include "../include/kernel.h"
 #include "../include/program.h"
 #include "../include/instruction.h"
+#include "../include/iohandler.h"
 
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
@@ -41,7 +42,6 @@ void luigi_test() {
 
 void luigi_testv2() {
   init_Kernel(); // Inicializa o kernel (incluindo mutex/cond)
-  system("clear");
 
   // Carrega programas
   Program *prog1 = read_program("../programs/synt1");
@@ -77,8 +77,25 @@ void luigi_testv2() {
   }
   printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
   // Cleanup
+  pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();
-  printf("\n✅ Todos os processos concluídos!\n");
+}
+
+void luigi_testv3(){
+  Program *prog1 = read_program("../programs/synt1");
+  if (prog1 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  Process *p1 = create_process_from_program(prog1);
+  //IORequest *r1 = make_request(p1, WRITE, 20);
+  IORequest *r1 = make_request(p1, READ, 20);
+  IOQueue *queue=init_queue(queue);
+  enqueue(queue, r1);
+  printf("PID: %d\n",queue->tail->process->pid);
+  printf("ARG: %d\n",queue->tail->arg);
+  printf("OPCODE: %d\n",queue->tail->opcode);
+  exec_request(queue);
 }
 
 void brum_test() {
@@ -137,7 +154,7 @@ void brum_test() {
 
 int main () {
 
-  luigi_testv2();
+  luigi_testv3();
 
   return 0;
 }

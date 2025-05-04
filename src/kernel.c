@@ -2,17 +2,22 @@
 #include "../include/commons.h"
 #include "../include/kernel.h"
 #include "../include/debug.h"
+#include "../include/iohandler.h"
+
+
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
-
+#define IOException -101
+#define RWTimeSlice 30 
 Kernel *kernel=NULL;
 
 void* input_thread_func(void* arg) {
   char command[10];
   while (!kernel->shutdown_request) {
-      printf("\nDigite 'q' para encerrar o Kernel: ");
+      printf("\nDigite 'q' para encerrar o Kernel: \n");
+      fflush(stdout);
       fgets(command, sizeof(command), stdin);
-      
+
       if (command[0] == 'q' || command[0] == 'Q') {
           kernel->shutdown_request = true;
           break;
@@ -57,7 +62,6 @@ void schedule() {
   }
 
       // Se chegou aqui, current é válido (pid >= 0)
-  print_process(current);
   current->slice_time++;
   current->runtime_execution--;
 
@@ -98,7 +102,7 @@ void *scheduler_thread_func(void *arg){
     printf("Quantidade de processos na BCP.. %d\n", kernel->process_amount);
     if(kernel->process_amount==0){
       puts("Encerrando escalonador...\n");
-      stop_scheduler();
+      scheduler_stop();
     }
     UNLOCK_BCP();
     usleep(10000);
@@ -114,7 +118,7 @@ void start_scheduler(){
   }
 }
 
-void stop_scheduler(){
+void scheduler_stop(){
   if(kernel->scheduler_running){
     kernel->scheduler_running = false;
     puts("Entrei aq");
@@ -182,6 +186,8 @@ void init_Kernel() {
 
     pthread_mutex_init(&kernel->bcp_mutex, NULL);
     pthread_cond_init(&kernel->bcp_cond, NULL);
+    pthread_mutex_init(&kernel->io_mutex, NULL);
+    pthread_cond_init(&kernel->io_cond, NULL);
 
     LOCK_BCP();
     init_BCP();  // Inicializa o BCP
@@ -279,3 +285,25 @@ void context_switch(Process *next, char *arg){
   void processInterrupt(Process *next){ //Quantum atingido. 
     context_switch(next, "QUANTUM"); //\n
   }
+
+
+void init_Buffer(){
+  kernel->Trail_Buffer = fopen("buffer.txt", "w+");
+}
+
+int exec_Instruction(Process *process, Opcode opcode, int arg){
+  switch(opcode){
+    case READ...WRITE:
+      IORequest *request = make_request(process, opcode, arg);
+      enqueue(kernel->queue_requests,request);
+      break;
+    case PRINT:
+      IORequest *print_request = make_request(process, opcode, arg);
+      enqueue(kernel->queue_requests, print_request);
+      break;
+  }
+}
+
+int exec_Process(Process *process){
+  
+}
