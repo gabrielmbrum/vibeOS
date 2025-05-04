@@ -39,33 +39,46 @@ void luigi_test() {
   printf("FINISHED \n");
 }
 
-void luigi_testv2(){
-  init_Kernel();
+void luigi_testv2() {
+  init_Kernel(); // Inicializa o kernel (incluindo mutex/cond)
   system("clear");
-  Program *prog1 = read_program("../programs/synt1");
-  if (prog1 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
-  Process *p1 = create_process_from_program(prog1);
 
+  // Carrega programas
+  Program *prog1 = read_program("../programs/synt1");
   Program *prog2 = read_program("../programs/synt2");
-  if (prog2 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
-  }
-  Process *p2 = create_process_from_program(prog2);
-  add_process_to_BCP(p1);
   Program *prog3 = read_program("../programs/synt3");
-  if (prog2 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
+
+  // Verifica erros na leitura
+  if (!prog1 || !prog2 || !prog3) {
+      fprintf(stderr, "Erro na leitura de programas\n");
+      free_program(prog1);
+      free_program(prog2);
+      free_program(prog3);
+      return;
   }
+
+  // Cria processos
+  Process *p1 = create_process_from_program(prog1);
+  Process *p2 = create_process_from_program(prog2);
   Process *p3 = create_process_from_program(prog3);
+
+  // Adiciona processos ao BCP (inicia automaticamente o escalonador)
+  add_process_to_BCP(p1);
   add_process_to_BCP(p3);
   add_process_to_BCP(p2);
+  // Exibe estado inicial
   print_BCP(&kernel->BCP, kernel->process_amount);
-  schedule();
+  printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
+
+  // Loop principal: aguarda término dos processos
+  while (kernel->process_amount > 0 && !kernel->shutdown_request) {
+      sleep(1); // Reduz uso da CPU
+      printf("\nProcessos restantes: %d", kernel->process_amount);
+  }
+  printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
+  // Cleanup
+  shutdown_Kernel();
+  printf("\n✅ Todos os processos concluídos!\n");
 }
 
 void brum_test() {

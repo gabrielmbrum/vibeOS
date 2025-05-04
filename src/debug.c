@@ -7,7 +7,7 @@ void print_BCP(Process **BCP, int processes) {
   }
 
   printf("Process Control Block (BCP):\n");
-  for (int i = 0; i < processes; i++) {
+  for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       printf("PID: %d, Name: %s, State: %d, PC: %d, Priority: %d, Counter RW: "
              "%d\n",
