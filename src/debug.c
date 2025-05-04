@@ -110,13 +110,12 @@ void print_process(Process *proc) {
   printf("Priority: %d\n", proc->priority);
   printf("RW Counter: %d\n", proc->counter_rw);
   printf("Segment ID: %d, Size: %d\n", proc->segment_id, proc->segment_size);
-  printf("Runtime: %d\n", proc->runtime);
+  printf("Runtime: %d\n", proc->runtime_execution);
   printf("Semaphores: %s\n", proc->semaphores);
-
   if (proc->page_table->page_count == 0) {
     printf("Page Table is empty! No pages allocated\n");
   } else {
-    print_page_table(proc->page_table);
+    //print_page_table(proc->page_table);
   }
   printf("\n");
 }

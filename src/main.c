@@ -7,26 +7,26 @@
 
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
-  p1 = processCreate(1, "sexta-feira", 0);
-  p2=processCreate(2, "play-tv", 0);
-  p3=processCreate(3, "nóstacomo", 0);
-  p4= processCreate(4, "xambão", 0);
+  p1 = processCreate(0, "sexta-feira", 0);
+  //p2=processCreate(2, "play-tv", 0);
+  //p3=processCreate(3, "nóstacomo", 0);
+  //p4= processCreate(4, "xambão", 0);
 
-  p1->counter_rw = 10;
-  p2->counter_rw = 5;
-  p3->counter_rw = 11;
-  p4->counter_rw = 11;
+  p1->counter_rw = 0;
+  /*p2->counter_rw = 0;
+  p3->counter_rw = 0;
+  p4->counter_rw = 0;
 
   p1->runtime_execution = 10;
   p2->runtime_execution = 5;
   p3->runtime_execution = 11;
-  p4->runtime_execution = 11;
+  p4->runtime_execution = 11;*/
 
   init_Kernel();
   add_process_to_BCP(p1);
-  add_process_to_BCP(p2);
-  add_process_to_BCP(p3);
-  add_process_to_BCP(p4);
+  //add_process_to_BCP(p2);
+  //add_process_to_BCP(p3);
+  //add_process_to_BCP(p4);
 
   print_BCP(&kernel->BCP, kernel->process_amount);
 
@@ -37,6 +37,35 @@ void luigi_test() {
   //print_BCP(&kernel->BCP);
 
   printf("FINISHED \n");
+}
+
+void luigi_testv2(){
+  init_Kernel();
+  system("clear");
+  Program *prog1 = read_program("../programs/synt1");
+  if (prog1 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  Process *p1 = create_process_from_program(prog1);
+
+  Program *prog2 = read_program("../programs/synt2");
+  if (prog2 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  Process *p2 = create_process_from_program(prog2);
+  add_process_to_BCP(p1);
+  Program *prog3 = read_program("../programs/synt3");
+  if (prog2 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  Process *p3 = create_process_from_program(prog3);
+  add_process_to_BCP(p3);
+  add_process_to_BCP(p2);
+  print_BCP(&kernel->BCP, kernel->process_amount);
+  schedule();
 }
 
 void brum_test() {
@@ -95,7 +124,7 @@ void brum_test() {
 
 int main () {
 
-  brum_test();
+  luigi_testv2();
 
   return 0;
 }

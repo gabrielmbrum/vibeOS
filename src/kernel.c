@@ -84,9 +84,10 @@ int rmv_process_of_BCP(int removing_pid) {
   if(idx != FAILURE){
     //If PID present in BCP, get the index and remove;
     kernel->BCP[idx].pid = EMPTY_BCP_ENTRY;
+    kernel->BCP[idx].counter_rw = -1;
+    kernel->process_amount--;
     return SUCCESS;
   }
-  kernel->process_amount--;
   return FAILURE;//If Search in BCP Failed, then PID not present in BCP, return FAILURE. 
 }
   
@@ -94,9 +95,8 @@ int rmv_process_of_BCP(int removing_pid) {
     (*process)->pid=-1;//Pointing some things about this to be discussed later
   }
     int scheduler_POLICY(){
-      int idx = -1, max_rw=0;
-      
-      for(int i=0;i<kernel->process_amount;i++){
+      int idx = -1, max_rw=-1;
+      for(int i=0;i<MAX_PROCESSES;i++){
           if(kernel->BCP[i].counter_rw > max_rw && kernel->BCP[i].pid>=0){
               max_rw = kernel->BCP[i].counter_rw;
               idx = i;
@@ -143,13 +143,11 @@ void context_switch(Process *next, char *arg){
 int counter = 0;
 
 void schedule() {
-  while (counter < 200) {
+  while (counter < 30) {
       Process *current = kernel->scheduler->running_process;
-
       // Se não há processo rodando OU o processo atual é inválido
       if (!current || current->pid < 0) {
           int idx = scheduler_POLICY();
-          
           // Se não há processos válidos, encerra o escalonador
           if (idx == FAILURE) {
               printf("Nenhum processo válido no BCP.\n");
@@ -164,7 +162,7 @@ void schedule() {
       }
 
       // Se chegou aqui, current é válido (pid >= 0)
-
+      print_process(current);
       current->slice_time++;
       current->runtime_execution--;
 
