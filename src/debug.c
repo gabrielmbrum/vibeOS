@@ -53,6 +53,10 @@ const char *opcode_to_string(Opcode opcode) {
   }
 }
 
+const char *boolean_to_string(bool value) {
+  return value ? "true" : "false";
+}
+
 void print_instruction(Instruction inst) {
   printf("\t%-6s", opcode_to_string(inst.opcode));
 
@@ -84,11 +88,13 @@ void print_instructions(Instruction *instructions, int total_instructions) {
 void print_page_table(PageTable *page_table) {
   printf("\n---------*---------*---------*---------  Page Table ---------*---------*---------*---------\n\n");
   for (int i = 0; i < page_table->page_count; i++) {
-    printf("Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d\n",
+    printf("Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d, Missing Instructions: %s, Last Instruction Loaded: %d\n",
           page_table->pages[i].page_number, 
           page_table->pages[i].reference_bit,
           page_table->pages[i].used_bit, 
-          page_table->pages[i].instruction_count);
+          page_table->pages[i].instruction_count,
+          boolean_to_string(page_table->missing_instructions),
+          page_table->last_instruction_loaded);
 
     print_instructions(page_table->pages[i].instructions, page_table->pages[i].instruction_count);
   }

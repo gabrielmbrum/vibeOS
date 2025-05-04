@@ -22,6 +22,7 @@ typedef struct __page_table {
   Page *pages;
   int page_count;
   bool missing_instructions;
+  int last_instruction_loaded;
 } PageTable;
 
 PageTable *build_page_table(Instruction *instructions, int instructions_count);
