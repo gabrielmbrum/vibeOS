@@ -69,6 +69,18 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /home/midori_torres/vibeOS/src/../include/debug.h \
  /home/midori_torres/vibeOS/src/../include/kernel.h \
  /home/midori_torres/vibeOS/src/../include/commons.h \
+ /home/midori_torres/vibeOS/src/../include/iohandler.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/x86_64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
  /home/midori_torres/vibeOS/src/../include/program.h \
  /home/midori_torres/vibeOS/src/../include/instruction.h \
  /home/midori_torres/vibeOS/src/../include/interface.h \
@@ -78,4 +90,5 @@ CMakeFiles/vibeOS.dir/src/main.c.o: /home/midori_torres/vibeOS/src/main.c \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h /usr/include/unctrl.h \
  /usr/include/curses.h \
- /home/midori_torres/vibeOS/src/../include/semaphore.h
+ /home/midori_torres/vibeOS/src/../include/semaphore.h \
+ /home/midori_torres/vibeOS/src/../include/iohandler.h

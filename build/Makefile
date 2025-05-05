@@ -201,6 +201,30 @@ src/interface.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/interface.c.s
 .PHONY : src/interface.c.s
 
+src/iohandler.o: src/iohandler.c.o
+.PHONY : src/iohandler.o
+
+# target to build an object file
+src/iohandler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.o
+.PHONY : src/iohandler.c.o
+
+src/iohandler.i: src/iohandler.c.i
+.PHONY : src/iohandler.i
+
+# target to preprocess a source file
+src/iohandler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.i
+.PHONY : src/iohandler.c.i
+
+src/iohandler.s: src/iohandler.c.s
+.PHONY : src/iohandler.s
+
+# target to generate assembly for a file
+src/iohandler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.s
+.PHONY : src/iohandler.c.s
+
 src/kernel.o: src/kernel.c.o
 .PHONY : src/kernel.o
 
@@ -363,6 +387,9 @@ help:
 	@echo "... src/interface.o"
 	@echo "... src/interface.i"
 	@echo "... src/interface.s"
+	@echo "... src/iohandler.o"
+	@echo "... src/iohandler.i"
+	@echo "... src/iohandler.s"
 	@echo "... src/kernel.o"
 	@echo "... src/kernel.i"
 	@echo "... src/kernel.s"

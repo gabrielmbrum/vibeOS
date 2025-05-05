@@ -6,88 +6,147 @@
 #include "../include/instruction.h"
 #include "../include/interface.h"
 #include "../include/semaphore.h"
+#include "../include/iohandler.h"
 
-void luigi_test() {
-  Process *p1, *p2, *p3, *p4;
-  p1 = processCreate(1, "sexta-feira", 0);
-  p2=processCreate(2, "play-tv", 0);
-  p3=processCreate(3, "nóstacomo", 0);
-  p4= processCreate(4, "xambão", 0);
+// void luigi_test() {
+//   Process *p1, *p2, *p3, *p4;
+//   p1 = processCreate(0, "sexta-feira", 0);
+//   //p2=processCreate(2, "play-tv", 0);
+//   //p3=processCreate(3, "nóstacomo", 0);
+//   //p4= processCreate(4, "xambão", 0);
 
-  p1->counter_rw = 10;
-  p2->counter_rw = 5;
-  p3->counter_rw = 11;
-  p4->counter_rw = 11;
+//   p1->counter_rw = 0;
+//   /*p2->counter_rw = 0;
+//   p3->counter_rw = 0;
+//   p4->counter_rw = 0;
 
-  p1->runtime_execution = 10;
-  p2->runtime_execution = 5;
-  p3->runtime_execution = 11;
-  p4->runtime_execution = 11;
+//   p1->runtime_execution = 10;
+//   p2->runtime_execution = 5;
+//   p3->runtime_execution = 11;
+//   p4->runtime_execution = 11;*/
 
-  init_Kernel();
-  add_process_to_BCP(p1);
-  add_process_to_BCP(p2);
-  add_process_to_BCP(p3);
-  add_process_to_BCP(p4);
+//   init_Kernel();
+//   add_process_to_BCP(p1);
+//   //add_process_to_BCP(p2);
+//   //add_process_to_BCP(p3);
+//   //add_process_to_BCP(p4);
 
-  print_BCP(&kernel->BCP, kernel->process_amount);
+//   print_BCP(&kernel->BCP, kernel->process_amount);
 
-  schedule();
-  puts("");
-  //print_BCP(&kernel->BCP);
+//   schedule();
+//   puts("");
+//   //print_BCP(&kernel->BCP);
 
-  //print_BCP(&kernel->BCP);
+//   //print_BCP(&kernel->BCP);
 
-  printf("FINISHED \n");
-}
+//   printf("FINISHED \n");
+// }
 
-void brum_test() {
+void luigi_testv2() {
+  init_semaphores();
+  init_Kernel(); // Inicializa o kernel (incluindo mutex/cond)
+
+  // Carrega programas
   Program *prog1 = read_program("../programs/synt1");
-  if (prog1 == NULL) {
-    fprintf(stderr, "Failed to read program\n");
-    return;
+  Program *prog2 = read_program("../programs/synt2");
+  //Program *prog3 = read_program("../programs/synt3");
+
+  // Verifica erros na leitura
+  if (!prog1 || !prog2 ) {
+      fprintf(stderr, "Erro na leitura de programas\n");
+      free_program(prog1);
+      free_program(prog2);
+      //free_program(prog3);
+      return;
   }
 
-  // Program *prog2 = read_program("../programs/synt2");
-  // if (prog2 == NULL) {
-  //   fprintf(stderr, "Failed to read program\n");
-  //   return;
-  // }
+  // Cria processos
+  Process *p1 = create_process_from_program(prog1);
+  Process *p2 = create_process_from_program(prog2);
+  //Process *p3 = create_process_from_program(prog3);
 
-  // Program *prog3 = read_program("../programs/synt3");
-  // if (prog3 == NULL) {
-  //   fprintf(stderr, "Failed to read program\n");
-  //   return;
-  // }
+  // Adiciona processos ao BCP (inicia automaticamente o escalonador)
+  add_process_to_BCP(p1);
+  //add_process_to_BCP(p3);
+  add_process_to_BCP(p2);
+  // Exibe estado inicial
+  print_BCP(&kernel->BCP, kernel->process_amount);
+  printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
 
-  // Program *prog4 = read_program("../programs/synt4");
-  // if (prog4 == NULL) {
-  //   fprintf(stderr, "Failed to read program\n");
-  //   return;
-  // }
-
-  // Program *prog5 = read_program("../programs/synt5");
-  // if (prog5 == NULL) {
-  //   fprintf(stderr, "Failed to read program\n");
-  //   return;
-  // }
-
-  // print_program(prog1);
-  // print_program(prog2);
-  // print_program(prog3);
-  // print_program(prog4);
-  // print_program(prog5);
-
-  Process *proc1 = create_process_from_program(prog1);
-
-  print_process(proc1);
-
-  free_program(prog1);
-  // free_program(prog2);
-  // free_program(prog3);
-  // free_program(prog4);
-  // free_program(prog5);
+  // Loop principal: aguarda término dos processos
+  while (kernel->process_amount > 0 && !kernel->shutdown_request) {
+      sleep(1); // Reduz uso da CPU
+      printf("\nProcessos restantes: %d", kernel->process_amount);
+  }
+  printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
+  // Cleanup
+  pthread_join(kernel->input_thread, NULL);
+  shutdown_Kernel();
 }
+
+// void luigi_testv3(){
+//   Program *prog1 = read_program("../programs/synt1");
+//   if (prog1 == NULL) {
+//     fprintf(stderr, "Failed to read program\n");
+//     return;
+//   }
+//   Process *p1 = create_process_from_program(prog1);
+//   //IORequest *r1 = make_request(p1, WRITE, 20);
+//   IORequest *r1 = make_request(p1, READ, 20);
+//   IOQueue *queue=init_queue(queue);
+//   enqueue(queue, r1);
+//   printf("PID: %d\n",queue->tail->process->pid);
+//   printf("ARG: %d\n",queue->tail->arg);
+//   printf("OPCODE: %d\n",queue->tail->opcode);
+//   exec_request(queue);
+// }
+// void brum_test() {
+//   Program *prog1 = read_program("../programs/synt1");
+//   if (prog1 == NULL) {
+//     fprintf(stderr, "Failed to read program\n");
+//     return;
+//   }
+
+//   // Program *prog2 = read_program("../programs/synt2");
+//   // if (prog2 == NULL) {
+//   //   fprintf(stderr, "Failed to read program\n");
+//   //   return;
+//   // }
+
+//   // Program *prog3 = read_program("../programs/synt3");
+//   // if (prog3 == NULL) {
+//   //   fprintf(stderr, "Failed to read program\n");
+//   //   return;
+//   // }
+
+//   // Program *prog4 = read_program("../programs/synt4");
+//   // if (prog4 == NULL) {
+//   //   fprintf(stderr, "Failed to read program\n");
+//   //   return;
+//   // }
+
+//   // Program *prog5 = read_program("../programs/synt5");
+//   // if (prog5 == NULL) {
+//   //   fprintf(stderr, "Failed to read program\n");
+//   //   return;
+//   // }
+
+//   // print_program(prog1);
+//   // print_program(prog2);
+//   // print_program(prog3);
+//   // print_program(prog4);
+//   // print_program(prog5);
+
+//   Process *proc1 = create_process_from_program(prog1);
+
+//   print_process(proc1);
+
+//   free_program(prog1);
+//   // free_program(prog2);
+//   // free_program(prog3);
+//   // free_program(prog4);
+//   // free_program(prog5);
+// }
 
 void midori_test(){
   init_semaphores();
@@ -241,6 +300,6 @@ int main () {
   // // close lncurses window
   // endwin();		 
 
-  midori_test();
+  luigi_testv2();
   return 0;
 }

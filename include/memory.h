@@ -22,8 +22,31 @@ typedef struct __page_table {
   Page *pages;
   int page_count;
   bool missing_instructions;
+  int last_instruction_loaded;
 } PageTable;
 
+/*
+
+  * Initializes a page with the given page number and instruction count.
+  * Sets the reference bit and used bit to 0, and allocates memory for the instructions array.
+
+*/
+void initialize_page(Page *page, int page_num, int instructions_count);
+
+/*
+
+  * Creates a page table from an array of instructions and the lenght of it, alocating all the pages needed with the limit of RESIDENT_SET.
+  * It checks if there are missing instructions and it sets the last instruction loaded.
+
+*/
 PageTable *build_page_table(Instruction *instructions, int instructions_count);
+
+/*
+
+  * Refreshes the page table, reusing the pages already alocated and putting the instructions not loaded to the pages.
+  * It updates the last instruction loaded and checks for missing instructions.
+
+*/
+void refresh_page_table(PageTable **page_table, Instruction *instructions, int instructions_count, int last_instruction_loaded);
 
 #endif 

@@ -22,6 +22,7 @@ add_executable(vibeOS
   src/interface.c
   src/semaphore.c
   src/memory.c
+  src/iohandler.c
 )
 
 # Linka a biblioteca ncurses ao executável

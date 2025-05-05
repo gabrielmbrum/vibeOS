@@ -53,6 +53,10 @@ const char *opcode_to_string(Opcode opcode) {
   }
 }
 
+const char *boolean_to_string(bool value) {
+  return value ? "true" : "false";
+}
+
 void print_instruction(Instruction inst) {
   printf("\t%-6s", opcode_to_string(inst.opcode));
 

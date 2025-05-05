@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/midori_torres/vibeOS/src/debug.c" "CMakeFiles/vibeOS.dir/src/debug.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/debug.c.o.d"
   "/home/midori_torres/vibeOS/src/instruction.c" "CMakeFiles/vibeOS.dir/src/instruction.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/instruction.c.o.d"
   "/home/midori_torres/vibeOS/src/interface.c" "CMakeFiles/vibeOS.dir/src/interface.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/interface.c.o.d"
+  "/home/midori_torres/vibeOS/src/iohandler.c" "CMakeFiles/vibeOS.dir/src/iohandler.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/iohandler.c.o.d"
   "/home/midori_torres/vibeOS/src/kernel.c" "CMakeFiles/vibeOS.dir/src/kernel.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/kernel.c.o.d"
   "/home/midori_torres/vibeOS/src/main.c" "CMakeFiles/vibeOS.dir/src/main.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/main.c.o.d"
   "/home/midori_torres/vibeOS/src/memory.c" "CMakeFiles/vibeOS.dir/src/memory.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/memory.c.o.d"
