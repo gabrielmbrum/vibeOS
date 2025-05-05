@@ -25,7 +25,7 @@ E tem as funções:
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    fprintf(stderr, "Error opening file: %s\n", filename);
+    //fprintf(stderr, "Error opening file: %s\n", filename);
     return NULL;
   }
 

@@ -7,7 +7,7 @@ Semaphore semaphores[MAX_SEMAPHORES];
 int total_semaphores = 0;
 
 void init_semaphores() {
-    printf("Initializing semaphores...\n");
+    //printf("Initializing semaphores...\n");
     total_semaphores = 0;  // Reseta
 
     for (int i = 0; i < MAX_SEMAPHORES; i++) {

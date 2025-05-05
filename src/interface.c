@@ -9,6 +9,13 @@
 // * feel the vibe
 // *para pegar o tamanho da tela atual -> getmaxyx(stdscr, linhas, colunas);
 
+WINDOW  *janela_menu;
+WINDOW  *janela_OUTPUT;
+WINDOW  *janela_SCHEDULER;
+WINDOW  *janela_memory;
+WINDOW  *janela_process;
+WINDOW  *janela_I_O;
+
 // support functions
 void clear_space(int y, int x,int size){
   for (int i = 0; i < size; i++) {
@@ -16,6 +23,8 @@ void clear_space(int y, int x,int size){
   }
 }
 
+/*
+! DEPRECIATED
 char *generate_blank_space(int size){
   if (size <= 0) return NULL;
   char *str = malloc(size);
@@ -42,9 +51,11 @@ int *init_int_array(int *list, int size){
 
   return list;
 }
-
+*/
 
 // input and output message operations
+/*
+! DEPRECIATED
 void add_element_list(char **list, char *input, int *num, int Vbound, int Hbound){
   int width = strlen(input);
 
@@ -107,6 +118,23 @@ void print_multiple_messages(WINDOW *local_window, char **list, int *size) {
   }
   wrefresh(local_window);  // faz refresh apenas uma vez no final
 }
+*/
+
+void print_win(WINDOW *local_window, char*input){
+  if(strlen(input)>DEF_WIN_WDH){
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    wmove(local_window,2,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,input);
+    wrefresh(local_window);
+  }else{
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,input);
+    wrefresh(local_window);
+  }
+}
 
 int check_input(char *input){
   for (int i = 1; i < SYNT; i++) {
@@ -120,7 +148,57 @@ int check_input(char *input){
 return 0; 
 }
 
+char* get_input(char *input,WINDOW*out){
+  getstr(input);
+  if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
+   print_win(out,"Invalid input. Try again");
+   refresh();
+     return NULL;
+  }else{
+   print_win(out,"Valid Input");
+   refresh();
+     return input;
+  }
+}
+
+void print_win_args(WINDOW *local_window, char*message, ...) {
+  char buffer[MAX_OUTPUT_STR] = " ";
+  va_list args;
+
+  va_start(args, message); // initialize args after 'message'
+  vsnprintf(buffer, MAX_OUTPUT_STR, message, args);
+  
+  if(strlen(buffer)>DEF_WIN_WDH){
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    wmove(local_window,2,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,buffer);
+    wrefresh(local_window);
+  }else{
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,buffer);
+    wrefresh(local_window);
+  }
+}
+
 // window operations
+void init_interface(){
+    // Draw main window, sub-windows and components
+    janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
+    janela_menu = init_menu_components(janela_menu);
+    janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
+    janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
+    janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
+    janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
+    janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
+  
+    // change window to get user input
+    move(6,34);
+    curs_set(1);
+}
+
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title){
   WINDOW *local_win = newwin(height-1, width-2, starty, startx+1);
   WINDOW *border_win = newwin(height, width, starty, startx);
@@ -168,7 +246,7 @@ WINDOW *janela_intro(){
   delete_window(intro);
 }
 
-WINDOW *menu(WINDOW *menu){
+WINDOW *init_menu_components(WINDOW *menu){
   mvwprintw(menu, 1, 15, "%s", " ___   _____       ____  ____ ");
   mvwprintw(menu, 2, 15, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
   mvwprintw(menu, 3, 15, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
@@ -179,57 +257,26 @@ WINDOW *menu(WINDOW *menu){
 
   return menu;
 }
-
-/*WINDOW *init_interface(){
+/*  
+!DEPRECIATED
+WINDOW *init_interface(){
   // malloc the screen windows, display arrays and sizes
-  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
+  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *local_window, *janela_SCHEDULER;
 
-/*   // Draw main window, sub-windows and components
+   // Draw main window, sub-windows and components
   janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
   janela_menu = init_menu_components(janela_menu);
-/* int main(){
-  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
-
-  //! This does not represent the total processes in the Simulator. The arrays contain only the information to be displayed in the screen
-  char **displayProcessos = init_string_array(displayProcessos,DEF_WIN_MAX_PRINTS_BIG,MAX_INPUT_STR);
-  char **displayScheduler = init_string_array(displayScheduler, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
-  char **displayIO = init_string_array(displayIO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  char **displayOUT = init_string_array(displayOUT, (DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR),MAX_OUTPUT_STR);
-  char **displayMEMO = init_string_array(displayMEMO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  char *input = malloc((MAX_INPUT_STR)*sizeof(char));
-  strcpy(input,"\0");
-
-  // Malloc the array containing the sizes of the dinamic arrays
-  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS);
-
-  
-  ! INDEX
-  * 0 -> OUtPUT
-  * 1 -> SCHEDULER
-  * 2 -> MEMORY
-  * 3 -> PROCESS
-  * 4 -> I/O
-  
-
-  // initialize introduction window
-  initscr();	
-  curs_set(0);		
-  janela_intro();
-
-  // initialize main window and components
-  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1,"MENU");
-  janela_menu = menu(janela_menu);
   janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
   janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
   janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
-  janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
+  local_window = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
   janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
 
   // change window to get user input
   move(6,34);
-  curs_set(1); */
+  curs_set(1); 
   //! input loop: this code DOES NOT GO HERE 
-/*   while(strcmp(input,"q")){
+   while(strcmp(input,"q")){
     getstr(input);
     if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
         print_message(janela_OUTPUT,"Entrada inválida");
@@ -238,7 +285,7 @@ WINDOW *menu(WINDOW *menu){
       add_element_list(displayProcessos,input,&sizes[3],(DEF_WIN_HGH_BIG-2));
       mvwprintw(janela_I_O, POS_Y, POS_X, "%d",sizes[3]);
       wrefresh(janela_I_O);
-      print_multiple_messages(janela_process, displayProcessos,&sizes[3]); 
+      print_multiple_messages(local_window, displayProcessos,&sizes[3]); 
 
     }
     clear_space(6,34,strlen(input));
@@ -251,42 +298,11 @@ WINDOW *menu(WINDOW *menu){
 
   // close lncurses window
   endwin();			 
-}*/
-
-char* get_input(char *input,WINDOW*out, char **output, int *sizes){
-     getstr(input);
-     if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-      add_element_list(output,"Entrada inválida",sizes,DEF_WIN_MAX_PRINTS_SMALL,DEF_WIN_WDH);
-      print_multiple_messages(out,output,sizes);
-      refresh();
-        return NULL;
-     }else{
-      add_element_list(output,"Entrada válida",sizes,DEF_WIN_MAX_PRINTS_SMALL,DEF_WIN_WDH);
-      print_multiple_messages(out,output,sizes);
-      refresh();
-        return input;
-     }
 }
-
-// void print_vibe(WINDOW *local_window){
-//   mvwprintw(local_window, POS_Y, POS_X, "%s","welecome to the vibeOS\t\t\tjust feel the vibe...\t\t\t");
-//   wrefresh(local_window);
-// }
-
-// void print_loop(WINDOW *local_window){
-//   for (int i = 1; i < 10; i++) {
-//     sleep(i);
-//     mvwprintw(local_window, POS_Y, POS_X, "%s\t\t\t", i % 2 == 0 ? "just feel the vibe..." : "are you feeling?");
-//     wrefresh(local_window);
-//   }
-// }
-
+*/
 
 WINDOW *close_window(){
 /*      // free memory
      free(input); */
      endwin();
 }
-//   endwin();			
-//   return 0;
-// }  */

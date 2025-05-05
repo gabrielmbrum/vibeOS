@@ -47,8 +47,9 @@
 
 // //   //print_BCP(&kernel->BCP);
 
-// //   printf("FINISHED \n");
-//  }
+//   printf("FINISHED \n");
+// }
+//}
 
 void luigi_testv2() {
   init_semaphores();
@@ -213,68 +214,126 @@ void luigi_testv2() {
 //   free_program(prog5);
 // }
 
-int main (){
-  // //create Processes array
-  // Process** processlist= (Process**)malloc(MAX_PROCESSES* sizeof(Process*));
-  // int total =0; //todo change this later
+void midori_test(){
+  init_semaphores();
+  init_Kernel();
 
-  // // create interface structures to handle the user input
-  // WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
-  // char **displayP,**displayS,**displayI,**displayU,**displayM;
-  // displayP = init_string_array(displayP,DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  // displayS = init_string_array(displayS, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
-  // displayI = init_string_array(displayI, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  // displayU = init_string_array(displayU, DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR);
-  // displayM = init_string_array(displayM, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  // int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS); 
-  // char *input = malloc((MAX_OUTPUT_STR)*sizeof(char));
-  // strcpy(input,"\0");
-  //       /*
-  //       ?   INDEX
-  //       * 0 -> OUTPUT
-  //       * 1 -> SCHEDULER
-  //       * 2 -> MEMORY
-  //       * 3 -> PROCESS
-  //       * 4 -> I/O
-  //       */
-  // // start with introduction window
-  // janela_intro();
-  
-  // // Draw main window, sub-windows and components
-  // janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
-  // janela_menu = menu(janela_menu);
-  // janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
-  // janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
-  // janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
-  // janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
-  // janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
+  Program *prog1 = read_program("../programs/synt1");
+  if (prog1 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
 
-  // // change window to get user input
-  // move(6,34);
-  // curs_set(1);
-  // //input loop
-  // while(strcmp(input,"q")){
-  //   if(get_input(input,janela_OUTPUT,displayU,&sizes[0])!= NULL){
-  //     Process *local_process = processCreate(1,input,10);
-  //     processlist[total] = local_process; //todo change later
-  //     total++; //todo change later   
-      
-  //     char processoutput[MAX_OUTPUT_STR] = "";
-  //     StringifyProcess(local_process, processoutput, MAX_OUTPUT_STR);
+  Program *prog2 = read_program("../programs/synt2");
+  if (prog2 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
 
-  //     add_element_list(displayP,processoutput,&sizes[3],DEF_WIN_MAX_PRINTS_BIG,DEF_WIN_WDH);
-  //     print_multiple_messages(janela_process, displayP,&sizes[3]);
-  //     char t[MAX_OUTPUT_STR] = " ";
-  //     sprintf(t, "%i", sizes[3]);
-  //     print_message(janela_memory,t);
-  //   };
-  //   // change window to get user input
-  //   clear_space(6,34,strlen(input));
-  //   move(6,34);
-    
+  // Program *prog3 = read_program("../programs/synt3");
+  // if (prog1 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
   // }
-  // //TODO freeMemory();
-  // close_window(); // closes window
+
+  // Program *prog4 = read_program("../programs/synt4");
+  // if (prog2 == NULL) {
+  //   fprintf(stderr, "Failed to read program\n");
+  //   return;
+  // }
+
+  Process *p1 = create_process_from_program(prog1);
+  Process *p2 = create_process_from_program(prog2);
+  // Process *p3 = create_process_from_program(prog3);
+  // Process *p4 = create_process_from_program(prog4);
+
+  add_process_to_BCP(p1);
+  add_process_to_BCP(p2);
+  // add_process_to_BCP(p3);
+  // add_process_to_BCP(p4);
+
+
+
+  schedule();
+  puts("");
+  print_BCP(&kernel->BCP, kernel->process_amount);
+
+  // //print_BCP(&kernel->BCP);
+
+  //printf("FINISHED \n");
+
+  free_program(prog1);
+  free_program(prog2);
+/*   free_program(prog3);
+  free_program(prog4);
+  free_program(prog5); */
+}
+
+int main (){
+  //create Processes array
+  Process** processlist= (Process**)malloc(MAX_PROCESSES* sizeof(Process*));
+  int total =0; //todo change this later
+/* 
+  !DEPRICIATED
+  // create interface structures to handle the user input
+  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
+
+   char **displayP,**displayS,**displayI,**displayU,**displayM;
+  displayP = init_string_array(displayP,DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  displayS = init_string_array(displayS, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
+  displayI = init_string_array(displayI, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  displayU = init_string_array(displayU, DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR);a
+  displayM = init_string_array(displayM, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS); 
+ */
+  char *input = malloc((MAX_OUTPUT_STR)*sizeof(char));
+  strcpy(input,"\0");
+        /*
+        ?   INDEX
+        * 0 -> OUTPUT
+        * 1 -> SCHEDULER
+        * 2 -> MEMORY
+        * 3 -> PROCESS
+        * 4 -> I/O
+        */
+  // start with introduction window
+  janela_intro();
+  init_interface();
+
+  //input loop
+  while(strcmp(input,"q")){
+    if(get_input(input,janela_OUTPUT)!= NULL){
+        //*Testing with process
+        //* NOTE - commented the prints from the functions for testing with the interface
+        char aux[MAX_OUTPUT_STR] = "../programs/";
+        strcat(aux,input);
+        Program *prog1 = read_program(aux);
+        if (prog1 == NULL) {
+        print_win(janela_OUTPUT,"Faled to read program");
+        return;
+      }else{
+        Process *p1 = create_process_from_program(prog1); 
+        print_win_args(janela_process,"PID: %d, Name: %s, Priority: %d, Segment_id: %d, PC: %d, STATE: %d",
+           p1->pid, p1->name, p1->priority, p1->segment_id, p1->pc, p1->state);     
+      } 
+    }; 
+    // change window to get user input
+    clear_space(6,34,strlen(input));
+    move(6,34);    
+  }     
+      /*    
+      !DEPRECIATED
+      processlist[total] = local_process; //todo change later
+      total++; //todo change later    
+      */
+      /*
+      !DEPRECIATED
+       add_element_list(displayP,processoutput,&sizes[3],DEF_WIN_MAX_PRINTS_BIG,DEF_WIN_WDH);
+       print_multiple_messages(janela_process, displayP,&sizes[3]);
+       */
+
+  //TODO freeMemory();
+  close_window(); // closes window
 
   luigi_testv2();
 

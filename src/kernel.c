@@ -5,6 +5,7 @@
 #include "../include/memory.h"
 #include "../include/semaphore.h"
 #include "../include/iohandler.h"
+#include "../include/interface.h" //?testing
 
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
@@ -15,7 +16,7 @@ Kernel *kernel=NULL;
 void* input_thread_func(void* arg) {
   char command[10];
   while (!kernel->shutdown_request) {
-      printf("\nDigite 'q' para encerrar o Kernel: \n");
+      //printf("\nDigite 'q' para encerrar o Kernel: \n");
       fflush(stdout);
       fgets(command, sizeof(command), stdin);
 
@@ -30,7 +31,8 @@ void* input_thread_func(void* arg) {
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
     if (kernel->BCP == NULL) {
-      fprintf(stderr, "Memory allocation failed\n");
+      //fprintf(stderr, "Memory allocation failed\n");
+      print_win(janela_OUTPUT, "Memory allocation failed");
       exit(EXIT_FAILURE);
     }
   
@@ -93,6 +95,7 @@ void *scheduler_thread_func(void *arg){
     if(kernel->process_amount > 0){
       schedule();
     }
+    printf("Quantidade de processos na BCP.. %d\n", kernel->process_amount);
     if(kernel->process_amount==0){
       scheduler_stop();
     }
@@ -119,6 +122,8 @@ void scheduler_stop(){
   
 int search_BCP(int process_pid){
   if (kernel->BCP == NULL) {
+    //printf("[ERROR] BCP not initialized!\n");
+    print_win(janela_OUTPUT,"[ERROR] BCP not initialized!");
     return FAILURE;
   }
   for (int i = 0; i < MAX_PROCESSES; i++) {
@@ -154,16 +159,18 @@ int add_process_to_BCP(Process *process) {
 // Inclua para ter a definição completa
 
 void init_Kernel() {
-  if (kernel != NULL) {
-      fprintf(stderr, "Kernel already initialized\n");
-      return;
-  }
+    if (kernel != NULL) {
+        //fprintf(stderr, "Kernel already initialized\n");
+        print_win(janela_OUTPUT,"Kernel already initialized");
+        return;
+    }
 
-  kernel = malloc(sizeof(Kernel));
-  if (kernel == NULL) {
-      fprintf(stderr, "Failed to allocate memory for Kernel\n");
-      exit(EXIT_FAILURE);
-  }
+    kernel = malloc(sizeof(Kernel));
+    if (kernel == NULL) {
+        //fprintf(stderr, "Failed to allocate memory for Kernel\n");
+        print_win(janela_OUTPUT,"Failed to allocate memory for Kernel");
+        exit(EXIT_FAILURE);
+    }
 
   // Aloca e inicializa o scheduler
   kernel->scheduler = malloc(sizeof(Scheduler));
