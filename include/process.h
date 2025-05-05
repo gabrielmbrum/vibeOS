@@ -9,6 +9,14 @@
 #include "memory.h"
 #include "program.h"
 
+typedef struct ProgramConter{
+  int last_page;
+  int last_instruction;
+  int global_index;
+}ProgramCounter;
+
+
+
 typedef enum _process__state {
   RUNNING = 1,
   READY = 2,
@@ -16,10 +24,10 @@ typedef enum _process__state {
   TERMINATED = 4
 } ProcessState;
 
-typedef struct {
+typedef struct{
   int pid;
   ProcessState state;
-  int pc;
+  ProgramCounter pc;
   char *name;
   int priority;
   int counter_rw;

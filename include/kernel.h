@@ -31,7 +31,7 @@ extern Kernel *kernel;
 void init_BCP();
 void init_Kernel();
 void processFinish(Process *process);
-void processInterrupt(Process *next);
+void processInterrupt(Process *next); 
 int add_process_to_BCP(Process *process);
 int rmv_process_of_BCP(int removing_pid);
 int search_BCP(int process_pid);
@@ -44,6 +44,8 @@ void start_scheduler();
 void *scheduler_thread_func(void *arg);
 void shutdown_Kernel();
 int processExecute(Process *process);
+int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg);
+int exec_Instruction(Process *process, Opcode opcode, int arg);
 void *io_thread_func(void *arg);
 void context_switch(Process *next, char *arg);
 

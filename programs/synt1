@@ -4,7 +4,7 @@ sint1
 4
 s t
 
-exec 40
+exec 4
 P(s)
 exec 800
 read k
@@ -16,7 +16,7 @@ V(s)
 P(s)
 exec 200
 P(t)
-exec 20000
+exec 200
 write l
 print 150
 V(t)

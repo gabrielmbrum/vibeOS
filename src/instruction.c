@@ -1,6 +1,9 @@
 #include "../include/instruction.h"
 #include "../include/commons.h"
 
+#define IOException -101
+
+
 Instruction* instruction_builder(const char *name, const char *runtime_str) {
   Instruction *instruction = malloc(sizeof(Instruction));
   if (instruction == NULL) {

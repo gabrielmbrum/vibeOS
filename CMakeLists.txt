@@ -5,6 +5,12 @@ project(HelloProject C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Encontra a biblioteca ncurses
+find_package(Curses REQUIRED)
+
+# Inclui os diretórios do ncurses
+include_directories(${CURSES_INCLUDE_DIR})
+
 # Executável principal com todos os arquivos fonte
 add_executable(vibeOS
   src/main.c
@@ -15,7 +21,11 @@ add_executable(vibeOS
   src/instruction.c
   src/memory.c
   src/iohandler.c
+  src/semaphore.c
+  src/interface.c
 )
+# Linka a biblioteca ncurses ao executável
+target_link_libraries(vibeOS ${CURSES_LIBRARIES})
 
 # Configurar diretórios de include
 target_include_directories(vibeOS PUBLIC include/)
