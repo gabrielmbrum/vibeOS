@@ -1,7 +1,7 @@
 #include <ncurses.h>
-#include <string.h>
-#include <stdlib.h>
 #include <curses.h>
+#include "commons.h"
+
 #define MAX_INPUT_STR 25
 #define MAX_OUTPUT_STR 120
 #define NUMBER_OF_WINDOWS 5
@@ -28,17 +28,24 @@ char **init_string_array(char**list,int bound, int stringSize);
 
 int *init_int_array(int *list, int size);
 
+<<<<<<< HEAD
 //input operations
 char*  get_input(char *input, WINDOW *out, char **output, int *sizes);
 
 void add_element_list(char **list, char *input, int *num, int Vbound, int Hbound);
+=======
+void add_input_list(char **list, char *input, int *num, int bound);
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
 
 void print_message(WINDOW *local_window, char *message);
 
 void print_multiple_messages(WINDOW *local_window, char **list, int *size);
 
 int check_input(char *input);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
 // window operations
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title);
 

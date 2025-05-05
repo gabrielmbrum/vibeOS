@@ -1,9 +1,14 @@
 CMakeFiles/vibeOS.dir/src/process.c.o: \
+<<<<<<< HEAD
  /mnt/c/Users/User/vibeOS/src/process.c /usr/include/stdc-predef.h \
  /mnt/c/Users/User/vibeOS/src/../include/process.h \
  /mnt/c/Users/User/vibeOS/src/../include/memory.h \
  /mnt/c/Users/User/vibeOS/src/../include/instruction.h \
  /mnt/c/Users/User/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+=======
+ /home/midori_torres/vibeOS/src/process.c /usr/include/stdc-predef.h \
+ /home/midori_torres/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -60,4 +65,12 @@ CMakeFiles/vibeOS.dir/src/process.c.o: \
  /usr/include/x86_64-linux-gnu/bits/confname.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+ /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/process.h \
+ /home/midori_torres/vibeOS/src/../include/memory.h \
+ /home/midori_torres/vibeOS/src/../include/instruction.h \
+ /home/midori_torres/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOS/src/../include/semaphore.h \
+ /home/midori_torres/vibeOS/src/../include/process.h

@@ -1,8 +1,17 @@
-#include "../include/process.h"
-#include "../include/commons.h"
- // Global variable to hold the BCP
+/* O process.c:
+- cria e inicializa estruturas Process
 
- Process *processCreate(int pid, const char *name, int priority) {
+a função processCreate(pid, name, priority): aloca memória e define os campos iniciais
+
+Um processo tem:
+pid, state, pc, name, priority, counter_rw, slice_time */
+
+#include "../include/commons.h"
+#include "../include/process.h"
+
+int global_pid = 0;
+
+Process *processCreate(int pid, const char *name, int priority) {
   //Ensuring Unique PID at Process Creation //In order to avoid effortless.
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
@@ -20,6 +29,7 @@
   return process;
 }
 
+<<<<<<< HEAD
 
 char* StringifyProcess(Process *p, char *buffer, int buffer_size) {
   if (p == NULL || buffer == NULL || buffer_size <= 0) return NULL;
@@ -30,3 +40,37 @@ char* StringifyProcess(Process *p, char *buffer, int buffer_size) {
   
   return buffer;
 }
+=======
+Process *create_process_from_program(Program *program) {
+  Process *process = (Process *) malloc(sizeof(Process));
+  if (process == NULL) {
+    fprintf(stderr, "Memory allocation failed\n");
+    return NULL;
+  }
+
+  process->pid = global_pid++; // Increment global PID for unique process ID
+  process->state = READY;
+  process->pc = 0;
+  process->name = calloc((strlen(program->header.name) + 1), sizeof(char));
+  strcpy(process->name, program->header.name); // Copy program name to process name
+  printf("[DEBUG] Created Process %d ('%s')\n", process->pid, process->name);
+
+  process->priority = program->header.original_priority;
+
+  process->counter_rw = 0; // Initialize counter_rw to 0
+
+  process->segment_id = program->header.segment_id;
+  process->segment_size = program->header.segment_size;
+
+  process->runtime = 0;
+
+  process->semaphores = calloc((strlen(program->header.semaphores) + 1), sizeof(char));
+  strcpy(process->semaphores, program->header.semaphores);
+  register_process_semaphores(process);
+  //print_all_semaphores();
+
+  process->page_table = build_page_table(program->instructions, program->instructions_count); // Initialize page table to NULL
+  
+  return process;
+}
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e

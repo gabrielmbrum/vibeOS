@@ -201,6 +201,30 @@ src/interface.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/interface.c.s
 .PHONY : src/interface.c.s
 
+src/iohandler.o: src/iohandler.c.o
+.PHONY : src/iohandler.o
+
+# target to build an object file
+src/iohandler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.o
+.PHONY : src/iohandler.c.o
+
+src/iohandler.i: src/iohandler.c.i
+.PHONY : src/iohandler.i
+
+# target to preprocess a source file
+src/iohandler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.i
+.PHONY : src/iohandler.c.i
+
+src/iohandler.s: src/iohandler.c.s
+.PHONY : src/iohandler.s
+
+# target to generate assembly for a file
+src/iohandler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/iohandler.c.s
+.PHONY : src/iohandler.c.s
+
 src/kernel.o: src/kernel.c.o
 .PHONY : src/kernel.o
 
@@ -248,6 +272,30 @@ src/main.s: src/main.c.s
 src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/memory.o: src/memory.c.o
+.PHONY : src/memory.o
+
+# target to build an object file
+src/memory.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/memory.c.o
+.PHONY : src/memory.c.o
+
+src/memory.i: src/memory.c.i
+.PHONY : src/memory.i
+
+# target to preprocess a source file
+src/memory.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/memory.c.i
+.PHONY : src/memory.c.i
+
+src/memory.s: src/memory.c.s
+.PHONY : src/memory.s
+
+# target to generate assembly for a file
+src/memory.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/memory.c.s
+.PHONY : src/memory.c.s
 
 src/process.o: src/process.c.o
 .PHONY : src/process.o
@@ -297,6 +345,30 @@ src/program.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/program.c.s
 .PHONY : src/program.c.s
 
+src/semaphore.o: src/semaphore.c.o
+.PHONY : src/semaphore.o
+
+# target to build an object file
+src/semaphore.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/semaphore.c.o
+.PHONY : src/semaphore.c.o
+
+src/semaphore.i: src/semaphore.c.i
+.PHONY : src/semaphore.i
+
+# target to preprocess a source file
+src/semaphore.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/semaphore.c.i
+.PHONY : src/semaphore.c.i
+
+src/semaphore.s: src/semaphore.c.s
+.PHONY : src/semaphore.s
+
+# target to generate assembly for a file
+src/semaphore.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/src/semaphore.c.s
+.PHONY : src/semaphore.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -315,18 +387,27 @@ help:
 	@echo "... src/interface.o"
 	@echo "... src/interface.i"
 	@echo "... src/interface.s"
+	@echo "... src/iohandler.o"
+	@echo "... src/iohandler.i"
+	@echo "... src/iohandler.s"
 	@echo "... src/kernel.o"
 	@echo "... src/kernel.i"
 	@echo "... src/kernel.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/memory.o"
+	@echo "... src/memory.i"
+	@echo "... src/memory.s"
 	@echo "... src/process.o"
 	@echo "... src/process.i"
 	@echo "... src/process.s"
 	@echo "... src/program.o"
 	@echo "... src/program.i"
 	@echo "... src/program.s"
+	@echo "... src/semaphore.o"
+	@echo "... src/semaphore.i"
+	@echo "... src/semaphore.s"
 .PHONY : help
 
 

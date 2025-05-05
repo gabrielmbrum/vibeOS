@@ -139,6 +139,8 @@ WINDOW *delete_window(WINDOW  *local_win){
 
   wrefresh(local_win);
   delwin(local_win);
+
+  return 0;
 }
 
 WINDOW *janela_intro(){
@@ -166,7 +168,7 @@ WINDOW *janela_intro(){
   delete_window(intro);
 }
 
-WINDOW *init_menu_components(WINDOW *menu){
+WINDOW *menu(WINDOW *menu){
   mvwprintw(menu, 1, 15, "%s", " ___   _____       ____  ____ ");
   mvwprintw(menu, 2, 15, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
   mvwprintw(menu, 3, 15, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
@@ -178,6 +180,7 @@ WINDOW *init_menu_components(WINDOW *menu){
   return menu;
 }
 
+<<<<<<< HEAD
 WINDOW *init_interface(){
   // malloc the screen windows, display arrays and sizes
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
@@ -185,6 +188,40 @@ WINDOW *init_interface(){
 /*   // Draw main window, sub-windows and components
   janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
   janela_menu = init_menu_components(janela_menu);
+=======
+/* int main(){
+  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
+
+  //! This does not represent the total processes in the Simulator. The arrays contain only the information to be displayed in the screen
+  char **displayProcessos = init_string_array(displayProcessos,DEF_WIN_MAX_PRINTS_BIG,MAX_INPUT_STR);
+  char **displayScheduler = init_string_array(displayScheduler, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
+  char **displayIO = init_string_array(displayIO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  char **displayOUT = init_string_array(displayOUT, (DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR),MAX_OUTPUT_STR);
+  char **displayMEMO = init_string_array(displayMEMO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  char *input = malloc((MAX_INPUT_STR)*sizeof(char));
+  strcpy(input,"\0");
+
+  // Malloc the array containing the sizes of the dinamic arrays
+  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS);
+
+  
+  ! INDEX
+  * 0 -> OUtPUT
+  * 1 -> SCHEDULER
+  * 2 -> MEMORY
+  * 3 -> PROCESS
+  * 4 -> I/O
+  
+
+  // initialize introduction window
+  initscr();	
+  curs_set(0);		
+  janela_intro();
+
+  // initialize main window and components
+  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1,"MENU");
+  janela_menu = menu(janela_menu);
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
   janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
   janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
   janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
@@ -216,6 +253,7 @@ WINDOW *init_interface(){
   free(input);
 
   // close lncurses window
+<<<<<<< HEAD
   endwin();			 */
 }
 
@@ -239,3 +277,8 @@ WINDOW *close_window(){
      free(input); */
      endwin();
 }
+=======
+  endwin();			
+  return 0;
+}  */
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e

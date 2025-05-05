@@ -1,9 +1,19 @@
 CMakeFiles/vibeOS.dir/src/kernel.c.o: \
+<<<<<<< HEAD
  /mnt/c/Users/User/vibeOS/src/kernel.c /usr/include/stdc-predef.h \
  /mnt/c/Users/User/vibeOS/src/../include/process.h \
  /mnt/c/Users/User/vibeOS/src/../include/memory.h \
  /mnt/c/Users/User/vibeOS/src/../include/instruction.h \
  /mnt/c/Users/User/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+=======
+ /home/midori_torres/vibeOS/src/kernel.c /usr/include/stdc-predef.h \
+ /home/midori_torres/vibeOS/src/../include/process.h \
+ /home/midori_torres/vibeOS/src/../include/memory.h \
+ /home/midori_torres/vibeOS/src/../include/instruction.h \
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
+ /home/midori_torres/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -61,8 +71,32 @@ CMakeFiles/vibeOS.dir/src/kernel.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+<<<<<<< HEAD
  /mnt/c/Users/User/vibeOS/src/../include/kernel.h \
  /mnt/c/Users/User/vibeOS/src/../include/process.h \
  /mnt/c/Users/User/vibeOS/src/../include/commons.h \
  /mnt/c/Users/User/vibeOS/src/../include/debug.h \
  /mnt/c/Users/User/vibeOS/src/../include/debug.h
+=======
+ /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/process.h \
+ /home/midori_torres/vibeOS/src/../include/semaphore.h \
+ /home/midori_torres/vibeOS/src/../include/kernel.h \
+ /home/midori_torres/vibeOS/src/../include/commons.h \
+ /home/midori_torres/vibeOS/src/../include/iohandler.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/x86_64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
+ /home/midori_torres/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOS/src/../include/memory.h \
+ /home/midori_torres/vibeOS/src/../include/semaphore.h \
+ /home/midori_torres/vibeOS/src/../include/iohandler.h
+>>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
