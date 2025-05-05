@@ -8,6 +8,7 @@ CMakeFiles/vibeOS.dir/src/debug.c.o: /home/midori_torres/vibeOS/src/debug.c \
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/endian.h \
   /usr/include/features-time64.h \
@@ -82,6 +83,7 @@ CMakeFiles/vibeOS.dir/src/instruction.c.o: /home/midori_torres/vibeOS/src/instru
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/endian.h \
   /usr/include/features-time64.h \
@@ -157,6 +159,7 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: /home/midori_torres/vibeOS/src/interfac
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/curses.h \
   /usr/include/endian.h \
@@ -240,6 +243,7 @@ CMakeFiles/vibeOS.dir/src/kernel.c.o: /home/midori_torres/vibeOS/src/kernel.c \
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/endian.h \
   /usr/include/features-time64.h \
@@ -399,6 +403,7 @@ CMakeFiles/vibeOS.dir/src/memory.c.o: /home/midori_torres/vibeOS/src/memory.c \
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/endian.h \
   /usr/include/features-time64.h \
@@ -473,6 +478,7 @@ CMakeFiles/vibeOS.dir/src/process.c.o: /home/midori_torres/vibeOS/src/process.c 
   /home/midori_torres/vibeOS/include/memory.h \
   /home/midori_torres/vibeOS/include/process.h \
   /home/midori_torres/vibeOS/include/program.h \
+  /home/midori_torres/vibeOS/include/semaphore.h \
   /usr/include/alloca.h \
   /usr/include/endian.h \
   /usr/include/features-time64.h \
@@ -772,10 +778,6 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphor
 
 /home/midori_torres/vibeOS/include/commons.h:
 
-/home/midori_torres/vibeOS/include/semaphore.h:
-
-/usr/include/features.h:
-
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
@@ -792,6 +794,20 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphor
 
 /home/midori_torres/vibeOS/include/process.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
+
+/usr/include/endian.h:
+
+/home/midori_torres/vibeOS/include/instruction.h:
+
+/usr/include/features.h:
+
+/home/midori_torres/vibeOS/include/semaphore.h:
+
+/home/midori_torres/vibeOS/include/kernel.h:
+
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
 /usr/include/ncurses_dll.h:
@@ -803,10 +819,6 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphor
 /usr/include/x86_64-linux-gnu/bits/types/sigset_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
-
-/home/midori_torres/vibeOS/include/kernel.h:
-
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
@@ -832,12 +844,6 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphor
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
-/usr/include/endian.h:
-
-/home/midori_torres/vibeOS/include/instruction.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
@@ -862,9 +868,9 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphor
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/long-double.h:
-
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
+
+/usr/include/x86_64-linux-gnu/bits/long-double.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 

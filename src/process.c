@@ -41,6 +41,7 @@ Process *create_process_from_program(Program *program) {
   process->pc = 0;
   process->name = calloc((strlen(program->header.name) + 1), sizeof(char));
   strcpy(process->name, program->header.name); // Copy program name to process name
+  printf("[DEBUG] Created Process %d ('%s')\n", process->pid, process->name);
 
   process->priority = program->header.original_priority;
 
@@ -53,6 +54,8 @@ Process *create_process_from_program(Program *program) {
 
   process->semaphores = calloc((strlen(program->header.semaphores) + 1), sizeof(char));
   strcpy(process->semaphores, program->header.semaphores);
+  register_process_semaphores(process);
+  //print_all_semaphores();
 
   process->page_table = build_page_table(program->instructions, program->instructions_count); // Initialize page table to NULL
   

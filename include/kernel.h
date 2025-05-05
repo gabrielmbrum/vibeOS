@@ -29,4 +29,13 @@ void change_process_state(Process **process, ProcessState state);
 int scheduler_POLICY();
 void context_switch();
 void schedule();
+
+void instruction_execution(Process *process, Instruction *inst);
+
+Instruction* fetch_next_instruction(Process *process);
+
+Process* scheduler_get_next_process(Scheduler *sched);
+
+void save_process_context(Process *p);
+void restore_process_context(Process *p);
 #endif

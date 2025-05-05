@@ -149,7 +149,7 @@ WINDOW *menu(WINDOW *menu){
   return menu;
 }
 
-int main(){
+/* int main(){
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
 
   //! This does not represent the total processes in the Simulator. The arrays contain only the information to be displayed in the screen
@@ -164,14 +164,14 @@ int main(){
   // Malloc the array containing the sizes of the dinamic arrays
   int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS);
 
-  /* 
+  
   ! INDEX
   * 0 -> OUtPUT
   * 1 -> SCHEDULER
   * 2 -> MEMORY
   * 3 -> PROCESS
   * 4 -> I/O
-  */
+  
 
   // initialize introduction window
   initscr();	
@@ -216,4 +216,4 @@ int main(){
   // close lncurses window
   endwin();			
   return 0;
-} 
+}  */

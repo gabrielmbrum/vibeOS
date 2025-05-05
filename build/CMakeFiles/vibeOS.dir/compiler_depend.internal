@@ -9,6 +9,7 @@ CMakeFiles/vibeOS.dir/src/debug.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/endian.h
  /usr/include/features-time64.h
@@ -84,6 +85,7 @@ CMakeFiles/vibeOS.dir/src/instruction.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/endian.h
  /usr/include/features-time64.h
@@ -160,6 +162,7 @@ CMakeFiles/vibeOS.dir/src/interface.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/curses.h
  /usr/include/endian.h
@@ -244,6 +247,7 @@ CMakeFiles/vibeOS.dir/src/kernel.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/endian.h
  /usr/include/features-time64.h
@@ -405,6 +409,7 @@ CMakeFiles/vibeOS.dir/src/memory.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/endian.h
  /usr/include/features-time64.h
@@ -480,6 +485,7 @@ CMakeFiles/vibeOS.dir/src/process.c.o
  /home/midori_torres/vibeOS/include/memory.h
  /home/midori_torres/vibeOS/include/process.h
  /home/midori_torres/vibeOS/include/program.h
+ /home/midori_torres/vibeOS/include/semaphore.h
  /usr/include/alloca.h
  /usr/include/endian.h
  /usr/include/features-time64.h

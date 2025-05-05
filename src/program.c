@@ -63,7 +63,6 @@ Program* read_program(const char *filename) {
       //printf("\n\t\tsemaphore list in char %d -> sem: %s | aux: %s\n", i, program->header.semaphores, aux);
     }
   }
-  init_semaphores(program);
   //printf("semaphores: %s[FIM]\n", program->header.semaphores);
   //puts("header readed :>");
 

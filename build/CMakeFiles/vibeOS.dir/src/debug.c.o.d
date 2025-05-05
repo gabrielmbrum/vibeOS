@@ -63,4 +63,5 @@ CMakeFiles/vibeOS.dir/src/debug.c.o: \
  /home/midori_torres/vibeOS/src/../include/process.h \
  /home/midori_torres/vibeOS/src/../include/memory.h \
  /home/midori_torres/vibeOS/src/../include/instruction.h \
- /home/midori_torres/vibeOS/src/../include/program.h
+ /home/midori_torres/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOS/src/../include/semaphore.h

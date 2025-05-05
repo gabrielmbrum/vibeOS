@@ -66,4 +66,6 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /home/midori_torres/vibeOS/src/../include/debug.h \
- /home/midori_torres/vibeOS/src/../include/commons.h
+ /home/midori_torres/vibeOS/src/../include/semaphore.h \
+ /home/midori_torres/vibeOS/src/../include/commons.h \
+ /home/midori_torres/vibeOS/src/../include/process.h
