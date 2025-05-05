@@ -22,7 +22,8 @@ typedef struct __page_table {
   Page *pages;
   int page_count;
   bool missing_instructions;
-  int last_instruction_loaded;
+  int last_instruction_loaded;  // keeps track of the last instruction loaded
+  int last_instruction_counter; // keeps track of how many pages were made for the last instruction
 } PageTable;
 
 /*
@@ -46,8 +47,13 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count);
   * Refreshes the page table, reusing the pages already alocated and putting the instructions not loaded to the pages.
   * It updates the last instruction loaded and checks for missing instructions.
 
+  INITIAL ASSUMPTIONS
+    - this function will only be called when the page table is full
+    - the last instruction loaded is considered as read by complete
+    - if for example, only more 4 pages will be needed, the other 12 pages MUST be freed
+
 */
-void refresh_page_table(PageTable **page_table, Instruction *instructions, int instructions_count, int last_instruction_loaded);
+void refresh_page_table(PageTable **page_table, Instruction *instructions, int instructions_count);
 
 /*
 

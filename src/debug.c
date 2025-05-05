@@ -113,6 +113,8 @@ void print_process(Process *proc) {
   printf("Runtime: %d\n", proc->runtime_execution);
   printf("Semaphores: %s\n", proc->semaphores);
   printf("Time-Slice: %d\n", proc->slice_time);
+  printf("Last Instruction Loaded: %d\n", proc->page_table->last_instruction_loaded);
+  printf("Last Instruction Counter: %d\n", proc->page_table->last_instruction_counter);
   if (proc->page_table->page_count == 0) {
     printf("Page Table is empty! No pages allocated\n");
   } else {

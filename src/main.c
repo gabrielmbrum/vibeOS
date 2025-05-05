@@ -154,11 +154,13 @@ void brum_test() {
 
   Process *proc1 = create_process_from_program(prog1);
 
+  print_program(prog1);
+
   print_process(proc1);
 
   memory_status();
 
-  refresh_page_table(&proc1->page_table, prog1->instructions, prog1->instructions_count, proc1->page_table->last_instruction_loaded);
+  refresh_page_table(&proc1->page_table, prog1->instructions, prog1->instructions_count);
 
   print_process(proc1);
 
