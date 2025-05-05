@@ -64,7 +64,7 @@ void luigi_testv2() {
 
   // Adiciona processos ao BCP (inicia automaticamente o escalonador)
   add_process_to_BCP(p1);
-  add_process_to_BCP(p3);
+  //add_process_to_BCP(p3);
   add_process_to_BCP(p2);
   // Exibe estado inicial
   print_BCP(&kernel->BCP, kernel->process_amount);
@@ -72,11 +72,13 @@ void luigi_testv2() {
 
   // Loop principal: aguarda término dos processos
   while (kernel->process_amount > 0 && !kernel->shutdown_request) {
-      sleep(1); // Reduz uso da CPU
-      printf("\nProcessos restantes: %d\n", kernel->process_amount);
+      sleep(1); // Reduz uso da CPU  
   }
+  printf("Processos no escalonador %d\n",kernel->process_amount);
   printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
   // Cleanup
+  add_process_to_BCP(p3);
+
   pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();
 }
@@ -172,8 +174,6 @@ void brum_test() {
 }
 
 int main () {
-
-  brum_test();
-
+  luigi_testv2();
   return 0;
 }

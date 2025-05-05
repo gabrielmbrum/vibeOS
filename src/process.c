@@ -13,7 +13,8 @@ Process *processCreate(int pid, const char *name, int priority) {
   
   process->pid = pid; // Creating Processes
   process->state = READY;
-  process->pc = 0;
+  process->pc.last_instruction=0;
+  process->pc.last_page=0;
   process->name = strdup(name);
   process->priority = priority;
   process->counter_rw = 0; // As long as the process's been created, insert at BCP
@@ -30,7 +31,9 @@ Process *create_process_from_program(Program *program) {
 
   process->pid = global_pid++; // Increment global PID for unique process ID
   process->state = READY;
-  process->pc = 0;
+  process->pc.last_instruction=0;
+  process->pc.last_page=0;
+  process->pc.global_index = 0;
   process->name = calloc((strlen(program->header.name) + 1), sizeof(char));
   strcpy(process->name, program->header.name); // Copy program name to process name
 

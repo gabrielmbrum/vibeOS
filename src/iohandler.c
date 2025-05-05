@@ -2,7 +2,7 @@
 #include "../include/iohandler.h"
 #include "../include/commons.h"
 
-#define RWTimeSlice 6
+#define RWTimeSlice 1
 
 
 IOQueue *init_queue(IOQueue *queue){
@@ -71,7 +71,7 @@ IORequest* dequeue(IOQueue *queue) {
 
 void exec_request(IOQueue *queue){
     IORequest *request = dequeue(queue);
-    if(!request) return;
+    if(!request || request->process->pid == EMPTY_BCP_ENTRY) return;
     LOCK_IO();
     FILE *buffer =  NULL;
     switch(request->opcode){
@@ -82,6 +82,7 @@ void exec_request(IOQueue *queue){
             printf("%s %d\n", "Escrita da trilha", request->arg);
             sleep(RWTimeSlice);
             fclose(buffer);
+            puts("Arquivo fechado com sucesso!");
         break;
         case READ:
             buffer = fopen("../src/buffer.txt", "r+");
@@ -92,6 +93,7 @@ void exec_request(IOQueue *queue){
             sleep(RWTimeSlice);
             pthread_cond_signal(&queue->iocond);
             fclose(buffer);
+            puts("Arquivo fechado com sucesso!");
         break;
         case PRINT:
         int print_timing = 0;

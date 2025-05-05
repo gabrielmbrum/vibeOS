@@ -11,7 +11,7 @@ void print_BCP(Process **BCP, int processes) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       printf("PID: %d, Name: %s, State: %d, PC: %d, Priority: %d, Counter RW: "
              "%d, Time-Slice: %d\n",
-             (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state, (*BCP)[i].pc,
+             (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state, (*BCP)[i].pc.last_instruction,
              (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }
   }
@@ -106,7 +106,8 @@ void print_process(Process *proc) {
   printf("PID: %d\n", proc->pid);
   printf("Name: %s\n", proc->name);
   printf("State: %s\n", state_to_string(proc->state));
-  printf("PC: %d\n", proc->pc);
+  printf("PC Instruction: %d\n", proc->pc.last_instruction);
+  printf("PC Page: %d\n", proc->pc.last_page);
   printf("Priority: %d\n", proc->priority);
   printf("RW Counter: %d\n", proc->counter_rw);
   printf("Segment ID: %d, Size: %d\n", proc->segment_id, proc->segment_size);
@@ -116,7 +117,7 @@ void print_process(Process *proc) {
   if (proc->page_table->page_count == 0) {
     printf("Page Table is empty! No pages allocated\n");
   } else {
-    print_page_table(proc->page_table);
+    //print_page_table(proc->page_table);
   }
   printf("\n");
 }

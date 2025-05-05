@@ -65,17 +65,19 @@ void schedule() {
       }
     }
   }
-
+  //print_BCP(&kernel->BCP, kernel->process_amount);
   // Se chegou aqui, current é válido (pid >= 0)
-  current->slice_time++;
-  current->runtime_execution--;
-
+  if(current->pid!=EMPTY_BCP_ENTRY) current->slice_time++;
+  if(current->runtime_execution>0)current->runtime_execution--;
   if (current->slice_time >= kernel->scheduler->QUANTUM_TIME) {
     int idx = scheduler_POLICY();
     if (idx != FAILURE) {
       Process *next = &kernel->BCP[idx];
       processInterrupt(next);
       result = processExecute(next);
+      if(result == TERMINATED){
+        context_switch(&current, "TERMINATED");
+      }
     }
   }
 
@@ -103,6 +105,7 @@ void *scheduler_thread_func(void *arg) {
 
 void start_scheduler() {
   if (!kernel->scheduler_running) {
+    puts("Schedular rodando!");
     kernel->scheduler_running = true;
     pthread_create(&kernel->scheduler_thread, NULL, scheduler_thread_func,
                    NULL);
@@ -114,6 +117,8 @@ void scheduler_stop() {
     kernel->scheduler_running = false;
     pthread_cond_signal(&kernel->bcp_cond);
     pthread_join(kernel->scheduler_thread, NULL);
+    UNLOCK_BCP();
+    puts("Scheduler encerrado!"); 
   }
 }
 
@@ -131,6 +136,7 @@ int search_BCP(int process_pid) {
 }
 
 int add_process_to_BCP(Process *process) {
+  puts("Adicionando");
   LOCK_BCP();
   if (kernel->BCP == NULL) {
     init_BCP();
@@ -250,6 +256,7 @@ void change_process_state(Process **process, ProcessState state) {
 
 void context_switch(Process *next, char *arg) {
   Process *running_process = kernel->scheduler->running_process;
+  puts("Trocando contexto por motivos");
 
   if (strcmp(arg, "QUANTUM") == 0) {
     running_process->slice_time = 0;
@@ -261,6 +268,7 @@ void context_switch(Process *next, char *arg) {
            running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
+    puts("Processo finalizado removido da BCP!");
   }
 
   else if (strcmp(arg, "I/O") == 0) {
@@ -277,6 +285,7 @@ void processInterrupt(Process *next) { // Quantum atingido.
 }
 
 int exec_Instruction(Process *process, Opcode opcode, int arg) {
+  printf("\nExecutando %s...\n",opcode_to_string(opcode));
   switch (opcode) {
   case READ ... WRITE:
     IORequest *request = make_request(process, opcode, arg);
@@ -298,40 +307,61 @@ int exec_Instruction(Process *process, Opcode opcode, int arg) {
   }
 }
 
+
 int get_total_instructions(PageTable *pt) {
   int total = 0;
   for (int i = 0; i < pt->page_count; i++) {
-    total += pt->pages[i].instruction_count;
+      total += pt->pages[i].instruction_count;
   }
   return total;
 }
 
 int processExecute(Process *process) {
-  if (!process || process->state == TERMINATED)
-    return FAILURE;
-  PageTable *current_pt = process->page_table;
-  printf("Executando processo: %d\n", process->pid);
-  printf("Process time-slice: %d\n", process->slice_time);
-  for (int i = 0; i < current_pt->page_count; i++) {
-    Page *page = &current_pt->pages[i];
-    for (int j = 0; j < page->instruction_count; j++) {
-      if (process->pc >= get_total_instructions(current_pt)) {
-        change_process_state(&process, TERMINATED);
-        return TERMINATED;
-      }
-
-      Instruction *inst = &page->instructions[j];
-
-      int result = exec_Instruction(process, inst->opcode, inst->value);
-
-      if (result == IOException) {
-        change_process_state(&process, WAITING);
-        return IOException;
-      }
-
-      process->pc++;
-    }
+  if (!process || process->state == TERMINATED) {
+      return FAILURE;
   }
+
+  PageTable *current_pt = process->page_table;
+  int total_instructions = get_total_instructions(current_pt);
+
+  // Verifica se o processo já terminou (PC >= total_instructions)
+  if (process->pc.global_index >= total_instructions) {
+      change_process_state(&process, TERMINATED);
+      return TERMINATED;
+  }
+
+  // Obtém a página e instrução atual
+  int current_page = process->pc.last_page;
+  int current_instruction = process->pc.last_instruction;
+  Page *page = &current_pt->pages[current_page];
+
+  // Executa a próxima instrução
+  Instruction *inst = &page->instructions[current_instruction];
+  print_instruction(*inst);
+  int result = exec_Instruction(process, inst->opcode, inst->value);
+
+  // Avança o PC
+  process->pc.last_instruction++;
+  process->pc.global_index++;
+
+  // Se terminou a página atual, avança para a próxima
+  if (process->pc.last_instruction >= page->instruction_count) {
+      process->pc.last_page++;
+      process->pc.last_instruction = 0;
+  }
+
+  // Trata resultados (I/O ou término)
+  if (result == IOException) {
+      change_process_state(&process, WAITING);
+      return IOException;
+  }
+
+  // Verifica se terminou todas as instruções
+  if (process->pc.global_index >= total_instructions) {
+      change_process_state(&process, TERMINATED);
+      return TERMINATED;
+  }
+
   return SUCCESS;
 }
 
@@ -342,8 +372,13 @@ void *io_thread_func(void *arg) {
       continue;
 
     exec_request(kernel->queue_requests);
-    if (req->process->state == WAITING)
+    LOCK_BCP();
+    if (req->process->state == WAITING){
+      puts("Processo estava esperando I/O..");
+      printf("Operação: %s %d\n", opcode_to_string(req->opcode), req->arg);
       change_process_state(&req->process, READY);
+    }
+    UNLOCK_BCP();
     printf("Processo PID %d liberado\n", req->process->pid);
     print_process(req->process);
   }
