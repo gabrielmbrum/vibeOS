@@ -180,15 +180,13 @@ WINDOW *menu(WINDOW *menu){
   return menu;
 }
 
-<<<<<<< HEAD
-WINDOW *init_interface(){
+/*WINDOW *init_interface(){
   // malloc the screen windows, display arrays and sizes
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
 
 /*   // Draw main window, sub-windows and components
   janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
   janela_menu = init_menu_components(janela_menu);
-=======
 /* int main(){
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
 
@@ -221,7 +219,6 @@ WINDOW *init_interface(){
   // initialize main window and components
   janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1,"MENU");
   janela_menu = menu(janela_menu);
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
   janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
   janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
   janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
@@ -253,9 +250,8 @@ WINDOW *init_interface(){
   free(input);
 
   // close lncurses window
-<<<<<<< HEAD
-  endwin();			 */
-}
+  endwin();			 
+}*/
 
 char* get_input(char *input,WINDOW*out, char **output, int *sizes){
      getstr(input);
@@ -272,13 +268,25 @@ char* get_input(char *input,WINDOW*out, char **output, int *sizes){
      }
 }
 
+// void print_vibe(WINDOW *local_window){
+//   mvwprintw(local_window, POS_Y, POS_X, "%s","welecome to the vibeOS\t\t\tjust feel the vibe...\t\t\t");
+//   wrefresh(local_window);
+// }
+
+// void print_loop(WINDOW *local_window){
+//   for (int i = 1; i < 10; i++) {
+//     sleep(i);
+//     mvwprintw(local_window, POS_Y, POS_X, "%s\t\t\t", i % 2 == 0 ? "just feel the vibe..." : "are you feeling?");
+//     wrefresh(local_window);
+//   }
+// }
+
+
 WINDOW *close_window(){
 /*      // free memory
      free(input); */
      endwin();
 }
-=======
-  endwin();			
-  return 0;
-}  */
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
+//   endwin();			
+//   return 0;
+// }  */

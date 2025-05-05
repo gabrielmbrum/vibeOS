@@ -1,8 +1,8 @@
 CMakeFiles/vibeOS.dir/src/program.c.o: \
- /mnt/c/Users/User/vibeOS/src/program.c /usr/include/stdc-predef.h \
- /mnt/c/Users/User/vibeOS/src/../include/program.h \
- /mnt/c/Users/User/vibeOS/src/../include/instruction.h \
- /mnt/c/Users/User/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+ /home/midori_torres/vibeOS/src/program.c /usr/include/stdc-predef.h \
+ /home/midori_torres/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOS/src/../include/instruction.h \
+ /home/midori_torres/vibeOS/src/../include/commons.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \

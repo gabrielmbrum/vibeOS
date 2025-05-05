@@ -1,3 +1,3 @@
-/mnt/c/Users/User/vibeOS/build/CMakeFiles/vibeOS.dir
-/mnt/c/Users/User/vibeOS/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/User/vibeOS/build/CMakeFiles/rebuild_cache.dir
+/home/midori_torres/vibeOS/build/CMakeFiles/vibeOS.dir
+/home/midori_torres/vibeOS/build/CMakeFiles/edit_cache.dir
+/home/midori_torres/vibeOS/build/CMakeFiles/rebuild_cache.dir

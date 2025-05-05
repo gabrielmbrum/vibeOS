@@ -7,12 +7,12 @@ void print_BCP(Process **BCP, int processes) {
   }
 
   printf("Process Control Block (BCP):\n");
-  for (int i = 0; i < processes; i++) {
+  for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       printf("PID: %d, Name: %s, State: %d, PC: %d, Priority: %d, Counter RW: "
-             "%d\n",
+             "%d, Time-Slice: %d\n",
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state, (*BCP)[i].pc,
-             (*BCP)[i].priority, (*BCP)[i].counter_rw);
+             (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }
   }
 }
@@ -88,11 +88,13 @@ void print_instructions(Instruction *instructions, int total_instructions) {
 void print_page_table(PageTable *page_table) {
   printf("\n---------*---------*---------*---------  Page Table ---------*---------*---------*---------\n\n");
   for (int i = 0; i < page_table->page_count; i++) {
-    printf("Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d\n",
+    printf("Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d, Missing Instructions: %s, Last Instruction Loaded: %d\n",
           page_table->pages[i].page_number, 
           page_table->pages[i].reference_bit,
           page_table->pages[i].used_bit, 
-          page_table->pages[i].instruction_count);
+          page_table->pages[i].instruction_count,
+          boolean_to_string(page_table->missing_instructions),
+          page_table->last_instruction_loaded);
 
     print_instructions(page_table->pages[i].instructions, page_table->pages[i].instruction_count);
   }
@@ -108,13 +110,13 @@ void print_process(Process *proc) {
   printf("Priority: %d\n", proc->priority);
   printf("RW Counter: %d\n", proc->counter_rw);
   printf("Segment ID: %d, Size: %d\n", proc->segment_id, proc->segment_size);
-  printf("Runtime: %d\n", proc->runtime);
+  printf("Runtime: %d\n", proc->runtime_execution);
   printf("Semaphores: %s\n", proc->semaphores);
-
+  printf("Time-Slice: %d\n", proc->slice_time);
   if (proc->page_table->page_count == 0) {
     printf("Page Table is empty! No pages allocated\n");
   } else {
-    print_page_table(proc->page_table);
+    //print_page_table(proc->page_table);
   }
   printf("\n");
 }

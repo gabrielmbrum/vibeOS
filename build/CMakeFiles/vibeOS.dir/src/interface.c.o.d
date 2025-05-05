@@ -1,6 +1,6 @@
 CMakeFiles/vibeOS.dir/src/interface.c.o: \
- /mnt/c/Users/User/vibeOS/src/interface.c /usr/include/stdc-predef.h \
- /mnt/c/Users/User/vibeOS/src/../include/interface.h \
+ /home/midori_torres/vibeOS/src/interface.c /usr/include/stdc-predef.h \
+ /home/midori_torres/vibeOS/src/../include/interface.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \

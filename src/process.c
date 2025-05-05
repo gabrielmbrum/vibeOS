@@ -29,7 +29,6 @@ Process *processCreate(int pid, const char *name, int priority) {
   return process;
 }
 
-<<<<<<< HEAD
 
 char* StringifyProcess(Process *p, char *buffer, int buffer_size) {
   if (p == NULL || buffer == NULL || buffer_size <= 0) return NULL;
@@ -40,7 +39,6 @@ char* StringifyProcess(Process *p, char *buffer, int buffer_size) {
   
   return buffer;
 }
-=======
 Process *create_process_from_program(Program *program) {
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
@@ -73,4 +71,3 @@ Process *create_process_from_program(Program *program) {
   
   return process;
 }
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e

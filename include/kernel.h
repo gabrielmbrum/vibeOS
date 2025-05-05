@@ -13,20 +13,17 @@ typedef struct Scheduler{
 }Scheduler;
 
 typedef struct Kernel{
-    Process *BCP;
-    Scheduler *scheduler;
-    int process_amount;
-    bool scheduler_running;
-    bool shutdown_request;
-    pthread_t scheduler_thread;
-    pthread_mutex_t bcp_mutex;
-    pthread_cond_t bcp_cond;
-    pthread_t io_thread;
-    pthread_t input_thread;
-    pthread_mutex_t io_mutex;
-    pthread_cond_t io_cond;
-    FILE *Trail_Buffer;
-    IOQueue *queue_requests;
+  Process *BCP;
+  Scheduler *scheduler;
+  int process_amount;
+  bool scheduler_running;
+  bool shutdown_request;
+  pthread_t scheduler_thread;
+  pthread_mutex_t bcp_mutex;
+  pthread_cond_t bcp_cond;
+  pthread_t io_thread;
+  pthread_t input_thread;
+  IOQueue *queue_requests;
 }Kernel;
 
 extern Kernel *kernel;
@@ -46,7 +43,8 @@ void scheduler_stop();
 void start_scheduler();
 void *scheduler_thread_func(void *arg);
 void shutdown_Kernel();
-Process* scheduler_get_next_process(Scheduler *sched);
-void instruction_execution(Process *process, Instruction *inst);
-Instruction* fetch_next_instruction(Process *process);
+int processExecute(Process *process);
+int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg);
+int exec_Instruction(Process *process, Opcode opcode, int arg);
+void *io_thread_func(void *arg);
 #endif
