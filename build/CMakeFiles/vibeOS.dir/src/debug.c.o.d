@@ -1,10 +1,10 @@
-CMakeFiles/vibeOS.dir/src/debug.c.o: \
- /home/midori_torres/vibeOS/src/debug.c /usr/include/stdc-predef.h \
- /home/midori_torres/vibeOS/src/../include/debug.h \
- /home/midori_torres/vibeOS/src/../include/process.h \
- /home/midori_torres/vibeOS/src/../include/memory.h \
- /home/midori_torres/vibeOS/src/../include/instruction.h \
- /home/midori_torres/vibeOS/src/../include/commons.h /usr/include/stdio.h \
+CMakeFiles/vibeOS.dir/src/debug.c.o: /mnt/c/Users/User/vibeOS/src/debug.c \
+ /usr/include/stdc-predef.h \
+ /mnt/c/Users/User/vibeOS/src/../include/debug.h \
+ /mnt/c/Users/User/vibeOS/src/../include/process.h \
+ /mnt/c/Users/User/vibeOS/src/../include/memory.h \
+ /mnt/c/Users/User/vibeOS/src/../include/instruction.h \
+ /mnt/c/Users/User/vibeOS/src/../include/commons.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
