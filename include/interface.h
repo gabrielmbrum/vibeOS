@@ -1,7 +1,12 @@
+#ifndef INTERFACE_H
+#define INTERFACE_H
+
 #include <ncurses.h>
 #include <curses.h>
 #include "commons.h"
+#include <stdarg.h>
 
+//! SOME constatns were depriciated - fix later
 #define MAX_INPUT_STR 25
 #define MAX_OUTPUT_STR 120
 #define NUMBER_OF_WINDOWS 5
@@ -17,47 +22,40 @@
 #define DEF_WIN_MAX_PRINTS_BIGGER 14
 #define SYNT 11
 
-//! UPDATE THE functions 
+// Including external windows for referencing 
+extern WINDOW  *janela_menu;
+extern WINDOW  *janela_OUTPUT;
+extern WINDOW  *janela_SCHEDULER;
+extern WINDOW  *janela_memory;
+extern WINDOW  *janela_process;
+extern WINDOW  *janela_I_O;
 
-// support functions
+// input operations
 void clear_space(int y, int x,int size);
 
-char *generate_blank_space(int size);
-
-char **init_string_array(char**list,int bound, int stringSize);
-
-int *init_int_array(int *list, int size);
-
-<<<<<<< HEAD
 //input operations
-char*  get_input(char *input, WINDOW *out, char **output, int *sizes);
-
-void add_element_list(char **list, char *input, int *num, int Vbound, int Hbound);
-=======
-void add_input_list(char **list, char *input, int *num, int bound);
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
-
-void print_message(WINDOW *local_window, char *message);
-
-void print_multiple_messages(WINDOW *local_window, char **list, int *size);
+char* get_input(char *input,WINDOW*out);
 
 int check_input(char *input);
-<<<<<<< HEAD
 
-=======
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
+//* New print function - more stable, use in any file to print strings only
+void print_win(WINDOW *local_window, char*input);
+
+//* New print function - supports arguments, use in any file to print strings with variables
+void print_win_args(WINDOW *local_window, char*message, ...);
+
+
 // window operations
+void init_interface();
+
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title);
 
 WINDOW *delete_window(WINDOW *local_win);
-
-WINDOW *menu(WINDOW *local_win);
 
 WINDOW *init_menu_components(WINDOW *menu);
 
 WINDOW *janela_intro();
 
-WINDOW *init_interface();
-
 WINDOW *close_window();
 
+#endif

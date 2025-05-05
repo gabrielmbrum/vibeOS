@@ -15,6 +15,7 @@ Funções principais:
 #include "../include/memory.h"
 #include "../include/semaphore.h"
 #include "../include/iohandler.h"
+#include "../include/interface.h" //?testing
 
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
@@ -25,7 +26,7 @@ Kernel *kernel=NULL;
 void* input_thread_func(void* arg) {
   char command[10];
   while (!kernel->shutdown_request) {
-      printf("\nDigite 'q' para encerrar o Kernel: \n");
+      //printf("\nDigite 'q' para encerrar o Kernel: \n");
       fflush(stdout);
       fgets(command, sizeof(command), stdin);
 
@@ -40,7 +41,8 @@ void* input_thread_func(void* arg) {
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
     if (kernel->BCP == NULL) {
-      fprintf(stderr, "Memory allocation failed\n");
+      //fprintf(stderr, "Memory allocation failed\n");
+      print_win(janela_OUTPUT, "Memory allocation failed");
       exit(EXIT_FAILURE);
     }
   
@@ -62,7 +64,8 @@ void *scheduler_thread_func(void *arg){
       puts("Escalonando..\n");
       schedule();
     }
-    printf("Quantidade de processos na BCP.. %d\n", kernel->process_amount);
+    //printf("Quantidade de processos na BCP.. %d\n", kernel->process_amount);
+    print_win_args(janela_SCHEDULER, "Quantidade de processos na BCP.. %d", kernel->process_amount);
     if(kernel->process_amount==0){
       puts("Encerrando escalonador...\n");
       scheduler_stop();
@@ -91,7 +94,8 @@ void scheduler_stop(){
   
 int search_BCP(int process_pid){
   if (kernel->BCP == NULL) {
-    printf("[ERROR] BCP not initialized!\n");
+    //printf("[ERROR] BCP not initialized!\n");
+    print_win(janela_OUTPUT,"[ERROR] BCP not initialized!");
     return FAILURE;
   }
   for (int i = 0; i < MAX_PROCESSES; i++) {
@@ -128,20 +132,22 @@ int add_process_to_BCP(Process *process) {
 
 void init_Kernel() {
     if (kernel != NULL) {
-        fprintf(stderr, "Kernel already initialized\n");
+        //fprintf(stderr, "Kernel already initialized\n");
+        print_win(janela_OUTPUT,"Kernel already initialized");
         return;
     }
 
     kernel = malloc(sizeof(Kernel));
     if (kernel == NULL) {
-        fprintf(stderr, "Failed to allocate memory for Kernel\n");
+        //fprintf(stderr, "Failed to allocate memory for Kernel\n");
+        print_win(janela_OUTPUT,"Failed to allocate memory for Kernel");
         exit(EXIT_FAILURE);
     }
 
     // Aloca e inicializa o scheduler
     kernel->scheduler = malloc(sizeof(Scheduler));
     if (kernel->scheduler == NULL) {
-        fprintf(stderr, "Failed to allocate memory for Scheduler\n");
+        //fprintf(stderr, "Failed to allocate memory for Scheduler\n");
         free(kernel);
         exit(EXIT_FAILURE);
     }
@@ -223,29 +229,35 @@ void context_switch(Process *next, const char *reason) {
   Process *current = kernel->scheduler->running_process;
   
   if (current) {
-      printf("\n[CONTEXT SWITCH] PID %d -> ", current->pid);
+     //printf("\n[CONTEXT SWITCH] PID %d -> ", current->pid);
+      print_win_args(janela_SCHEDULER,"[CONTEXT SWITCH] PID %d -> ", current->pid);
       
       // Handle current process state transition
       if (strcmp(reason, "QUANTUM") == 0) {
-        printf("Quantum expired, moving to READY\n");
+        //printf("Quantum expired, moving to READY\n");
+        print_win(janela_SCHEDULER,"Quantum expired, moving to READY");
         current->slice_time=0;
         change_process_state(&current, READY);
       }
       else if (strcmp(reason, "TERMINATED") == 0) {
-          printf("Process with PID: %d finished execution...\n", current->pid);
+          //printf("Process with PID: %d finished execution...\n", current->pid);
+          print_win_args(janela_SCHEDULER,"Process with PID: %d finished execution...\n", current->pid);
           change_process_state(&current, TERMINATED);
           rmv_process_of_BCP(current->pid);
       } 
       else if (strcmp(reason, "I/O") == 0) {
-          printf("I/O wait, moving to WAITING\n");
+          //printf("I/O wait, moving to WAITING\n");
+          print_win(janela_SCHEDULER,"I/O wait, moving to WAITING");
           change_process_state(&current, WAITING);
       }
       else if (strcmp(reason, "SEM_BLOCK") == 0) {
-          printf("Semaphore block, moving to WAITING\n");
+          //printf("Semaphore block, moving to WAITING\n");
+          print_win(janela_SCHEDULER,"Semaphore block, moving to WAITING");
           current->slice_time=0;
           change_process_state(&current, WAITING);
       }else{
-          printf("Unknown reason, moving to READY\n");
+          //printf("Unknown reason, moving to READY\n");
+          print_win(janela_SCHEDULER,"Unknown reason, moving to READY");
           change_process_state(&current, READY);
       }
       kernel->scheduler->running_process = next;
@@ -302,12 +314,15 @@ void schedule() {
       puts("");
       current = kernel->scheduler->running_process;
       printf("Selected PID %d to run\n", current->pid);
+      print_win_args(janela_SCHEDULER, "Selected PID %d to run", current->pid);
+      
     }
 
     // Execute instruction
     Instruction *inst = fetch_next_instruction(current);
     if (!inst) {
         printf("Process %d completed all instructions\n", current->pid);
+        print_win_args(janela_SCHEDULER, "Process %d completed all instructions\n", current->pid);
         context_switch(NULL, "TERMINATED");
     }
 
@@ -345,12 +360,14 @@ void instruction_execution(Process *process, Instruction *inst) {
 
   switch (inst->opcode) {
       case EXEC:
-          printf("[EXEC] PID %d: %d ms\n", process->pid, inst->value);
+          //printf("[EXEC] PID %d: %d ms\n", process->pid, inst->value);
+          print_win_args(janela_SCHEDULER, "[EXEC] PID %d: %d ms\n", process->pid, inst->value);
           process->runtime_execution += inst->value;
           break;
 
       case P:
-          printf("[P] PID %d: Waiting on %c\n", process->pid, inst->semaphore_name);
+          //printf("[P] PID %d: Waiting on %c\n", process->pid, inst->semaphore_name);
+          print_win_args(janela_SCHEDULER, "[P] PID %d: Waiting on %c\n", process->pid, inst->semaphore_name);
           sem_P(process, inst->semaphore_name);
           if (process->state == WAITING) {
             return;  // Sai da execução da instrução
@@ -358,7 +375,8 @@ void instruction_execution(Process *process, Instruction *inst) {
           break;
 
       case V:
-          printf("[V] PID %d: Signaling %c\n", process->pid, inst->semaphore_name);
+          //printf("[V] PID %d: Signaling %c\n", process->pid, inst->semaphore_name);
+          print_win_args(janela_SCHEDULER,"[V] PID %d: Signaling %c", process->pid, inst->semaphore_name);
           sem_V(process, inst->semaphore_name);
           break;
 
@@ -401,14 +419,16 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       enqueue(kernel->queue_requests, print_request);
       break;
     case P:
-      printf("[P] PID %d: Waiting on %c\n", process->pid, arg);
+      //printf("[P] PID %d: Waiting on %c\n", process->pid, arg);
+      print_win_args(janela_SCHEDULER,"[P] PID %d: Waiting on %c\n", process->pid, arg);
       //sem_P(process, arg);
       // if (process->state == WAITING) {
       //   return;  // Sai da execução da instrução
       // }
       break;
     case V:
-      printf("[V] PID %d: Signaling %c\n", process->pid, arg);
+      //printf("[V] PID %d: Signaling %c\n", process->pid, arg);
+      print_win_args(janela_SCHEDULER,"[V] PID %d: Signaling %c\n", process->pid, arg);
       //sem_V(process, arg);
       break;
   }

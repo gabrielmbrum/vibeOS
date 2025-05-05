@@ -7,7 +7,7 @@ Semaphore semaphores[MAX_SEMAPHORES];
 int total_semaphores = 0;
 
 void init_semaphores() {
-    printf("Initializing semaphores...\n");
+    //printf("Initializing semaphores...\n");
     total_semaphores = 0;  // Reseta
 
     for (int i = 0; i < MAX_SEMAPHORES; i++) {
@@ -49,11 +49,11 @@ Semaphore* find_or_create_semaphore(char name) {
         sem->value = 1;  // Start unlocked
         sem->blocked_count = 0;
         total_semaphores++;
-        printf("Created new semaphore '%c' at slot %d\n", name, total_semaphores-1);
+        //printf("Created new semaphore '%c' at slot %d\n", name, total_semaphores-1);
         return sem;
     }
     
-    printf("ERROR: No space for new semaphore '%c'\n", name);
+    //printf("ERROR: No space for new semaphore '%c'\n", name);
     return NULL;
 }
 

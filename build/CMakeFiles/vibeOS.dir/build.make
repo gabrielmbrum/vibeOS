@@ -168,46 +168,46 @@ CMakeFiles/vibeOS.dir/src/interface.c.s: cmake_force
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/User/vibeOS/src/interface.c -o CMakeFiles/vibeOS.dir/src/interface.c.s
 
 CMakeFiles/vibeOS.dir/src/semaphore.c.o: CMakeFiles/vibeOS.dir/flags.make
-CMakeFiles/vibeOS.dir/src/semaphore.c.o: /home/midori_torres/vibeOS/src/semaphore.c
+CMakeFiles/vibeOS.dir/src/semaphore.c.o: /mnt/c/Users/User/vibeOS/src/semaphore.c
 CMakeFiles/vibeOS.dir/src/semaphore.c.o: CMakeFiles/vibeOS.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/midori_torres/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/vibeOS.dir/src/semaphore.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/semaphore.c.o -MF CMakeFiles/vibeOS.dir/src/semaphore.c.o.d -o CMakeFiles/vibeOS.dir/src/semaphore.c.o -c /home/midori_torres/vibeOS/src/semaphore.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/User/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/vibeOS.dir/src/semaphore.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/semaphore.c.o -MF CMakeFiles/vibeOS.dir/src/semaphore.c.o.d -o CMakeFiles/vibeOS.dir/src/semaphore.c.o -c /mnt/c/Users/User/vibeOS/src/semaphore.c
 
 CMakeFiles/vibeOS.dir/src/semaphore.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/vibeOS.dir/src/semaphore.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/midori_torres/vibeOS/src/semaphore.c > CMakeFiles/vibeOS.dir/src/semaphore.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/User/vibeOS/src/semaphore.c > CMakeFiles/vibeOS.dir/src/semaphore.c.i
 
 CMakeFiles/vibeOS.dir/src/semaphore.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/vibeOS.dir/src/semaphore.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/midori_torres/vibeOS/src/semaphore.c -o CMakeFiles/vibeOS.dir/src/semaphore.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/User/vibeOS/src/semaphore.c -o CMakeFiles/vibeOS.dir/src/semaphore.c.s
 
 CMakeFiles/vibeOS.dir/src/memory.c.o: CMakeFiles/vibeOS.dir/flags.make
-CMakeFiles/vibeOS.dir/src/memory.c.o: /home/midori_torres/vibeOS/src/memory.c
+CMakeFiles/vibeOS.dir/src/memory.c.o: /mnt/c/Users/User/vibeOS/src/memory.c
 CMakeFiles/vibeOS.dir/src/memory.c.o: CMakeFiles/vibeOS.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/midori_torres/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/vibeOS.dir/src/memory.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/memory.c.o -MF CMakeFiles/vibeOS.dir/src/memory.c.o.d -o CMakeFiles/vibeOS.dir/src/memory.c.o -c /home/midori_torres/vibeOS/src/memory.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/User/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/vibeOS.dir/src/memory.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/memory.c.o -MF CMakeFiles/vibeOS.dir/src/memory.c.o.d -o CMakeFiles/vibeOS.dir/src/memory.c.o -c /mnt/c/Users/User/vibeOS/src/memory.c
 
 CMakeFiles/vibeOS.dir/src/memory.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/vibeOS.dir/src/memory.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/midori_torres/vibeOS/src/memory.c > CMakeFiles/vibeOS.dir/src/memory.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/User/vibeOS/src/memory.c > CMakeFiles/vibeOS.dir/src/memory.c.i
 
 CMakeFiles/vibeOS.dir/src/memory.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/vibeOS.dir/src/memory.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/midori_torres/vibeOS/src/memory.c -o CMakeFiles/vibeOS.dir/src/memory.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/User/vibeOS/src/memory.c -o CMakeFiles/vibeOS.dir/src/memory.c.s
 
 CMakeFiles/vibeOS.dir/src/iohandler.c.o: CMakeFiles/vibeOS.dir/flags.make
-CMakeFiles/vibeOS.dir/src/iohandler.c.o: /home/midori_torres/vibeOS/src/iohandler.c
+CMakeFiles/vibeOS.dir/src/iohandler.c.o: /mnt/c/Users/User/vibeOS/src/iohandler.c
 CMakeFiles/vibeOS.dir/src/iohandler.c.o: CMakeFiles/vibeOS.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/midori_torres/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/vibeOS.dir/src/iohandler.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/iohandler.c.o -MF CMakeFiles/vibeOS.dir/src/iohandler.c.o.d -o CMakeFiles/vibeOS.dir/src/iohandler.c.o -c /home/midori_torres/vibeOS/src/iohandler.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/mnt/c/Users/User/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/vibeOS.dir/src/iohandler.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/vibeOS.dir/src/iohandler.c.o -MF CMakeFiles/vibeOS.dir/src/iohandler.c.o.d -o CMakeFiles/vibeOS.dir/src/iohandler.c.o -c /mnt/c/Users/User/vibeOS/src/iohandler.c
 
 CMakeFiles/vibeOS.dir/src/iohandler.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/vibeOS.dir/src/iohandler.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/midori_torres/vibeOS/src/iohandler.c > CMakeFiles/vibeOS.dir/src/iohandler.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /mnt/c/Users/User/vibeOS/src/iohandler.c > CMakeFiles/vibeOS.dir/src/iohandler.c.i
 
 CMakeFiles/vibeOS.dir/src/iohandler.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/vibeOS.dir/src/iohandler.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/midori_torres/vibeOS/src/iohandler.c -o CMakeFiles/vibeOS.dir/src/iohandler.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /mnt/c/Users/User/vibeOS/src/iohandler.c -o CMakeFiles/vibeOS.dir/src/iohandler.c.s
 
 # Object files for target vibeOS
 vibeOS_OBJECTS = \
@@ -239,11 +239,7 @@ vibeOS: CMakeFiles/vibeOS.dir/build.make
 vibeOS: /usr/lib/x86_64-linux-gnu/libcurses.so
 vibeOS: /usr/lib/x86_64-linux-gnu/libform.so
 vibeOS: CMakeFiles/vibeOS.dir/link.txt
-<<<<<<< HEAD
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/Users/User/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C executable vibeOS"
-=======
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/midori_torres/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C executable vibeOS"
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/mnt/c/Users/User/vibeOS/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking C executable vibeOS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/vibeOS.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

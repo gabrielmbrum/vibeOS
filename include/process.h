@@ -44,15 +44,12 @@ Process *create_process(int pid, const char *name, int priority);
 
 Process *processCreate(int pid, const char *name, int priority);
 
-<<<<<<< HEAD
 char* StringifyProcess(Process *p, char *buffer, int buffer_size);
-=======
 /*
 
   * Create a new process from the given program.
   * The process is initialized with state READY and PC set to 0.
   * Returns a pointer to the newly created process.
->>>>>>> 11519fc4ef399b5b57749f9e9c3ab1964a84572e
 
 */
 Process *create_process_from_program(Program *program);

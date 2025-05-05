@@ -61,9 +61,9 @@ CMakeFiles/vibeOS.dir/src/program.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
- /home/midori_torres/vibeOS/src/../include/debug.h \
- /home/midori_torres/vibeOS/src/../include/process.h \
- /home/midori_torres/vibeOS/src/../include/memory.h \
- /home/midori_torres/vibeOS/src/../include/program.h \
- /home/midori_torres/vibeOS/src/../include/semaphore.h \
- /home/midori_torres/vibeOS/src/../include/semaphore.h
+ /mnt/c/Users/User/vibeOS/src/../include/debug.h \
+ /mnt/c/Users/User/vibeOS/src/../include/process.h \
+ /mnt/c/Users/User/vibeOS/src/../include/memory.h \
+ /mnt/c/Users/User/vibeOS/src/../include/program.h \
+ /mnt/c/Users/User/vibeOS/src/../include/semaphore.h \
+ /mnt/c/Users/User/vibeOS/src/../include/semaphore.h
