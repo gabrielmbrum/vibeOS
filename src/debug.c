@@ -106,7 +106,8 @@ void print_process(Process *proc) {
   printf("PID: %d\n", proc->pid);
   printf("Name: %s\n", proc->name);
   printf("State: %s\n", state_to_string(proc->state));
-  printf("PC: %d\n", proc->pc);
+  printf("PC Instruction: %d\n", proc->pc.last_instruction);
+  printf("PC Page: %d\n", proc->pc.last_page);
   printf("Priority: %d\n", proc->priority);
   printf("RW Counter: %d\n", proc->counter_rw);
   printf("Segment ID: %d, Size: %d\n", proc->segment_id, proc->segment_size);

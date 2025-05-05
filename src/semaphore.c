@@ -84,7 +84,7 @@ void sem_P(Process *process, char sem_name) {
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
 
-        //printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
 
         context_switch(process, "SEM_BLOCK");
     }
@@ -113,7 +113,7 @@ void sem_V(Process *process, char sem_name) {
         // if (idx != FAILURE) {
         //     kernel->BCP[idx].state = READY;
 
-        //printf("[SEM_V] Unblocking PID %d from semaphore '%c'\n", unblocked_pid, sem_name);
+        printf("[SEM_V] Unblocking PID %d from semaphore '%c'\n", unblocked_pid, sem_name);
 
         context_switch(process, "SEM_UNBLOCK");
     }

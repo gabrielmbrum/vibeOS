@@ -1,19 +1,3 @@
-/* O program.c lê um arquivo contendo:
-- Nome do processo
-- Segmento de memória (ID e tamanho)
-- Prioridade
-- Lista de semáforos usados
-- Instruções (como EXEC, READ, WRITE, P, V)
-
-Cria um Program com:
-- Header (metadados)
-- Vetor de Instruction
-
-E tem as funções:
-- read_program(filename): lê o arquivo e monta a estrutura
-- print_program(): imprime o conteúdo do programa
-- free_program(): libera memória alocada */
-
 // ler o arquivo e montar o programa
 // enviar header para process
 // ler as intruçoes e jogar pra instruction_builder()

@@ -49,4 +49,19 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count);
 */
 void refresh_page_table(PageTable **page_table, Instruction *instructions, int instructions_count, int last_instruction_loaded);
 
+/*
+
+  * Frees all the pages in the page table and the page table itself.
+  * It also frees the instructions array in each page.
+
+*/
+void free_page_table(PageTable **page_table);
+
+/*
+
+  * Show the memory status, showin the total of pages allocated comparing to all the space available.
+
+*/
+void memory_status();
+
 #endif 

@@ -1,13 +1,7 @@
-/* O instruction.c faz:
-- Interpreta comandos do arquivo de programa (linha a linha).
-- Mapeia strings como "EXEC 10" ou "P(A) 0" para estruturas Instruction.
-
-Dá suporte a operações:
-EXEC, READ, WRITE, PRINT
-Semáforos P(x) e V(x) */
-
 #include "../include/instruction.h"
 #include "../include/commons.h"
+
+#define IOException -101
 
 Instruction* instruction_builder(const char *name, const char *runtime_str) {
   Instruction *instruction = malloc(sizeof(Instruction));
@@ -49,33 +43,3 @@ Instruction* instruction_builder(const char *name, const char *runtime_str) {
   
   return instruction;
 }
-
-// void print_instruction(const Instruction instruction) {
-//   // Print instruction based on opcode
-//   switch (instruction.opcode) {
-//       case EXEC:
-//           printf("EXEC %d\n", instruction.value);
-//           break;
-//       case READ:
-//           printf("READ %c\n", instruction.value);
-//           break;
-//       case WRITE:
-//           printf("WRITE %c\n", instruction.value);
-//           break;
-//       case WAIT:
-//           printf("WAIT %d\n", instruction.value);
-//           break;
-//       case P:
-//           printf("P %c\n", instruction.semaphore_name);
-//           break;
-//       case V:
-//           printf("V %c\n", instruction.semaphore_name);
-//           break;
-//       case PRINT:
-//           printf("PRINT %d\n", instruction.value);
-//           break;
-//       default:
-//           printf("UNKNOWN INSTRUCTION\n");
-//           break;
-//   }
-// }

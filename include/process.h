@@ -9,6 +9,14 @@
 #include "memory.h"
 #include "program.h"
 
+typedef struct ProgramConter{
+  int last_page;
+  int last_instruction;
+  int global_index;
+}ProgramCounter;
+
+
+
 typedef enum _process__state {
   RUNNING = 1,
   READY = 2,
@@ -16,14 +24,14 @@ typedef enum _process__state {
   TERMINATED = 4
 } ProcessState;
 
-typedef struct {
-  int pid; //*
-  ProcessState state; //*
-  int pc; //*
-  char *name; //*
-  int priority; //*
+typedef struct{
+  int pid;
+  ProcessState state;
+  ProgramCounter pc;
+  char *name;
+  int priority;
   int counter_rw;
-  int segment_id; //*
+  int segment_id;
   int segment_size;
   int runtime;
   char *semaphores; 
@@ -44,7 +52,6 @@ Process *create_process(int pid, const char *name, int priority);
 
 Process *processCreate(int pid, const char *name, int priority);
 
-char* StringifyProcess(Process *p, char *buffer, int buffer_size);
 /*
 
   * Create a new process from the given program.
