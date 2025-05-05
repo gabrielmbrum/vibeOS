@@ -1,30 +1,30 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
-#include "process.h"
 #include "commons.h"
 #include "debug.h"
 #include "iohandler.h"
+#include "process.h"
 #include <pthread.h>
 #include <stdbool.h>
-typedef struct Scheduler{
+typedef struct Scheduler {
   Process *running_process;
   int QUANTUM_TIME;
-}Scheduler;
+} Scheduler;
 
-typedef struct Kernel{
-    Process *BCP;
-    Scheduler *scheduler;
-    int process_amount;
-    bool scheduler_running;
-    bool shutdown_request;
-    pthread_t scheduler_thread;
-    pthread_mutex_t bcp_mutex;
-    pthread_cond_t bcp_cond;
-    pthread_t io_thread;
-    pthread_t input_thread;
-    IOQueue *queue_requests;
-}Kernel;
+typedef struct Kernel {
+  Process *BCP;
+  Scheduler *scheduler;
+  int process_amount;
+  bool scheduler_running;
+  bool shutdown_request;
+  pthread_t scheduler_thread;
+  pthread_mutex_t bcp_mutex;
+  pthread_cond_t bcp_cond;
+  pthread_t io_thread;
+  pthread_t input_thread;
+  IOQueue *queue_requests;
+} Kernel;
 
 extern Kernel *kernel;
 
@@ -45,4 +45,6 @@ void *scheduler_thread_func(void *arg);
 void shutdown_Kernel();
 int processExecute(Process *process);
 void *io_thread_func(void *arg);
+void context_switch(Process *next, char *arg);
+
 #endif

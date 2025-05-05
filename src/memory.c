@@ -1,12 +1,24 @@
 #include "../include/commons.h"
-#include "../include/memory.h" // Ensure this header defines 'Page'
+#include "../include/memory.h"
+
+int page_counter = 0;
+
+void memory_status() {
+  printf("\n--------*-------- Memory status --------*--------\n");
+  printf("\tTotal memory: %d KB\n", MEM_LENGTH);
+  printf("\tOS memory: %d KB\n", OS_MEMORY_SIZE);
+  printf("\tPages allocated: %d page(s)\n", page_counter);
+  printf("\tPages available: %d KB\n", MEM_LENGTH - OS_MEMORY_SIZE - page_counter*PAGE_SIZE);
+  printf("\tMEMORY OCUPATION: %.2f%% [%d/%d]\n", ((float)page_counter*PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) * 100, page_counter*PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
+  printf("\n------------------------------------------------\n");
+}
 
 void initialize_page(Page *page, int page_num, int instructions_count) {
   page->page_number = page_num;
   page->reference_bit = 0;
   page->used_bit = 0;
   page->instruction_count = 1;
-  page->instructions = malloc(sizeof(Instruction) * instructions_count); // Initialize to NULL
+  page->instructions = malloc(sizeof(Instruction) * instructions_count);
 }
 
 PageTable *build_page_table(Instruction *instructions, int instructions_count) {
@@ -29,6 +41,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
         num_of_instructions_per_page = 0;
 
         initialize_page(&page_table->pages[page_table->page_count], page_table->page_count, instructions_count);
+        page_counter++;
 
         page_table->pages[page_table->page_count].instructions[num_of_instructions_per_page] = instructions[i];
 
@@ -40,6 +53,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
     } else {
       if (page_table->page_count == 0) {
         initialize_page(&page_table->pages[page_table->page_count ], page_table->page_count, instructions_count);
+        page_counter++;
 
         page_table->pages[page_table->page_count].instructions[num_of_instructions_per_page++] = instructions[i];
 
@@ -108,4 +122,14 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
     free((*page_table)->pages[i].instructions);
     i++;
   }
+
+  page_counter -= (old_page_table_size - (*page_table)->page_count);
+}
+
+void free_page_table(PageTable **page_table) {
+  for (int i = 0; i < (*page_table)->page_count; i++) {
+    free((*page_table)->pages[i].instructions);
+  }
+  free((*page_table)->pages);
+  free(*page_table);
 }

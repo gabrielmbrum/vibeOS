@@ -156,9 +156,13 @@ void brum_test() {
 
   print_process(proc1);
 
+  memory_status();
+
   refresh_page_table(&proc1->page_table, prog1->instructions, prog1->instructions_count, proc1->page_table->last_instruction_loaded);
 
   print_process(proc1);
+
+  memory_status();
 
   free_program(prog1);
   // free_program(prog2);
@@ -169,7 +173,7 @@ void brum_test() {
 
 int main () {
 
-  luigi_testv2();
+  brum_test();
 
   return 0;
 }
