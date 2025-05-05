@@ -116,7 +116,7 @@ void print_process(Process *proc) {
   if (proc->page_table->page_count == 0) {
     printf("Page Table is empty! No pages allocated\n");
   } else {
-    //print_page_table(proc->page_table);
+    print_page_table(proc->page_table);
   }
   printf("\n");
 }

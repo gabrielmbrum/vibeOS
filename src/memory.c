@@ -21,6 +21,18 @@ void initialize_page(Page *page, int page_num, int instructions_count) {
   page->instructions = malloc(sizeof(Instruction) * instructions_count);
 }
 
+int sum_of_exec_time(Instruction *instructions, int instructions_count) {
+  int sum = 0;
+  for (int i=0; i < instructions_count; i++) {
+    if (instructions[i].opcode == EXEC) {
+      sum += instructions[i].value;
+    }
+  }
+  print_instructions(instructions, instructions_count);
+  printf("\n\t\t\t\tsum: %d", sum);
+  return sum;
+}
+
 PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   PageTable *page_table = malloc(sizeof(PageTable));
   
@@ -35,7 +47,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
 
   for (i = 0; i < instructions_count && page_table->page_count < RESIDENT_SET; i++) {
     // if the instruction is EXEC, it will create a new page
-    if (instructions[i].opcode == EXEC) {
+    if (instructions[i].opcode == EXEC && (page_table->page_count > 0 ? sum_of_exec_time(page_table->pages[page_table->page_count - 1].instructions, page_table->pages[page_table->page_count - 1].instruction_count) + instructions[i].value > 1000 : 1)) {
       for (int j = 0; (j < instructions[i].value / 1000  || j == 0) && page_table->page_count < RESIDENT_SET; j++) {        
         // every new page created will have zero instructions initially
         num_of_instructions_per_page = 0;
@@ -85,7 +97,7 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   int num_of_instructions_per_page = 0, iteration_val, i;
   
   for (i = last_instruction_loaded + 1; i < instructions_count && (*page_table)->page_count < RESIDENT_SET; i++) {
-    if (instructions[i].opcode == EXEC) {
+    if (instructions[i].opcode == EXEC && ((*page_table)->page_count > 0 ? sum_of_exec_time((*page_table)->pages[(*page_table)->page_count - 1].instructions, (*page_table)->pages[(*page_table)->page_count - 1].instruction_count) + instructions[i].value > 1000 : 1)) {
       for (int j = 0; (j < instructions[i].value / 1000  || j == 0) && (*page_table)->page_count < RESIDENT_SET; j++) {        
         // every new page created will have zero instructions initially
         num_of_instructions_per_page = 0;
