@@ -6,8 +6,9 @@
 #include "../include/instruction.h"
 #include "../include/interface.h"
 
-void luigi_test() {
+void luigi_test(){
   Process *p1, *p2, *p3, *p4;
+
   p1 = processCreate(1, "sexta-feira", 0);
   p2=processCreate(2, "play-tv", 0);
   p3=processCreate(3, "nóstacomo", 0);
@@ -40,7 +41,7 @@ void luigi_test() {
   printf("FINISHED \n");
 }
 
-void brum_test() {
+void brum_test(){
   Program *prog1 = read_program("../programs/synt1");
   if (prog1 == NULL) {
     fprintf(stderr, "Failed to read program\n");
@@ -84,45 +85,67 @@ void brum_test() {
   free_program(prog5);
 }
 
-int main () {
+int main (){
+  //create Processes array
+  Process** processlist= (Process**)malloc(MAX_PROCESSES* sizeof(Process*));
+  int total =0; //todo change this later
+
+  // create interface structures to handle the user input
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
-  int num = 0; // number of current inputs in the process display array
-
-  char *input = malloc((MAX_INPUT_STR)*sizeof(char));
-  char **displayprocessos = (char**)malloc(MAX_WD_HGH_PROCESS * sizeof(char*));
-  for (int i = 0; i < MAX_WD_HGH_PROCESS; i++) {
-      displayprocessos[i] = (char*)malloc((MAX_INPUT_STR) * sizeof(char));
-  }
-
-  // initialize introduction window
-  initscr();	
-  curs_set(0);		
+  char **displayP,**displayS,**displayI,**displayU,**displayM;
+  displayP = init_string_array(displayP,DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  displayS = init_string_array(displayS, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
+  displayI = init_string_array(displayI, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  displayU = init_string_array(displayU, DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR);
+  displayM = init_string_array(displayM, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
+  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS); 
+  char *input = malloc((MAX_OUTPUT_STR)*sizeof(char));
+  strcpy(input,"\0");
+        /*
+        ?   INDEX
+        * 0 -> OUTPUT
+        * 1 -> SCHEDULER
+        * 2 -> MEMORY
+        * 3 -> PROCESS
+        * 4 -> I/O
+        */
+  // start with introduction window
   janela_intro();
-
-  janela_menu = create_newwin(9, 59, 0, 1,"MENU");
-  janela_menu = menu(janela_menu);
-  janela_OUTPUT = create_newwin(5, 59, 9, 1," OUTPUT ");
-  janela_SCHEDULER = create_newwin(16, 59, 14, 1," SCHEDULER ");
-  janela_memory = create_newwin(10, 59, 0, 61," MEMORY ");
-  janela_process = create_newwin(10, 59, 10, 61, " PROCESS ");
-  janela_I_O = create_newwin(10, 59, 20, 61," I/O ");
-
-  do{
-    move(6,34);
-    getstr(input);
-    add_input_list(displayprocessos,input,&num);
-    print_input(janela_process, displayprocessos,&num);
-    clear_input_space(20,6,34);
-    move(6,34);
-    refresh();
-  }while(strcmp(input,"q"));
-
-  // free memory
-  free(input);
-
-  // close lncurses window
-  endwin();			
   
-  luigi_test();
-  return 0;
+  // Draw main window, sub-windows and components
+  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
+  janela_menu = init_menu_components(janela_menu);
+  janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
+  janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
+  janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
+  janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
+  janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
+
+  // change window to get user input
+  move(6,34);
+  curs_set(1);
+  //input loop
+  while(strcmp(input,"q")){
+    if(get_input(input,janela_OUTPUT,displayU,&sizes[0])!= NULL){
+      Process *local_process = processCreate(1,input,10);
+      processlist[total] = local_process; //todo change later
+      total++; //todo change later   
+      
+      char processoutput[MAX_OUTPUT_STR] = "";
+      StringifyProcess(local_process, processoutput, MAX_OUTPUT_STR);
+
+      add_element_list(displayP,processoutput,&sizes[3],DEF_WIN_MAX_PRINTS_BIG,DEF_WIN_WDH);
+      print_multiple_messages(janela_process, displayP,&sizes[3]);
+      char t[MAX_OUTPUT_STR] = " ";
+      sprintf(t, "%i", sizes[3]);
+      print_message(janela_memory,t);
+    };
+    // change window to get user input
+    clear_space(6,34,strlen(input));
+    move(6,34);
+    
+  }
+  //TODO freeMemory();
+  close_window(); // closes window
+
 }

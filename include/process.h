@@ -16,13 +16,13 @@ typedef enum _process__state {
 } ProcessState;
 
 typedef struct {
-  int pid;
-  ProcessState state;
-  int pc;
-  char *name;
-  int priority;
+  int pid; //*
+  ProcessState state; //*
+  int pc; //*
+  char *name; //*
+  int priority; //*
   int counter_rw;
-  int segment_id;
+  int segment_id; //*
   int segment_size;
   int slice_time;
   int runtime_execution;
@@ -40,6 +40,6 @@ typedef struct {
 
 Process *processCreate(int pid, const char *name, int priority);
 
-
+char* StringifyProcess(Process *p, char *buffer, int buffer_size);
 
 #endif

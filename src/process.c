@@ -20,3 +20,13 @@
   return process;
 }
 
+
+char* StringifyProcess(Process *p, char *buffer, int buffer_size) {
+  if (p == NULL || buffer == NULL || buffer_size <= 0) return NULL;
+
+  snprintf(buffer, buffer_size,
+           "PID: %d, Name: %s, Priority: %d, Segment_id: %d, PC: %d, STATE: %d",
+           p->pid, p->name, p->priority, p->segment_id, p->pc, p->state);
+  
+  return buffer;
+}

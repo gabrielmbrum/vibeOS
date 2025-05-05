@@ -45,15 +45,46 @@ int *init_int_array(int *list, int size){
 
 
 // input and output message operations
-void add_input_list(char **list, char *input, int *num, int bound){
-  if(*num<bound){
-    strcpy(list[*num], input);
-    *num = *num+1;
-  }else{
-    for(int i=0;i<(bound-1);i++){
-      strcpy(list[i],list[i+1]);
+void add_element_list(char **list, char *input, int *num, int Vbound, int Hbound){
+  int width = strlen(input);
+
+  if (width < Hbound) {
+    if (*num < Vbound) {
+      strcpy(list[*num], input);
+      (*num)++;
+    } else {
+      for (int i = 0; i < Vbound - 1; i++) {
+        strcpy(list[i], list[i + 1]);
+      }
+      strcpy(list[Vbound - 1], input);
     }
-    strcpy(list[bound-1], input);
+  } else {
+    char str1[Hbound];
+    char str2[Hbound];
+
+    strncpy(str1, input, Hbound - 1);
+    str1[Hbound - 1] = '\0';
+
+    strncpy(str2, input + Hbound - 2, Hbound - 1);
+    str2[Hbound - 1] = '\0';
+
+    if (*num <= Vbound - 2) {
+      strcpy(list[*num], str1);
+      (*num)++;
+      strcpy(list[*num], str2);
+      (*num)++;
+    } else {
+
+      int shifts = (*num >= Vbound) ? 2 : 1;
+      for (int i = 0; i < Vbound - shifts; i++) {
+        strcpy(list[i], list[i + shifts]);
+      }
+      if (Vbound >= 2) {
+        strcpy(list[Vbound - 2], str1);
+        strcpy(list[Vbound - 1], str2);
+      }
+      *num = Vbound;
+    }
   }
 }
 
@@ -74,12 +105,11 @@ void print_multiple_messages(WINDOW *local_window, char **list, int *size) {
     }
     mvwprintw(local_window, i + 1, POS_X, "%s", list[i]);
   }
-
   wrefresh(local_window);  // faz refresh apenas uma vez no final
 }
 
 int check_input(char *input){
-  for (int i = 0; i < SYNT; i++) {
+  for (int i = 1; i < SYNT; i++) {
     char base[50];
     sprintf(base, "synt%d", i);
 
@@ -113,8 +143,11 @@ WINDOW *delete_window(WINDOW  *local_win){
 
 WINDOW *janela_intro(){
   int lin, col;
+  initscr();	
   getmaxyx(stdscr, lin, col);
+  curs_set(0);
   WINDOW *intro = newwin(8, 40, ((lin/2) - 5), ((col/2) - 20));
+  wrefresh(intro);
   refresh();
 
   wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -131,8 +164,6 @@ WINDOW *janela_intro(){
   werase(intro);
   wrefresh(intro);
   delete_window(intro);
-
-  return 0;
 }
 
 WINDOW *init_menu_components(WINDOW *menu){
@@ -147,37 +178,12 @@ WINDOW *init_menu_components(WINDOW *menu){
   return menu;
 }
 
-int main(int argc, char *argv[]){
+WINDOW *init_interface(){
+  // malloc the screen windows, display arrays and sizes
   WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *janela_process, *janela_SCHEDULER;
 
-  //! This does not represent the total processes in the Simulator. The arrays contain only the information to be displayed in the screen
-  char **displayProcessos = init_string_array(displayProcessos,DEF_WIN_MAX_PRINTS_BIG,MAX_INPUT_STR);
-  char **displayScheduler = init_string_array(displayScheduler, DEF_WIN_MAX_PRINTS_BIGGER,MAX_OUTPUT_STR);
-  char **displayIO = init_string_array(displayIO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  char **displayOUT = init_string_array(displayOUT, (DEF_WIN_MAX_PRINTS_SMALL,MAX_OUTPUT_STR),MAX_OUTPUT_STR);
-  char **displayMEMO = init_string_array(displayMEMO, DEF_WIN_MAX_PRINTS_BIG,MAX_OUTPUT_STR);
-  char *input = malloc((MAX_INPUT_STR)*sizeof(char));
-  strcpy(input,"\0");
-
-  // Malloc the array containing the sizes of the dinamic arrays
-  int *sizes = init_int_array(sizes,NUMBER_OF_WINDOWS);
-
-  /* 
-  ! INDEX
-  * 0 -> OUtPUT
-  * 1 -> SCHEDULER
-  * 2 -> MEMORY
-  * 3 -> PROCESS
-  * 4 -> I/O
-  */
-
-  // initialize introduction window
-  initscr();	
-  curs_set(0);		
-  janela_intro();
-
-  // initialize main window and components
-  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1,"MENU");
+/*   // Draw main window, sub-windows and components
+  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
   janela_menu = init_menu_components(janela_menu);
   janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
   janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
@@ -187,17 +193,15 @@ int main(int argc, char *argv[]){
 
   // change window to get user input
   move(6,34);
-  curs_set(1);
-
-  // input loop 
-  while(strcmp(input,"q")){
+  curs_set(1); */
+  //! input loop: this code DOES NOT GO HERE 
+/*   while(strcmp(input,"q")){
     getstr(input);
     if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-      //? This implementation is not perfect for every case (example: strings bigger than the screen), but it mostly works
-      print_message(janela_OUTPUT,"Entrada inválida");
+        print_message(janela_OUTPUT,"Entrada inválida");
     }else{
       // handle the correct user input 
-      add_input_list(displayProcessos,input,&sizes[3],(DEF_WIN_HGH_BIG-2));
+      add_element_list(displayProcessos,input,&sizes[3],(DEF_WIN_HGH_BIG-2));
       mvwprintw(janela_I_O, POS_Y, POS_X, "%d",sizes[3]);
       wrefresh(janela_I_O);
       print_multiple_messages(janela_process, displayProcessos,&sizes[3]); 
@@ -212,6 +216,26 @@ int main(int argc, char *argv[]){
   free(input);
 
   // close lncurses window
-  endwin();			
-  return 0;
+  endwin();			 */
+}
+
+char* get_input(char *input,WINDOW*out, char **output, int *sizes){
+     getstr(input);
+     if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
+      add_element_list(output,"Entrada inválida",sizes,DEF_WIN_MAX_PRINTS_SMALL,DEF_WIN_WDH);
+      print_multiple_messages(out,output,sizes);
+      refresh();
+        return NULL;
+     }else{
+      add_element_list(output,"Entrada válida",sizes,DEF_WIN_MAX_PRINTS_SMALL,DEF_WIN_WDH);
+      print_multiple_messages(out,output,sizes);
+      refresh();
+        return input;
+     }
+}
+
+WINDOW *close_window(){
+/*      // free memory
+     free(input); */
+     endwin();
 }
