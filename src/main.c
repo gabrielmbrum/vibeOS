@@ -173,7 +173,55 @@ void brum_test() {
   // free_program(prog5);
 }
 
-int main () {
+int maria_test(){
+  //create Processes array
+  Process** processlist= (Process**)malloc(MAX_PROCESSES* sizeof(Process*));
+  int total =0; //todo change this later
+
+  char *input = malloc((MAX_OUTPUT_STR)*sizeof(char));
+  strcpy(input,"\0");
+        /*
+        ?   INDEX
+        * 0 -> OUTPUT
+        * 1 -> SCHEDULER
+        * 2 -> MEMORY
+        * 3 -> PROCESS
+        * 4 -> I/O
+        */
+  // start with introduction window
+  janela_intro();
+  init_interface();
+
+  //input loop
+  while(strcmp(input,"q")){
+    if(get_input(input,janela_OUTPUT)!= NULL){
+        //*Testing with process
+        //* NOTE - commented the prints from the functions for testing with the interface
+        char aux[MAX_OUTPUT_STR] = "../programs/";
+        strcat(aux,input);
+        Program *prog1 = read_program(aux);
+        if (prog1 == NULL) {
+        print_win(janela_OUTPUT,"Faled to read program");
+        return;
+      }else{
+        Process *p1 = create_process_from_program(prog1); 
+        print_win_args(janela_process,"PID: %d, Name: %s, Priority: %d, Segment_id: %d, PC: %d, STATE: %d",
+           p1->pid, p1->name, p1->priority, p1->segment_id, p1->pc, p1->state);     
+      } 
+    }; 
+    // change window to get user input
+    clear_space(6,34,strlen(input));
+    move(6,34);    
+  }     
+      
+  close_window(); // closes window
+  return 0;
+}
+
+int main() {
+  //for ver como ta a interface é só tirar o comentário e executar:
+  //maria_test();
+  
   luigi_testv2();
   return 0;
 }

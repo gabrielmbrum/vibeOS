@@ -44,6 +44,8 @@ void start_scheduler();
 void *scheduler_thread_func(void *arg);
 void shutdown_Kernel();
 int processExecute(Process *process);
+int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg);
+int exec_Instruction(Process *process, Opcode opcode, int arg);
 void *io_thread_func(void *arg);
 void context_switch(Process *next, char *arg);
 

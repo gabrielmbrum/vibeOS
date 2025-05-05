@@ -1,8 +1,10 @@
-#include "../include/kernel.h"
-#include "../include/commons.h"
-#include "../include/debug.h"
-#include "../include/iohandler.h"
 #include "../include/process.h"
+#include "../include/commons.h"
+#include "../include/kernel.h"
+#include "../include/debug.h"
+#include "../include/memory.h"
+#include "../include/semaphore.h"
+#include "../include/iohandler.h"
 
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
@@ -29,6 +31,7 @@ void init_BCP() {
   kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
   if (kernel->BCP == NULL) {
     fprintf(stderr, "Memory allocation failed\n");
+
     exit(EXIT_FAILURE);
   }
 
@@ -262,7 +265,6 @@ void context_switch(Process *next, char *arg) {
     running_process->slice_time = 0;
     change_process_state(&running_process, READY);
   }
-
   else if (strcmp(arg, "TERMINATED") == 0) {
     printf("Process with PID: %d finished execution...\n",
            running_process->pid);
@@ -270,10 +272,18 @@ void context_switch(Process *next, char *arg) {
     rmv_process_of_BCP(running_process->pid);
     puts("Processo finalizado removido da BCP!");
   }
-
   else if (strcmp(arg, "I/O") == 0) {
     change_process_state(&running_process, WAITING);
-  } else {
+  }
+  else if (strcmp(arg, "SEM_BLOCK") == 0) {
+    printf("Process with PID: %d blocked by semaphore.\n", running_process->pid);
+    change_process_state(&running_process, WAITING);
+  }
+  else if (strcmp(arg, "SEM_UNBLOCK") == 0) {
+  printf("Process with PID: %d unblocked by semaphore.\n", running_process->pid);
+  change_process_state(&running_process, READY);
+  }
+   else {
     change_process_state(&running_process, READY);
   }
   kernel->scheduler->running_process = next;
@@ -302,11 +312,24 @@ int exec_Instruction(Process *process, Opcode opcode, int arg) {
   case EXEC:
     process->runtime_execution += arg;
     break;
-  case WAIT ... V:
+  case WAIT:
     break;
   }
 }
 
+int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg){
+  switch(opcode){
+    case P:
+      if (process->state == WAITING) {
+        return; 
+      }
+      sem_P(process, arg);
+      break;
+    case V:
+      sem_V(process, arg);
+      break;
+  }
+}
 
 int get_total_instructions(PageTable *pt) {
   int total = 0;
@@ -338,7 +361,17 @@ int processExecute(Process *process) {
   // Executa a próxima instrução
   Instruction *inst = &page->instructions[current_instruction];
   print_instruction(*inst);
-  int result = exec_Instruction(process, inst->opcode, inst->value);
+  
+  Opcode *op = P;
+  Opcode *op2 = V;
+
+  int result;
+  //Verifica se é instrução de semáforo  executa
+  if((inst->opcode == op) || (inst->opcode == op2)){
+    exec_Instruction_semaphore(process, inst->opcode, inst->semaphore_name);
+  }else{
+    result = exec_Instruction(process, inst->opcode, inst->value);
+  }
 
   // Avança o PC
   process->pc.last_instruction++;

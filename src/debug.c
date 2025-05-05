@@ -121,3 +121,13 @@ void print_process(Process *proc) {
   }
   printf("\n");
 }
+
+void print_all_semaphores() {
+  printf("\n=== Current Semaphores ===\n");
+  for (int i = 0; i < total_semaphores; i++) {
+      printf("Semaphore '%c': value=%d, blocked=%d\n",
+             semaphores[i].name,
+             semaphores[i].value,
+             semaphores[i].blocked_count);
+  }
+}
