@@ -73,7 +73,7 @@ void luigi_testv2() {
   // Loop principal: aguarda término dos processos
   while (kernel->process_amount > 0 && !kernel->shutdown_request) {
       sleep(1); // Reduz uso da CPU
-      printf("\nProcessos restantes: %d", kernel->process_amount);
+      printf("\nProcessos restantes: %d\n", kernel->process_amount);
   }
   printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
   // Cleanup
@@ -97,6 +97,21 @@ void luigi_testv3(){
   printf("OPCODE: %d\n",queue->tail->opcode);
   exec_request(queue);
 }
+
+void luigi_testv4(){
+  Program *prog1 = read_program("../programs/synt1");
+  if (prog1 == NULL) {
+    fprintf(stderr, "Failed to read program\n");
+    return;
+  }
+  Process *p1 = create_process_from_program(prog1);
+  init_Kernel();
+  add_process_to_BCP(p1);
+  print_BCP(&kernel->BCP, kernel->process_amount);
+
+
+}
+
 
 void brum_test() {
 
@@ -154,7 +169,7 @@ void brum_test() {
 
 int main () {
 
-  luigi_testv3();
+  luigi_testv2();
 
   return 0;
 }

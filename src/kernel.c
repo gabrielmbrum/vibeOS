@@ -42,10 +42,9 @@ void init_BCP() {
     kernel->process_amount = 0;
 }
 
-int counter = 0;
-
 void schedule() {
   Process *current = kernel->scheduler->running_process;
+  int result;
       // Se não há processo rodando OU o processo atual é inválido
   if (!current || current->pid < 0) {
       int idx = scheduler_POLICY();
@@ -56,9 +55,18 @@ void schedule() {
       
       kernel->scheduler->running_process = &kernel->BCP[idx];
       change_process_state(&kernel->scheduler->running_process, RUNNING);
-      //print_BCP(&kernel->BCP, kernel->process_amount);
-      puts("");
+      print_BCP(&kernel->BCP, kernel->process_amount);
       current = kernel->scheduler->running_process;
+      result = processExecute(current);
+
+      if(result == IOException) printf("Processo %d bloqueado para I/O \n", current->pid);
+      else if(result == TERMINATED){
+        int idx = scheduler_POLICY();
+        if (idx != FAILURE){
+          Process *next = &kernel->BCP[idx];
+          context_switch(next, "TERMINATED");
+        }
+      }
   }
 
       // Se chegou aqui, current é válido (pid >= 0)
@@ -70,21 +78,11 @@ void schedule() {
       if (idx != FAILURE) {
           Process *next = &kernel->BCP[idx];
           processInterrupt(next);
+          result = processExecute(next);
       }
     }
 
-    if (current->runtime_execution <= 0) {
-      int idx = scheduler_POLICY();
-      if (idx != FAILURE) {
-      Process *next = &kernel->BCP[idx];
-        context_switch(next, "TERMINATED");
-      }
-  }
-
-  if (counter % 5 == 0) {
-      sleep(1);
-  }
-  counter++;
+  usleep(1);
 }
 
 void *scheduler_thread_func(void *arg){
@@ -92,20 +90,16 @@ void *scheduler_thread_func(void *arg){
     LOCK_BCP();
     while(kernel->process_amount == 0 && kernel->scheduler_running){
       pthread_cond_wait(&kernel->bcp_cond, &kernel->bcp_mutex);
-      puts("Inicializando thread...\n");
     }
 
     if(kernel->process_amount > 0){
-      puts("Escalonando..\n");
       schedule();
     }
-    printf("Quantidade de processos na BCP.. %d\n", kernel->process_amount);
     if(kernel->process_amount==0){
-      puts("Encerrando escalonador...\n");
       scheduler_stop();
     }
     UNLOCK_BCP();
-    usleep(10000);
+    usleep(1000);
   }
   return NULL;
 }
@@ -121,7 +115,6 @@ void start_scheduler(){
 void scheduler_stop(){
   if(kernel->scheduler_running){
     kernel->scheduler_running = false;
-    puts("Entrei aq");
     pthread_cond_signal(&kernel->bcp_cond);
     pthread_join(kernel->scheduler_thread, NULL);
   }
@@ -186,19 +179,18 @@ void init_Kernel() {
 
     pthread_mutex_init(&kernel->bcp_mutex, NULL);
     pthread_cond_init(&kernel->bcp_cond, NULL);
-    pthread_mutex_init(&kernel->io_mutex, NULL);
-    pthread_cond_init(&kernel->io_cond, NULL);
-
     LOCK_BCP();
     init_BCP();  // Inicializa o BCP
     // Configura o scheduler
     pthread_cond_signal(&kernel->bcp_cond);
     UNLOCK_BCP();
     kernel->scheduler->running_process = NULL;
-    kernel->scheduler->QUANTUM_TIME = 2;
+    kernel->scheduler->QUANTUM_TIME = 200;
     kernel->scheduler_running = false;
     kernel->shutdown_request = false;
+    kernel->queue_requests = init_queue(kernel->queue_requests);
     pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
+    pthread_create(&kernel->io_thread, NULL, io_thread_func, NULL);
   }
 
 
@@ -211,6 +203,7 @@ void init_Kernel() {
 
     free(kernel->BCP);
     free(kernel->scheduler);
+    free(kernel->queue_requests);
     free(kernel);
 }
 
@@ -287,23 +280,77 @@ void context_switch(Process *next, char *arg){
   }
 
 
-void init_Buffer(){
-  kernel->Trail_Buffer = fopen("buffer.txt", "w+");
-}
 
 int exec_Instruction(Process *process, Opcode opcode, int arg){
   switch(opcode){
     case READ...WRITE:
       IORequest *request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
+      pthread_cond_signal(&kernel->queue_requests->iocond);
+      return IOException;
       break;
     case PRINT:
       IORequest *print_request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests, print_request);
+      pthread_cond_signal(&kernel->queue_requests->iocond);
+      return IOException;
+      break;
+    case EXEC:
+      process->runtime_execution+=arg;
+      break;
+    case WAIT...V:
       break;
   }
 }
 
-int exec_Process(Process *process){
-  
+
+
+int get_total_instructions(PageTable *pt) {
+  int total = 0;
+  for (int i = 0; i < pt->page_count; i++) {
+      total += pt->pages[i].instruction_count;
+  }
+  return total;
+}
+
+int processExecute(Process *process){
+    if(!process || process->state == TERMINATED)return FAILURE;
+    PageTable *current_pt = process->page_table;
+    printf("Executando processo: %d\n", process->pid);
+    printf("Process time-slice: %d\n", process->slice_time);
+    for(int i=0;i<current_pt->page_count;i++){
+        Page *page = &current_pt->pages[i];
+        for(int j=0;j<page->instruction_count;j++){
+          if(process->pc >=get_total_instructions(current_pt)) {
+            change_process_state(&process, TERMINATED);
+            return TERMINATED;
+          }
+
+          Instruction *inst = &page->instructions[j];
+
+          int result = exec_Instruction(process, inst->opcode, inst->value);
+
+          if(result == IOException){
+            change_process_state(&process, WAITING);
+            return IOException;
+          }
+
+          process->pc++;
+
+        }
+    }
+    return SUCCESS;
+}
+
+void *io_thread_func(void *arg){
+  while(!kernel->shutdown_request) {
+    IORequest *req = dequeue(kernel->queue_requests);
+    if(!req) continue;
+
+    exec_request(kernel->queue_requests);
+    if(req->process->state == WAITING) change_process_state(&req->process, READY);
+    printf("Processo PID %d liberado\n", req->process->pid);
+    print_process(req->process);
+  }
+  return NULL;
 }

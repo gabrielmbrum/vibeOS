@@ -23,9 +23,6 @@ typedef struct Kernel{
     pthread_cond_t bcp_cond;
     pthread_t io_thread;
     pthread_t input_thread;
-    pthread_mutex_t io_mutex;
-    pthread_cond_t io_cond;
-    FILE *Trail_Buffer;
     IOQueue *queue_requests;
 }Kernel;
 
@@ -46,4 +43,6 @@ void scheduler_stop();
 void start_scheduler();
 void *scheduler_thread_func(void *arg);
 void shutdown_Kernel();
+int processExecute(Process *process);
+void *io_thread_func(void *arg);
 #endif

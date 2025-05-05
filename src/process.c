@@ -43,7 +43,7 @@ Process *create_process_from_program(Program *program) {
 
   process->runtime = 0;
   process->slice_time = 0;
-  process->runtime_execution = 10;
+  process->runtime_execution = 0;
   process->semaphores = calloc((strlen(program->header.semaphores) + 1), sizeof(char));
   strcpy(process->semaphores, program->header.semaphores);
 
