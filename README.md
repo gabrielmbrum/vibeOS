@@ -1,12 +1,23 @@
 
 # vibeOS
 
-Instalação (se ainda não tiver) no Ubuntu/Debian do ncurses:
+this is a OS simulator, where you can create process from the programs (inside programs/) and see the executing of all of them, beyond that you can see the memory status, I/O request and other things.
+
+to enjoy it, follow the 'Setting and Running' instructions ;)
+
+please, dont forget that this isnt just a operating system, this is a vibe 🪴
+
+---
+
+## Setting and Running
+
+🔧 Ncurses instalation
+
 ```bash
 sudo apt-get install libncurses5-dev libncursesw5-dev
 ```
 
-🔧 Instalação CMAKE
+🔧 CMAKE instalation
 
 ```bash
 sudo apt update
@@ -14,9 +25,11 @@ sudo apt install cmake
 cmake --version
 ```
 
-🏃 Executando
+🏃 Running
 
-1. entra no /build
+```bash
+1. cd /build
 2. cmake ..
 3. make
-4. rodar o exec (ex.: ./nome_do_executavel)
+4. ./vibeOS
+```
