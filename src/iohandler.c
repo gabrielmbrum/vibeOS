@@ -78,18 +78,21 @@ void exec_request(IOQueue *queue){
         case WRITE:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,  request->arg,SEEK_SET);
-            fprintf(buffer, "%c", 'L');
-            printf("%s %d\n", "Escrita da trilha", request->arg);
+            //fprintf(buffer, "%c", 'L');
+            //printf("%s %d\n", "Escrita da trilha", request->arg);
+            print_win_args(janela_I_O,"Escrita da trilha %d", request->arg);
             sleep(RWTimeSlice);
             fclose(buffer);
-            puts("Arquivo fechado com sucesso!");
+            //puts("Arquivo fechado com sucesso!");
+            print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
         break;
         case READ:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,request->arg,SEEK_SET);
             char data;
             fread(&data, 1, 1, buffer);
-            printf("Leitura da trilha %d: %c\n", request->arg, data);
+            //printf("Leitura da trilha %d: %c\n", request->arg, data);
+            print_win_args(janela_I_O,"Leitura da trilha %d: %c", request->arg, data);            
             sleep(RWTimeSlice);
             pthread_cond_signal(&queue->iocond);
             fclose(buffer);
@@ -98,7 +101,9 @@ void exec_request(IOQueue *queue){
         case PRINT:
         int print_timing = 0;
             while(print_timing < request->arg){
-                if(print_timing % 1000 == 0) printf("Program PID Print Operation %d\n", request->process->pid);
+                if(print_timing % 1000 == 0) print_win_args(janela_I_O,"Program PID Print Operation %d\n", request->process->pid);            
+
+                //printf("Program PID Print Operation %d\n", request->process->pid);
                 //Simulate screen print from program.
                 //Adjust later.
                 print_timing++;

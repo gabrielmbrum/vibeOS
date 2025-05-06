@@ -7,6 +7,8 @@
 #include "../include/interface.h"
 #include "../include/semaphore.h"
 #include "../include/iohandler.h"
+
+
 void luigi_test() {
   Process *p1, *p2, *p3, *p4;
   p1 = processCreate(0, "sexta-feira", 0);
@@ -30,7 +32,6 @@ void luigi_test() {
   //add_process_to_BCP(p3);
   //add_process_to_BCP(p4);
 
-  print_BCP(&kernel->BCP, kernel->process_amount);
 
   schedule();
   puts("");
@@ -68,7 +69,6 @@ void luigi_testv2() {
   //add_process_to_BCP(p3);
   add_process_to_BCP(p2);
   // Exibe estado inicial
-  print_BCP(&kernel->BCP, kernel->process_amount);
   printf("\n▶ Scheduler status: %s\n", kernel->scheduler_running ? "ATIVO" : "INATIVO");
 
   // Loop principal: aguarda término dos processos
@@ -110,7 +110,6 @@ void luigi_testv4(){
   Process *p1 = create_process_from_program(prog1);
   init_Kernel();
   add_process_to_BCP(p1);
-  print_BCP(&kernel->BCP, kernel->process_amount);
 
 
 }
@@ -216,7 +215,6 @@ void midori_test(){
 
   schedule();
   puts("");
-  print_BCP(&kernel->BCP, kernel->process_amount);
 
   // //print_BCP(&kernel->BCP);
 
@@ -297,6 +295,37 @@ int maria (){
 }
 
   int main(){
-  luigi_testv2();
+   init_Kernel(); // Inicializa o kernel (incluindo mutex/cond)
+
+   char *input = malloc((MAX_OUTPUT_STR)*sizeof(char));
+   strcpy(input,"\0");
+
+   janela_intro();
+   init_interface();
+
+   //input loop
+  while(strcmp(input,"q")){
+    if(get_input(input,janela_OUTPUT)!= NULL){
+        char aux[MAX_OUTPUT_STR] = "../programs/";
+        strcat(aux,input);
+        Program *prog1 = read_program(aux);
+        if (prog1 == NULL) {
+        print_win(janela_OUTPUT,"Failed to read program");
+        return;
+      }else{
+        Process *p1 = create_process_from_program(prog1); 
+        add_process_to_BCP(p1);
+        /* print_win_args(janela_process,"PID: %d, Name: %s, Priority: %d, Segment_id: %d, PC: %d, STATE: %d",
+           p1->pid, p1->name, p1->priority, p1->segment_id, p1->pc, p1->state);  */    
+      } 
+    }
+    clear_space(6,34,strlen(input));
+    move(6,34);    
+  }
+
+  pthread_join(kernel->input_thread, NULL);
+  shutdown_Kernel();
+  endwin();
+
   return 0;
 }

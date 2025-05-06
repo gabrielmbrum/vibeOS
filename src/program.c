@@ -106,17 +106,19 @@ void print_program(Program *program) {
   }
 
   // Print header information
-  printf("--------------------------------------------------\n");
-  printf("\nPrinting program: %s\n", program->header.name);
-  printf("\tSegment ID: %d\n", program->header.segment_id);
-  printf("\tOriginal Priority: %d\n", program->header.original_priority);
-  printf("\tSegment Size: %d\n", program->header.segment_size);
-  printf("\tSemaphores: %s\n", program->header.semaphores);
+  
+  print_win(janela_process,"--------------------------------------------------");
+  print_win_args(janela_process,"Printing program: %s", program->header.name);
+  print_win_args(janela_process,"Segment ID: %d", program->header.segment_id);
+  print_win_args(janela_process,"Original Priority: %d", program->header.original_priority);
+  print_win_args(janela_process,"Segment Size: %d", program->header.segment_size);
+  print_win_args(janela_process,"Semaphores: %s", program->header.semaphores);
   
   // Print instructions
-  printf("Instructions:\n");
+  //printf("Instructions:\n");
+  print_win(janela_process,"Instructions:");
   print_instructions(program->instructions, program->instructions_count);
-  printf("\n--------------------------------------------------\n\n");
+  print_win(janela_process,"--------------------------------------------------");
 }
 
 void free_program(Program *program) {

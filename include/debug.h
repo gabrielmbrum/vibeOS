@@ -4,7 +4,8 @@
 #include "process.h"
 #include "semaphore.h"
 
-void print_BCP(Process **BCP, int processes);
+//void print_BCP(Process **BCP, int processes);
+void print_bcp(Process **BCP);
 const char *state_to_string(ProcessState state);
 const char *opcode_to_string(Opcode opcode);
 void print_page_table(PageTable *page);

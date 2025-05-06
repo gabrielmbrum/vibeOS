@@ -6,7 +6,8 @@
 Instruction* instruction_builder(const char *name, const char *runtime_str) {
   Instruction *instruction = malloc(sizeof(Instruction));
   if (instruction == NULL) {
-    fprintf(stderr, "Memory allocation failed\n");
+    //fprintf(stderr, "Memory allocation failed\n");
+    print_win(janela_memory,"Memory allocation failed");
     return NULL;
   }
   

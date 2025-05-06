@@ -7,5 +7,6 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include "debug.h"
+#include "../include/interface.h"
 
 #endif

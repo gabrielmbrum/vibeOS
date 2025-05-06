@@ -1,6 +1,7 @@
 CMakeFiles/vibeOS.dir/src/interface.c.o: \
- /home/midori_torres/vibeOS/src/interface.c /usr/include/stdc-predef.h \
- /home/midori_torres/vibeOS/src/../include/interface.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/interface.c \
+ /usr/include/stdc-predef.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/interface.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -32,7 +33,7 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h /usr/include/unctrl.h \
  /usr/include/curses.h \
- /home/midori_torres/vibeOS/src/../include/commons.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/commons.h \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
@@ -66,9 +67,10 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
- /home/midori_torres/vibeOS/src/../include/debug.h \
- /home/midori_torres/vibeOS/src/../include/process.h \
- /home/midori_torres/vibeOS/src/../include/memory.h \
- /home/midori_torres/vibeOS/src/../include/instruction.h \
- /home/midori_torres/vibeOS/src/../include/program.h \
- /home/midori_torres/vibeOS/src/../include/semaphore.h
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/debug.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/process.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/memory.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/instruction.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/program.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/semaphore.h \
+ /mnt/c/Users/User/SO-vibe/vibeOS/src/../include/../include/interface.h
