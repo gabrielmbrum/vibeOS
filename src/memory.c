@@ -2,6 +2,7 @@
 #include "../include/memory.h"
 
 int page_counter = 0;
+bool limit_reached = false;
 
 void memory_status() {
   printf("\n--------*-------- Memory status --------*--------\n");
@@ -43,18 +44,18 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   page_table->page_count = 0;
   int num_of_instructions_per_page = 0, iteration_val, i, j;
 
-  for (i = 0; i < instructions_count; i++) {
+  for (i = 0; i < instructions_count && !limit_reached; i++) {
     // if the instruction is EXEC, it will create a new page
     if (instructions[i].opcode == EXEC && (page_table->page_count > 0 ? sum_of_exec_time(page_table->pages[page_table->page_count - 1].instructions, page_table->pages[page_table->page_count - 1].instruction_count) + instructions[i].value > 1000 : 1)) {
       // if it gets here, it means that other page will ne needed to be created, but we cant because the limit was reached
       
-      for (j = 0; (j < instructions[i].value / 1000  || j == 0) && page_table->page_count < RESIDENT_SET; j++) {        
+      for (j = 0; (j < instructions[i].value / 1000  || j == 0) && page_table->page_count < RESIDENT_SET && !limit_reached; j++) {        
         // every new page created will have zero instructions initially
-        printf("j: %d\n", j);
         num_of_instructions_per_page = 0;
 
         initialize_page(&page_table->pages[page_table->page_count], page_table->page_count, instructions_count);
         page_counter++;
+        if (page_counter*PAGE_SIZE == MEM_LENGTH - OS_MEMORY_SIZE) limit_reached = true;
 
         page_table->pages[page_table->page_count].instructions[num_of_instructions_per_page] = instructions[i];
 
@@ -64,8 +65,6 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
         page_table->page_count++;
       }
       
-      //printf("\nsaiu do if com j = %d sendo que instructions[i].value = %d e page_count = %d\n", j, instructions[i].value, page_table->page_count);
-      //printf("boolean: %d\n", page_table->page_count == RESIDENT_SET && !(j < instructions[i].value / 1000));
       // it reached the maximum of pages and it still has instructions to load
       if (page_table->page_count == RESIDENT_SET && (j < instructions[i].value / 1000)) break;
 
@@ -73,6 +72,8 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
       if (page_table->page_count == 0) {
         initialize_page(&page_table->pages[page_table->page_count ], page_table->page_count, instructions_count);
         page_counter++;
+
+        if (page_counter*PAGE_SIZE == MEM_LENGTH - OS_MEMORY_SIZE) limit_reached = true;
 
         page_table->pages[page_table->page_count].instructions[num_of_instructions_per_page++] = instructions[i];
 
@@ -85,9 +86,8 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
     }
   }
 
-  printf("\nj: %d | i: %d\n", j, i);
   page_table->missing_instructions = (i < instructions_count && page_table->page_count == RESIDENT_SET) ? true : false;
-  page_table->last_instruction_loaded = i;
+  page_table->last_instruction_loaded = limit_reached ? i-1 : i;
   page_table->last_instruction_counter = j;
   
   return page_table;
@@ -101,16 +101,12 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   
   /*
   
-    if the last instruction loadaed was an EXEC and we didnt have the necessary space to load it completely,
+    if the last instruction loaded was an EXEC and we didnt have the necessary space to load it completely,
     we need to create the reamining pages for it, if it reamins to no complete the instruction, 
     we will keep it signed to check in the next refresh
 
   */
-  print_instruction(instructions[(*page_table)->last_instruction_loaded]);
-  printf("last instruction loaded: %d\n", (*page_table)->last_instruction_loaded);
-  printf("last instruction counter: %d\n", (*page_table)->last_instruction_counter);
   if (instructions[(*page_table)->last_instruction_loaded].opcode == EXEC && instructions[(*page_table)->last_instruction_loaded].value > 1000*((*page_table)->last_instruction_counter)) {
-    puts("im doing rehab");
     // i will need to make the first pages have the last remaining space of the last instruction loaded
     remaining_pages = (instructions[(*page_table)->last_instruction_loaded].value - 1000*((*page_table)->last_instruction_counter)) / 1000 > 0 ? (instructions[(*page_table)->last_instruction_loaded].value - 1000*((*page_table)->last_instruction_counter)) / 1000 : 1;
     
@@ -144,7 +140,6 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   */
 
   if ((*page_table)->page_count < RESIDENT_SET) {
-    printf("im getting here with this infos -> i: %d, page_count: %d\n", i, (*page_table)->page_count);
     for (i = (*page_table)->last_instruction_loaded + 1; i < instructions_count; i++) {
       if (instructions[i].opcode == EXEC && ((*page_table)->page_count > 0 ? sum_of_exec_time((*page_table)->pages[(*page_table)->page_count - 1].instructions, (*page_table)->pages[(*page_table)->page_count - 1].instruction_count) + instructions[i].value > 1000 : 1)) {
         if ((*page_table)->page_count == RESIDENT_SET) 
@@ -183,7 +178,6 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   
   }
 
-  printf("Page table refreshed. Old size: %d, New size: %d, Instructions Loaded [%d/%d]\n", old_page_table_size, (*page_table)->page_count, i, instructions_count);
   while (i < old_page_table_size) {
     free((*page_table)->pages[i].instructions);
     i++;
