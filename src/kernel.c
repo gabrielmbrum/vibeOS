@@ -5,7 +5,7 @@
 #include "../include/memory.h"
 #include "../include/semaphore.h"
 #include "../include/iohandler.h"
-#include "../include/interface.h" //?testing
+#include "../include/interface.h"
 
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
@@ -13,7 +13,7 @@
 #define RWTimeSlice 30 
 Kernel *kernel=NULL;
 
-void *input_thread_func(void *arg) {
+void *input_thread_func() {
   char command[10];
   while (!kernel->shutdown_request) {
     printf("\nDigite 'q' para encerrar o Kernel: \n");
@@ -83,7 +83,7 @@ void schedule() {
       processInterrupt(next);
       result = processExecute(next);
       if(result == TERMINATED){
-        context_switch(&current, "TERMINATED");
+        context_switch(current, "TERMINATED");
       }
     }
   }
@@ -91,7 +91,7 @@ void schedule() {
   usleep(1);
 }
 
-void *scheduler_thread_func(void *arg) {
+void *scheduler_thread_func() {
   while (kernel->scheduler_running && !kernel->shutdown_request) {
     LOCK_BCP();
     while (kernel->process_amount == 0 && kernel->scheduler_running) {
@@ -311,15 +311,18 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
   //printf("\nExecutando %s...\n",opcode_to_string(opcode));
   print_win_args(janela_SCHEDULER,"Executando %s...",opcode_to_string(opcode));
   switch(opcode){
-    case READ...WRITE:
-      IORequest *request = make_request(process, opcode, arg);
+    case READ...WRITE: {
+      IORequest *request;
+      request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
       print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
+    }
     case PRINT:
-      IORequest *print_request = make_request(process, opcode, arg);
+      IORequest *print_request;
+      print_request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests, print_request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
       print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
@@ -328,23 +331,26 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
     case EXEC:
       process->runtime_execution+=arg;
       break;
-    case WAIT:
+    default:
       break;
   }
+  return SUCCESS;
 }
 
 int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg){
   switch(opcode){
     case P:
       if (process->state == WAITING) {
-        return; 
+        break;; 
       }
       sem_P(process, arg);
       break;
     case V:
       sem_V(process, arg);
       break;
+    default: break;
   }
+  return SUCCESS;
 }
 
 int get_total_instructions(PageTable *pt) {
@@ -379,8 +385,8 @@ int processExecute(Process *process){
 
   print_instruction(*inst);
 
-  Opcode *op = P;
-  Opcode *op2 = V;
+  Opcode op = P;
+  Opcode op2 = V;
 
   int result;
   //Verifica se é instrução de semáforo  executa
@@ -415,7 +421,7 @@ int processExecute(Process *process){
   return SUCCESS;
 }
 
-void *io_thread_func(void *arg) {
+void *io_thread_func() {
   while (!kernel->shutdown_request) {
     IORequest *req = dequeue(kernel->queue_requests);
     if (!req)

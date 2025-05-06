@@ -29,7 +29,7 @@ Semaphore* get_semaphore(char name) {
 }
 
 void register_process_semaphores(Process *process) {
-    for (int i = 0; i < strlen(process->semaphores); i++) {
+    for (int i = 0; i < (int) strlen(process->semaphores); i++) {
         char sem_name = process->semaphores[i];
         Semaphore *sem = find_or_create_semaphore(sem_name);
         sem->blocked_count = 0;  
@@ -68,11 +68,11 @@ void sem_P(Process *process, char sem_name) {
     if (sem->value <= 0) {
         if (sem->value < -MAX_BLOCKED_PROCESSES) {
             sem->value++;  
-            return FAILURE; 
+            return; 
         }
         if (sem->blocked_count > MAX_BLOCKED_PROCESSES) {
             sem->value++;  
-            return FAILURE; 
+            return; 
         }
         // Bloqueia o processo s context_switch
         // for (int i = 0; i < kernel->process_amount; i++) {

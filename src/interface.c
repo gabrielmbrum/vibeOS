@@ -120,18 +120,18 @@ void print_multiple_messages(WINDOW *local_window, char **list, int *size) {
 }
 */
 
-void print_win(WINDOW *local_window, char*input){
+void print_win(WINDOW *local_window, char *input){
   if(strlen(input)>DEF_WIN_WDH){
     wmove(local_window,1,0);
     winsertln(local_window);
     wmove(local_window,2,0);
     winsertln(local_window);
-    mvwprintw(local_window,1,1,input);
+    mvwprintw(local_window,1,1,"%s",input);
     wrefresh(local_window);
   }else{
     wmove(local_window,1,0);
     winsertln(local_window);
-    mvwprintw(local_window,1,1,input);
+    mvwprintw(local_window,1,1,"%s", input);
     wrefresh(local_window);
   }
 }
@@ -173,12 +173,12 @@ void print_win_args(WINDOW *local_window, char*message, ...) {
     winsertln(local_window);
     wmove(local_window,2,0);
     winsertln(local_window);
-    mvwprintw(local_window,1,1,buffer);
+    mvwprintw(local_window,1,1,"%s",buffer);
     wrefresh(local_window);
   }else{
     wmove(local_window,1,0);
     winsertln(local_window);
-    mvwprintw(local_window,1,1,buffer);
+    mvwprintw(local_window,1,1,"%s",buffer);
     wrefresh(local_window);
   }
 }
@@ -244,6 +244,8 @@ WINDOW *janela_intro(){
   werase(intro);
   wrefresh(intro);
   delete_window(intro);
+
+  return intro;
 }
 
 WINDOW *init_menu_components(WINDOW *menu){
@@ -305,4 +307,6 @@ WINDOW *close_window(){
 /*      // free memory
      free(input); */
      endwin();
+
+     return 0;
 }
