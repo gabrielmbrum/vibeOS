@@ -101,7 +101,7 @@ void exec_request(IOQueue *queue){
         case PRINT:
         int print_timing = 0;
             while(print_timing < request->arg){
-                if(print_timing % 1000 == 0) print_win_args(janela_I_O,"Program PID Print Operation %d\n", request->process->pid);            
+                if(print_timing % 1000 == 0) print_win_args(janela_I_O,"Program PID Print Operation %d", request->process->pid);            
 
                 //printf("Program PID Print Operation %d\n", request->process->pid);
                 //Simulate screen print from program.
@@ -109,6 +109,9 @@ void exec_request(IOQueue *queue){
                 print_timing++;
                 usleep(request->arg);
             }
+        break;
+        default:
+        
         break;
     }
     request->process->counter_rw++;

@@ -13,20 +13,22 @@
 #define RWTimeSlice 30 
 Kernel *kernel=NULL;
 
-void* input_thread_func(void* arg) {
+void *input_thread_func(void *arg) {
   char command[10];
   while (!kernel->shutdown_request) {
-      //printf("\nDigite 'q' para encerrar o Kernel: \n");
-      fflush(stdout);
-      fgets(command, sizeof(command), stdin);
+    printf("\nDigite 'q' para encerrar o Kernel: \n");
+    fflush(stdout);
+    fgets(command, sizeof(command), stdin);
 
-      if (command[0] == 'q' || command[0] == 'Q') {
-          kernel->shutdown_request = true;
-          break;
-      }
+    if (command[0] == 'q' || command[0] == 'Q') {
+      kernel->shutdown_request = true;
+      break;
+    }
   }
+  pthread_join(kernel->input_thread, NULL);
+  puts("Encerraaaado");
   return NULL;
-}
+} 
 
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
@@ -99,9 +101,6 @@ void *scheduler_thread_func(void *arg) {
     if (kernel->process_amount > 0) {
       schedule();
     }
-    if (kernel->process_amount == 0) {
-      scheduler_stop();
-    }
     UNLOCK_BCP();
     usleep(1000);
   }
@@ -110,8 +109,7 @@ void *scheduler_thread_func(void *arg) {
 
 void start_scheduler() {
   if (!kernel->scheduler_running) {
-    //puts("Schedular rodando!");
-    print_win(janela_SCHEDULER, "Schedular rodando!");
+    puts("Schedular rodando!");
     kernel->scheduler_running = true;
     pthread_create(&kernel->scheduler_thread, NULL, scheduler_thread_func,
                    NULL);
@@ -121,11 +119,7 @@ void start_scheduler() {
 void scheduler_stop() {
   if (kernel->scheduler_running) {
     kernel->scheduler_running = false;
-    pthread_cond_signal(&kernel->bcp_cond);
     pthread_join(kernel->scheduler_thread, NULL);
-    UNLOCK_BCP();
-    //puts("Scheduler encerrado!"); 
-    print_win(janela_SCHEDULER,"Scheduler encerrado!");
   }
 }
 
@@ -214,7 +208,9 @@ void init_Kernel() {
 void shutdown_Kernel() {
   kernel->shutdown_request = true;
   kernel->scheduler_running = false;
-
+  LOCK_BCP();
+  pthread_cond_signal(&kernel->bcp_cond); // Acorda o scheduler
+  UNLOCK_BCP();
   pthread_join(kernel->input_thread, NULL);
   pthread_join(kernel->scheduler_thread, NULL);
 
@@ -222,6 +218,7 @@ void shutdown_Kernel() {
   free(kernel->scheduler);
   free(kernel->queue_requests);
   free(kernel);
+  puts("Todos liberados");
 }
 
 void processFinish(Process *process) {
