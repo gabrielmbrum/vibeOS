@@ -28,8 +28,9 @@ cmake --version
 🏃 Running
 
 ```bash
-1. cd /build
-2. cmake ..
-3. make
-4. ./vibeOS
+1. mkdir build
+2. cd /build
+3. cmake ..
+4. make
+5. ./vibeOS
 ```
