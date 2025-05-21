@@ -201,7 +201,7 @@ void init_Kernel() {
   kernel->scheduler_running = false;
   kernel->shutdown_request = false;
   kernel->queue_requests = init_queue(kernel->queue_requests);
-  pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
+  //pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
   pthread_create(&kernel->io_thread, NULL, io_thread_func, NULL);
 }
 
