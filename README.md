@@ -5,6 +5,8 @@ this is a OS simulator, where you can create process from the programs (inside p
 
 to enjoy it, follow the 'Setting and Running' instructions ;)
 
+![alt text](intro.png)
+
 please, dont forget that this isnt just a operating system, this is a vibe 🪴
 
 ---
