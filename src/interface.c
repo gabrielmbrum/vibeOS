@@ -226,18 +226,19 @@ WINDOW *janela_intro(){
   initscr();	
   getmaxyx(stdscr, lin, col);
   curs_set(0);
-  WINDOW *intro = newwin(8, 40, ((lin/2) - 5), ((col/2) - 20));
+  WINDOW *intro = newwin(8, 60, ((lin/2) - 5), ((col/2) - 30));
   wrefresh(intro);
   refresh();
 
   wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-  mvwprintw(intro, 0, 0, "%s", "         _  _             ____    _____ ");
-  mvwprintw(intro, 1, 0, "%s", "        (_)| |           / __ \\  / ____|");
-  mvwprintw(intro, 2, 0, "%s", " __   __ _ | |__    ___ | |  | || (___ ");
-  mvwprintw(intro, 3, 0, "%s", " \\ \\ / /| || '_ \\  / _ \\| |  | | \\___ \\ ");
-  mvwprintw(intro, 4, 0, "%s", "  \\ V / | || |_) ||  __/| |__| | ____) |");
-  mvwprintw(intro, 5, 0, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/ ");
-  mvwprintw(intro, 7, 4, "%s", "Aperte qualquer tecla para iniciar");
+  mvwprintw(intro, 0, 3, "%s", "         _  _             ____    _____           _/)");
+  mvwprintw(intro, 1, 3, "%s", "        (_)| |           / __ \\  / ____|       .-(_(=:");
+  mvwprintw(intro, 2, 3, "%s", " __   __ _ | |__    ___ | |  | || (___     |\\ |    \\)");
+  mvwprintw(intro, 3, 3, "%s", " \\ \\ / /| || '_ \\  / _ \\| |  | | \\___ \\    \\ ||");
+  mvwprintw(intro, 4, 3, "%s", "  \\ V / | || |_) ||  __/| |__| | ____) |    \\||");
+  mvwprintw(intro, 5, 3, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/      \\| ");
+  mvwprintw(intro, 6, 7, "%s", "                                          |");
+  mvwprintw(intro, 7, 7, "%s", "   Aperte qualquer tecla para iniciar     |");
   wrefresh(intro);
 
   int c = getch();
