@@ -245,15 +245,15 @@ int rmv_process_of_BCP(int removing_pid) {
 }
 
 int scheduler_POLICY(){
-  int idx = -1, max_rw=-1;
+  int idx = -1, min_rw=10*10*10*10*10*10;
   for(int i=0;i<MAX_PROCESSES;i++){
-      if(kernel->BCP[i].counter_rw > max_rw &&
+      if(kernel->BCP[i].counter_rw < min_rw &&
         kernel->BCP[i].pid>=0 &&
         kernel->BCP[i].state!=TERMINATED){
-          max_rw = kernel->BCP[i].counter_rw;
+          min_rw = kernel->BCP[i].counter_rw;
            idx = i;
       }
-      else if (kernel->BCP[i].counter_rw==max_rw && kernel->BCP[idx].pid > kernel->BCP[i].pid && kernel->BCP[i].pid>=0){
+      else if (kernel->BCP[i].counter_rw==min_rw && kernel->BCP[idx].pid > kernel->BCP[i].pid && kernel->BCP[i].pid>=0){
           idx = i;
       }
   }
