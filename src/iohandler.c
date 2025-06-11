@@ -79,7 +79,7 @@ Disk * init_disk(){
 }
 
 int sstf_policy(Disk *disk){
-    print_win_args(janela_I_O,"Aplicando politica");
+    puts("Aplicando política");
 
     int current_trail = disk->current_trail, closest_trail_idx = -1, min_distance = INT_MAX;
     if(disk->buffer_occupation == 0 ) return FAILURE;
@@ -104,7 +104,7 @@ void move_to_disk_buffer(IOQueue *queue){
         UNLOCK_DISK();
         return;
     }
-    print_win_args(janela_I_O,"passei e morri aqui: PEDIDO %d", request_to_be_moved->process->pid);
+    puts("Cheguei e morri");
     disk->requests[disk->buffer_occupation] = *request_to_be_moved;
     disk->buffer_occupation++;
     pthread_cond_signal(&disk->disk_cond);

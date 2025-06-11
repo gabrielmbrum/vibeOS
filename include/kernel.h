@@ -24,7 +24,11 @@ typedef struct Kernel{
   pthread_t io_thread;
   pthread_t input_thread;
   pthread_t disk_thread;
+  pthread_t printer_thread;
+  pthread_mutex_t printer_lock;
+  pthread_cond_t printer_cond;
   IOQueue *queue_requests;
+  IOQueue *printer_queue;
 }Kernel;
 
 extern Kernel *kernel;
@@ -51,4 +55,5 @@ int exec_Instruction(Process *process, Opcode opcode, int arg);
 void *io_thread_func();
 void context_switch(Process *next, char *arg);
 void *disk_thread_func();
+
 #endif
