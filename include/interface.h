@@ -3,7 +3,6 @@
 
 #include <ncurses.h>
 #include <curses.h>
-#include "commons.h"
 #include <stdarg.h>
 
 //! SOME constatns were depriciated - fix later
