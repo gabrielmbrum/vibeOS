@@ -189,8 +189,6 @@ void init_Kernel() {
   // Configura o scheduler
   pthread_cond_signal(&kernel->bcp_cond);
   UNLOCK_BCP();
-  pthread_mutex_init(&kernel->printer_cond, NULL);
-  pthread_cond_init(&kernel->printer_cond, NULL);
   kernel->scheduler->running_process = NULL;
   kernel->scheduler->QUANTUM_TIME = 200;
   kernel->scheduler_running = false;
@@ -314,7 +312,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
     case PRINT: //MODIFY
       IORequest *print_request;
       print_request = make_request(process, opcode, arg);
-      enqueue(kernel->queue_requests, print_request);
+      enqueue(kernel->printer_queue, print_request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
       return IOException;
       break;

@@ -25,8 +25,6 @@ typedef struct Kernel{
   pthread_t input_thread;
   pthread_t disk_thread;
   pthread_t printer_thread;
-  pthread_mutex_t printer_lock;
-  pthread_cond_t printer_cond;
   IOQueue *queue_requests;
   IOQueue *printer_queue;
 }Kernel;
