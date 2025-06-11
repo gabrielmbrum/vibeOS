@@ -23,6 +23,7 @@ typedef struct Kernel{
   pthread_cond_t bcp_cond;
   pthread_t io_thread;
   pthread_t input_thread;
+  pthread_t disk_thread;
   IOQueue *queue_requests;
 }Kernel;
 
@@ -49,4 +50,5 @@ int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg);
 int exec_Instruction(Process *process, Opcode opcode, int arg);
 void *io_thread_func();
 void context_switch(Process *next, char *arg);
+void *disk_thread_func();
 #endif

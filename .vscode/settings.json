@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "commons.h": "c"
+        "commons.h": "c",
+        "limits.h": "c",
+        "process.h": "c"
     }
 }

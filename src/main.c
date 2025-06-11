@@ -300,6 +300,7 @@ void brum_test() {
 // }
 
 int main() {
+  srand(time(NULL));
   init_Kernel(); // Inicializa o kernel (incluindo mutex/cond)
 
   char *input = malloc((MAX_OUTPUT_STR) * sizeof(char));

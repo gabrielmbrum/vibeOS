@@ -8,5 +8,5 @@
 #include <stdbool.h>
 #include "debug.h"
 #include "../include/interface.h"
-
+#include <time.h>
 #endif

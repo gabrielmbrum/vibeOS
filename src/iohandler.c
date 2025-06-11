@@ -2,8 +2,8 @@
 #include "../include/iohandler.h"
 #include "../include/commons.h"
 
-#define RWTimeSlice 1
 
+Disk *disk;
 
 IOQueue *init_queue(IOQueue *queue){
     queue = malloc(sizeof(IOQueue));
@@ -11,7 +11,7 @@ IOQueue *init_queue(IOQueue *queue){
     queue->tail = NULL;
     pthread_mutex_init(&queue->iomutex,NULL);
     pthread_cond_init(&queue->iocond, NULL);
-
+    queue->num_elements = 0;
     return queue;
 }
 
@@ -25,7 +25,10 @@ IORequest *make_request(Process *process, Opcode opcode, int arg){
     return request;
 }
 
+
+
 void enqueue(IOQueue *queue, IORequest *request){
+    
     if(!queue || !request) return;
     LOCK_IO();
     if(!queue->head){
@@ -36,86 +39,79 @@ void enqueue(IOQueue *queue, IORequest *request){
         queue->tail->next = request;
         queue->tail = request;
     }
+    queue->num_elements++;
     pthread_cond_signal(&queue->iocond);
     UNLOCK_IO();
     return;
 }
-
 IORequest* dequeue(IOQueue *queue) {
     if (!queue) return NULL;
 
-    // Trava o mutex para operação segura
-    LOCK_IO();
+    pthread_mutex_lock(&queue->iomutex);  // FALTAVA TRAVAR AQUI!
 
-    // Espera enquanto a fila estiver vazia (evita busy-waiting)
     while (!queue->head) {
         pthread_cond_wait(&queue->iocond, &queue->iomutex);
     }
 
-    // Se foi acordado por shutdown, retorna NULL
 
-    // Remove o elemento da fila
     IORequest *request = queue->head;
-    queue->head = request->next;
-
-    // Se a fila esvaziou, atualiza tail
-    if (!queue->head) {
-        queue->tail = NULL;
+    if (!request || queue->num_elements == 0) {
+        pthread_mutex_unlock(&queue->iomutex);
+        pthread_mutex_unlock(&queue->iomutex);  // FALTAVA DESTRAVAR!
+        return NULL;
     }
-    // Destrava o mutex
-    pthread_cond_signal(&queue->iocond);
-    UNLOCK_IO();
 
-    return request;
+    queue->head = request->next;
+    if (!queue->head) queue->tail = NULL;
+    queue->num_elements--;
+
+    pthread_mutex_unlock(&queue->iomutex);  // FALTAVA DESTRAVAR!
+    return request;  // RETORNA O PONTEIRO ORIGINAL
 }
 
-void exec_request(IOQueue *queue){
-    IORequest *request = dequeue(queue);
-    if(!request || request->process->pid == EMPTY_BCP_ENTRY) return;
-    LOCK_IO();
-    FILE *buffer =  NULL;
-    switch(request->opcode){
-        case WRITE:
-            buffer = fopen("../src/buffer.txt", "r+");
-            fseek(buffer,  request->arg,SEEK_SET);
-            //fprintf(buffer, "%c", 'L');
-            //printf("%s %d\n", "Escrita da trilha", request->arg);
-            print_win_args(janela_I_O,"Escrita da trilha %d", request->arg);
-            sleep(RWTimeSlice);
-            fclose(buffer);
-            //puts("Arquivo fechado com sucesso!");
-            print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
-        break;
-        case READ:
-            buffer = fopen("../src/buffer.txt", "r+");
-            fseek(buffer,request->arg,SEEK_SET);
-            char data;
-            fread(&data, 1, 1, buffer);
-            //printf("Leitura da trilha %d: %c\n", request->arg, data);
-            print_win_args(janela_I_O,"Leitura da trilha %d: %c", request->arg, data);            
-            sleep(RWTimeSlice);
-            pthread_cond_signal(&queue->iocond);
-            fclose(buffer);
-            puts("Arquivo fechado com sucesso!");
-        break;
-        case PRINT:
-        int print_timing = 0;
-            while(print_timing < request->arg){
-                if(print_timing % 1000 == 0) print_win_args(janela_I_O,"Program PID Print Operation %d", request->process->pid);            
+Disk * init_disk(){
+    disk = (Disk*) malloc(sizeof(Disk));
+    disk->current_trail = 0;
+    disk->buffer_occupation = 0;
+    pthread_cond_init(&disk->disk_cond, NULL);
+    pthread_mutex_init(&disk->disk_lock, NULL);
+    return disk;
+}
 
-                //printf("Program PID Print Operation %d\n", request->process->pid);
-                //Simulate screen print from program.
-                //Adjust later.
-                print_timing++;
-                usleep(request->arg);
-            }
-        break;
-        default:
-        
-        break;
+int sstf_policy(Disk *disk){
+    print_win_args(janela_I_O,"Aplicando politica");
+
+    int current_trail = disk->current_trail, closest_trail_idx = -1, min_distance = INT_MAX;
+    if(disk->buffer_occupation == 0 ) return FAILURE;
+    for(int i = 0; i < disk->buffer_occupation; i++){
+        int distance = abs(current_trail - disk->requests[i].arg);
+        if(distance < min_distance){
+            min_distance = distance;
+            closest_trail_idx = i;
+        }
     }
-    request->process->counter_rw++;
-    free(request);
-    UNLOCK_IO();
-    return;
+    return closest_trail_idx;
+}
+
+void move_to_disk_buffer(IOQueue *queue){
+    LOCK_DISK();
+    if(!queue || queue->num_elements <= 0 ) {
+        UNLOCK_DISK();
+        return;
+    }
+    IORequest *request_to_be_moved = dequeue(queue);
+    if (!request_to_be_moved) {
+        UNLOCK_DISK();
+        return;
+    }
+    print_win_args(janela_I_O,"passei e morri aqui: PEDIDO %d", request_to_be_moved->process->pid);
+    disk->requests[disk->buffer_occupation] = *request_to_be_moved;
+    disk->buffer_occupation++;
+    pthread_cond_signal(&disk->disk_cond);
+    pthread_cond_signal(&queue->iocond);
+    UNLOCK_DISK();
+}
+
+IORequest *pick_request(int idx_request_to_be_executed){
+    return &disk->requests[idx_request_to_be_executed];    
 }
