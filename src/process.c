@@ -7,8 +7,7 @@ Process *processCreate(int pid, const char *name, int priority) {
   //Ensuring Unique PID at Process Creation //In order to avoid effortless.
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
-    //fprintf(stderr, "Memory allocation failed\n");
-    print_win(janela_memory, "Memory allocation failed");
+    fprintf(stderr, "Memory allocation failed\n");
 
     return NULL;
   }
@@ -27,8 +26,7 @@ Process *processCreate(int pid, const char *name, int priority) {
 Process *create_process_from_program(Program *program) {
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
-    //fprintf(stderr, "Memory allocation failed\n");
-    print_win(janela_memory, "Memory allocation failed");
+    fprintf(stderr, "Memory allocation failed\n");
     return NULL;
   }
 
