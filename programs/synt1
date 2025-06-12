@@ -12,12 +12,12 @@ exec 400
 print 100
 read k
 exec 500
+write l
 V(s)
 P(s)
 exec 200
 P(t)
 exec 20000
-write l
 print 150
 V(t)
 V(s)

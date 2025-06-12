@@ -28,7 +28,7 @@ int sum_of_exec_time(Instruction *instructions, int instructions_count) {
       sum += instructions[i].value;
     }
   }
-  print_instructions(instructions, instructions_count);
+  //print_instructions(instructions, instructions_count);
   return sum;
 }
 

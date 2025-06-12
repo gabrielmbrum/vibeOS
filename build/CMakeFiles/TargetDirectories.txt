@@ -1,3 +1,0 @@
-/home/lhslobato/projetoSO/vibeOS/build/CMakeFiles/vibeOS.dir
-/home/lhslobato/projetoSO/vibeOS/build/CMakeFiles/edit_cache.dir
-/home/lhslobato/projetoSO/vibeOS/build/CMakeFiles/rebuild_cache.dir

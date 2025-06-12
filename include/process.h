@@ -38,6 +38,7 @@ typedef struct{
   PageTable *page_table;
   int slice_time;
   int runtime_execution;
+  int waiting_operations;
 } Process;
 
 /*

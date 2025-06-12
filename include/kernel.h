@@ -53,5 +53,6 @@ int exec_Instruction(Process *process, Opcode opcode, int arg);
 void *io_thread_func();
 void context_switch(Process *next, char *arg);
 void *disk_thread_func();
+void *printer_thread_func();
 
 #endif

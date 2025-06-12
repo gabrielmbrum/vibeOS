@@ -6,8 +6,8 @@
 #include <math.h>
 #include <limits.h>
 
-#define LOCK_IO() pthread_mutex_lock(&queue->iomutex)
-#define UNLOCK_IO() pthread_mutex_unlock(&queue->iomutex)
+#define LOCK_IO(queue) pthread_mutex_lock(&(queue)->iomutex)
+#define UNLOCK_IO(queue) pthread_mutex_unlock(&(queue)->iomutex)
 #define LOCK_DISK() pthread_mutex_lock(&disk->disk_lock)
 #define UNLOCK_DISK() pthread_mutex_unlock(&disk->disk_lock)
 

@@ -21,16 +21,17 @@ IORequest *make_request(Process *process, Opcode opcode, int arg){
     request->opcode = opcode;
     request->arg = arg;
     request->next = NULL;
-
     return request;
 }
 
 
 
 void enqueue(IOQueue *queue, IORequest *request){
-    
-    if(!queue || !request) return;
-    LOCK_IO();
+    if(!queue || !request) {
+        return;
+    }
+
+    pthread_mutex_lock(&queue->iomutex);  // FALTAVA TRAVAR AQUI!
     if(!queue->head){
         queue->head = request;
         queue->tail = request;
@@ -40,8 +41,10 @@ void enqueue(IOQueue *queue, IORequest *request){
         queue->tail = request;
     }
     queue->num_elements++;
+    request->process->waiting_operations++;
+    printf("Processo esperando: %d\n", request->process->waiting_operations);
+    pthread_mutex_unlock(&queue->iomutex);
     pthread_cond_signal(&queue->iocond);
-    UNLOCK_IO();
     return;
 }
 IORequest* dequeue(IOQueue *queue) {
@@ -56,20 +59,23 @@ IORequest* dequeue(IOQueue *queue) {
 
     IORequest *request = queue->head;
     if (!request || queue->num_elements == 0) {
+        
         pthread_mutex_unlock(&queue->iomutex);
-        pthread_mutex_unlock(&queue->iomutex);  // FALTAVA DESTRAVAR!
+        pthread_cond_signal(&queue->iocond);  // FALTAVA DESTRAVAR!
         return NULL;
     }
 
     queue->head = request->next;
     if (!queue->head) queue->tail = NULL;
     queue->num_elements--;
-
-    pthread_mutex_unlock(&queue->iomutex);  // FALTAVA DESTRAVAR!
+    pthread_mutex_unlock(&queue->iomutex);
+    pthread_cond_signal(&queue->iocond);
+    request->next = NULL;  // FALTAVA DESTRAVAR!
     return request;  // RETORNA O PONTEIRO ORIGINAL
 }
 
 Disk * init_disk(){
+    puts("Disk initialized");
     disk = (Disk*) malloc(sizeof(Disk));
     disk->current_trail = 0;
     disk->buffer_occupation = 0;
@@ -79,10 +85,9 @@ Disk * init_disk(){
 }
 
 int sstf_policy(Disk *disk){
-    puts("Aplicando política");
-
     int current_trail = disk->current_trail, closest_trail_idx = -1, min_distance = INT_MAX;
-    if(disk->buffer_occupation == 0 ) return FAILURE;
+    if(disk->buffer_occupation == 0 ) return FAILURE;          
+
     for(int i = 0; i < disk->buffer_occupation; i++){
         int distance = abs(current_trail - disk->requests[i].arg);
         if(distance < min_distance){
@@ -90,28 +95,47 @@ int sstf_policy(Disk *disk){
             closest_trail_idx = i;
         }
     }
+    printf("Request em buffer com menor trilha: %d\n", closest_trail_idx);
     return closest_trail_idx;
 }
 
-void move_to_disk_buffer(IOQueue *queue){
-    LOCK_DISK();
-    if(!queue || queue->num_elements <= 0 ) {
-        UNLOCK_DISK();
+void move_to_disk_buffer(IOQueue *queue) {
+    if(!queue) return;
+    
+    // Primeiro trava o mutex da fila
+    pthread_mutex_lock(&queue->iomutex);
+    if (queue->num_elements <= 0) {
+        pthread_mutex_unlock(&queue->iomutex);
         return;
     }
-    IORequest *request_to_be_moved = dequeue(queue);
-    if (!request_to_be_moved) {
+    // Depois trava o mutex do disco
+    pthread_mutex_lock(&disk->disk_lock);
+    /*    if(disk->buffer_occupation>=buffer_size){
         UNLOCK_DISK();
+        pthread_mutex_unlock(&queue->iomutex);
         return;
     }
-    puts("Cheguei e morri");
+    */
+    // Remove da fila
+    IORequest *request_to_be_moved = queue->head;
+    queue->head = request_to_be_moved->next;
+    if(!queue->head) queue->tail = NULL;
+    queue->num_elements--;
+    
+    // Adiciona ao buffer do disco
     disk->requests[disk->buffer_occupation] = *request_to_be_moved;
     disk->buffer_occupation++;
-    pthread_cond_signal(&disk->disk_cond);
+    printf("Requests em disco: %d\n", disk->buffer_occupation);
+    // Destrava na ordem inversa
+    pthread_mutex_unlock(&disk->disk_lock);
+    pthread_mutex_unlock(&queue->iomutex);
+    
+    // Sinaliza as condições
     pthread_cond_signal(&queue->iocond);
-    UNLOCK_DISK();
+    pthread_cond_signal(&disk->disk_cond);
 }
 
 IORequest *pick_request(int idx_request_to_be_executed){
+    puts("picking..");
     return &disk->requests[idx_request_to_be_executed];    
 }

@@ -59,9 +59,11 @@ void schedule() {
     print_SCHEDULER(&kernel->BCP);
     current = kernel->scheduler->running_process;
     result = processExecute(current);
-
-    if (result == IOException);
-      //printf("Processo %d bloqueado para I/O \n", current->pid);
+    printf("Executando processo %d\n", kernel->scheduler->running_process->pid);
+    if (result == IOException){
+      printf("Processo %d bloqueado para I/O \n", current->pid);
+      kernel->scheduler->running_process = NULL;
+    }
     else if (result == TERMINATED) {
       int idx = scheduler_POLICY();
       if (idx != FAILURE) {
@@ -82,11 +84,12 @@ void schedule() {
       result = processExecute(next);
       if(result == TERMINATED){
         context_switch(current, "TERMINATED");
+        kernel->scheduler->running_process = NULL;
       }
     }
   }
 
-  usleep(1);
+  usleep(1000);
 }
 
 void *scheduler_thread_func() {
@@ -134,6 +137,7 @@ int search_BCP(int process_pid) {
 }
 
 int add_process_to_BCP(Process *process) {
+  printf("Adicionando processo %d\n", process->pid);
   LOCK_BCP();
   if (kernel->BCP == NULL) {
     init_BCP();
@@ -195,9 +199,10 @@ void init_Kernel() {
   kernel->shutdown_request = false;
   kernel->queue_requests = init_queue(kernel->queue_requests);
   kernel->printer_queue = init_queue(kernel->printer_queue);
-  //pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
-  pthread_create(&kernel->disk_thread, NULL, disk_thread_func, NULL);
   init_disk();
+  pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
+  pthread_create(&kernel->disk_thread, NULL, disk_thread_func, NULL);
+  pthread_create(&kernel->printer_thread, NULL, printer_thread_func, NULL);
   pthread_create(&kernel->io_thread, NULL, io_thread_func, NULL);
 }
 
@@ -210,6 +215,7 @@ void shutdown_Kernel() {
   pthread_join(kernel->input_thread, NULL);
   pthread_join(kernel->scheduler_thread, NULL);
   pthread_join(kernel->disk_thread, NULL);
+  pthread_join(kernel->printer_queue, NULL);
   free(disk);
   free(kernel->BCP);
   free(kernel->scheduler);
@@ -228,6 +234,10 @@ int rmv_process_of_BCP(int removing_pid) {
     return FAILURE;
   }
 
+  if(kernel->BCP[removing_pid].waiting_operations>0){
+    UNLOCK_BCP();
+    return FAILURE;
+  }
   int idx = search_BCP(removing_pid);
   if (idx != FAILURE) {
     // If PID present in BCP, get the index and remove;
@@ -270,7 +280,7 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    //printf("Process with PID: %d finished execution...\n", running_process->pid);
+    printf("Process with PID: %d finished execution...\n", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
     //("Processo finalizado removido da BCP!");
@@ -299,11 +309,12 @@ void processInterrupt(Process *next){ //Quantum atingido.
 }
 
 int exec_Instruction(Process *process, Opcode opcode, int arg){
-  //printf("\nExecutando %s...\n",opcode_to_string(opcode));
   switch(opcode){
     case READ...WRITE: {
+      
       IORequest *request;
       request = make_request(process, opcode, arg);
+  printf("\ninserindo %s operation...\n",opcode_to_string(request->opcode));
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
       return IOException;
@@ -313,7 +324,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       IORequest *print_request;
       print_request = make_request(process, opcode, arg);
       enqueue(kernel->printer_queue, print_request);
-      pthread_cond_signal(&kernel->queue_requests->iocond);
+      pthread_cond_signal(&kernel->printer_queue->iocond);
       return IOException;
       break;
     case EXEC:
@@ -357,7 +368,7 @@ int processExecute(Process *process){
   int total_instructions = get_total_instructions(current_pt);
 
   // Verifica se o processo já terminou (PC >= total_instructions)
-  if (process->pc.global_index >= total_instructions) {
+  if (process->pc.global_index >= total_instructions && process->waiting_operations<=0) {
     change_process_state(&process, TERMINATED);
     return TERMINATED;
   }
@@ -371,7 +382,7 @@ int processExecute(Process *process){
   Instruction *inst = &page->instructions[current_instruction];
 
 
-  print_instruction(*inst);
+  //print_instruction(*inst);
 
   Opcode op = P;
   Opcode op2 = V;
@@ -401,7 +412,7 @@ int processExecute(Process *process){
   }
 
   // Verifica se terminou todas as instruções
-  if (process->pc.global_index >= total_instructions) {
+  if (process->pc.global_index >= total_instructions&& process->waiting_operations<=0) {
       change_process_state(&process, TERMINATED);
       return TERMINATED;
   }
@@ -412,25 +423,40 @@ int processExecute(Process *process){
 
 
 void exec_request(IOQueue *queue){
-    if(kernel->queue_requests->num_elements <=0) return;
-    int idx_request_to_be_executed = sstf_policy(disk);
-    if(idx_request_to_be_executed == FAILURE) return;
+    pthread_mutex_lock(&queue->iomutex);
     LOCK_DISK();
-    IORequest *request = pick_request(idx_request_to_be_executed);
-    if(!request || request->process->pid == EMPTY_BCP_ENTRY) {
+     if (disk->buffer_occupation <= 0) {
+        pthread_mutex_unlock(&queue->iomutex);
+        UNLOCK_DISK();
+        return;
+    }
+    
+    int idx_request_to_be_executed = sstf_policy(disk);
+    if(idx_request_to_be_executed == FAILURE){
       UNLOCK_DISK();
+      pthread_mutex_lock(&queue->iomutex);
       return;
     }
+    IORequest *request = pick_request(idx_request_to_be_executed);
+    printf("Request feito por %s with pid %d\n", request->process->name, request->process->pid);
     FILE *buffer =  NULL;
-    disk->current_trail = request->arg;
+    disk->current_trail = request->arg; 
+    for (int i = idx_request_to_be_executed; i < disk->buffer_occupation - 1; i++) {
+        disk->requests[i] = disk->requests[i+1];
+    }
+    disk->buffer_occupation--;
+    request->process->waiting_operations--;
+    UNLOCK_DISK();
+    pthread_mutex_unlock(&queue->iomutex);
+    printf("Executando %s\n", opcode_to_string(request->opcode));
     switch(request->opcode){
         case WRITE:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,  request->arg,SEEK_SET);
             int to_be_written = rand() % 2;
             fwrite(&to_be_written,sizeof(int),1,buffer);
-            //printf("%s %d\n", "Escrita da trilha", request->arg);
-            usleep(IO_QUANTUM*100);
+            printf("%s %d\n", "Escrita da trilha", request->arg);
+            usleep(IO_QUANTUM);
             fclose(buffer);
             //("Arquivo fechado com sucesso!");
         break;
@@ -439,55 +465,82 @@ void exec_request(IOQueue *queue){
             fseek(buffer,request->arg,SEEK_SET);
             int data;
             fread(&data, sizeof(int), 1, buffer);
-            //printf("Leitura da trilha %d: %c\n", request->arg, data);           
-            usleep(IO_QUANTUM*100);
-            pthread_cond_signal(&queue->iocond);
+            printf("Leitura da trilha %d: %c\n", request->arg, data);        
+            usleep(IO_QUANTUM);
             fclose(buffer);
-            ("Arquivo fechado com sucesso!");
         break;
         default:
         break;
     }
+    printf("Processo esperando: %d\n", request->process->waiting_operations);
     LOCK_BCP();
     if(request->process->state == WAITING) {
       change_process_state(&request->process, READY);
     }
-    pthread_cond_signal(&kernel->bcp_cond);
     UNLOCK_BCP();
-    disk->buffer_occupation --;
-    pthread_cond_signal(&disk->disk_cond);
-    UNLOCK_DISK();
+    pthread_cond_signal(&kernel->bcp_cond);
     request->process->counter_rw++;
-    return;
+    printf("Pedidos em disco agora: %d", disk->buffer_occupation);
+    return;   
 }
 
 void *io_thread_func() {
-  while (!kernel->shutdown_request) {
-    
-    if(disk->buffer_occupation > 0){
-      exec_request(kernel->queue_requests);
+    while (!kernel->shutdown_request) {
+        LOCK_DISK();
+        pthread_mutex_lock(&kernel->queue_requests->iomutex);
+        
+        // Processa TODOS os requests pendentes
+        while (disk->buffer_occupation > 0) {
+            pthread_mutex_unlock(&kernel->queue_requests->iomutex);
+            UNLOCK_DISK();
+            
+            exec_request(kernel->queue_requests);
+            
+            LOCK_DISK();
+            pthread_mutex_lock(&kernel->queue_requests->iomutex);
+        }
+        
+        pthread_mutex_unlock(&kernel->queue_requests->iomutex);
+        UNLOCK_DISK();
+        usleep(1000);
+    }
+    return NULL;
+}
+
+void *printer_thread_func(){
+  while(!kernel->shutdown_request){
+    if(kernel->printer_queue->num_elements >0){
+      IORequest *print_request = dequeue(kernel->printer_queue);
+      for(int i=0;i<print_request->arg;i++){
+        if(i%20 ==0)
+        printf("Processo: %d solicitou impressora\n", print_request->process->pid);
+        //There will be a printer window, where a process will be printing for *arg amount of time (in ms). 
+        //Be creative in what can be this action of printing, what will be printed, idk what it must be.
+        
+      }
+      print_request->process->waiting_operations--;
+      printf("Processo esperando ainda %d operações\n", print_request->process->waiting_operations);
     }
   }
   return NULL;
 }
-
-void *disk_thread_func(){
-   pthread_mutex_lock(&kernel->queue_requests->iomutex);
-        while (!kernel->queue_requests->head) {
-            pthread_cond_wait(&kernel->queue_requests->iocond, &kernel->queue_requests->iomutex);
-       }
-        pthread_mutex_unlock(&kernel->queue_requests->iomutex);
-
-  while (!kernel->shutdown_request) {
-        LOCK_DISK();
-        while (disk->buffer_occupation < buffer_size) {
-
-            UNLOCK_DISK();
-            move_to_disk_buffer(&kernel->queue_requests);
-            LOCK_DISK();
+void *disk_thread_func() {
+    while (!kernel->shutdown_request) {
+        // Trava APENAS o mutex da fila para verificar condições
+        pthread_mutex_lock(&kernel->queue_requests->iomutex);
+        
+        if (disk->buffer_occupation < buffer_size && 
+            kernel->queue_requests->num_elements > 0) {
+            // Libera o mutex da fila antes de chamar move_to_disk_buffer
+            // (pois ela já vai travar os mutexes na ordem correta)
+            pthread_mutex_unlock(&kernel->queue_requests->iomutex);
+            
+            move_to_disk_buffer(kernel->queue_requests);
+        } else {
+            pthread_mutex_unlock(&kernel->queue_requests->iomutex);
         }
-        UNLOCK_DISK();
-        usleep(100);  
+
+        usleep(1000);  // Evita busy-waiting
     }
     return NULL;
 }

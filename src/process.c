@@ -50,7 +50,7 @@ Process *create_process_from_program(Program *program) {
   process->runtime_execution = 0;
   process->semaphores = calloc((strlen(program->header.semaphores) + 1), sizeof(char));
   strcpy(process->semaphores, program->header.semaphores);
-
+  process->waiting_operations = 0;
   process->page_table = build_page_table(program->instructions, program->instructions_count); // Initialize page table to NULL
   
   return process;
