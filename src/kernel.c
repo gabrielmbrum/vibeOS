@@ -263,7 +263,9 @@ int scheduler_POLICY(){
           idx = i;
       }
   }
-
+  puts("politica aplicada encontrou");
+  printf("PID: %d", kernel->BCP[idx].pid);
+  puts("");
   return idx;
 }
 
