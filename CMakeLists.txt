@@ -4,7 +4,7 @@ project(HelloProject C)
 # Configurações do compilador C
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-# 1. Garante que os símbolos de debug (-g) sejam incluídos e desativa otimizações
+
 # Encontra a biblioteca ncurses
 find_package(Curses REQUIRED)
 

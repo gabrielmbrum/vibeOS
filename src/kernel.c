@@ -6,7 +6,7 @@
 #include "../include/semaphore.h"
 #include "../include/iohandler.h"
 #include "../include/interface.h"
-
+#include <limits.h>
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
 #define IOException -101
@@ -26,9 +26,28 @@ void *input_thread_func() {
     }
   }
   pthread_join(kernel->input_thread, NULL);
-  ("Encerraaaado");
+  puts("Encerraaaado");
   return NULL;
 } 
+
+void *printer_thread_func(){
+  while(!kernel->shutdown_request){
+    if(kernel->printer_queue->num_elements >0){
+      IORequest *print_request = dequeue(kernel->printer_queue);
+      for(int i=0;i<print_request->arg;i++){
+        if(i%10 == 0){
+          print_win_args(janela_memory,"PID (%d) using printer..", print_request->process->pid);
+        }
+        //Implementem uma janela escrito "Printer", pra seguir o padrão em inglês;
+        //A ideia é que durante o tempo que tá no programa sintético, tipo
+        //print 1000
+        //durante 1000 unidades de tempo apareça na janela "synt1 (exemplo) has been using printer for x seconds..." e ai vai incrementando o timer, por exemplo.
+        
+      }
+    }
+  }
+  return NULL;
+}
 
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
@@ -109,6 +128,7 @@ void *scheduler_thread_func() {
 
 void start_scheduler() {
   if (!kernel->scheduler_running) {
+    puts("Schedular rodando!");
     kernel->scheduler_running = true;
     pthread_create(&kernel->scheduler_thread, NULL, scheduler_thread_func,
                    NULL);
@@ -200,10 +220,11 @@ void init_Kernel() {
   kernel->scheduler_running = false;
   kernel->shutdown_request = false;
   kernel->queue_requests = init_queue(kernel->queue_requests);
+  kernel->printer_queue = init_queue(kernel->printer_queue);
+  disk = init_disk();
   //pthread_create(&kernel->input_thread, NULL, input_thread_func, NULL);
-  pthread_create(&kernel->disk_thread, NULL, disk_thread_func, NULL);
-  init_disk();
   pthread_create(&kernel->io_thread, NULL, io_thread_func, NULL);
+  pthread_create(&kernel->printer_thread, NULL, printer_thread_func, NULL);
 }
 
 void shutdown_Kernel() {
@@ -214,12 +235,12 @@ void shutdown_Kernel() {
   UNLOCK_BCP();
   pthread_join(kernel->input_thread, NULL);
   pthread_join(kernel->scheduler_thread, NULL);
-  pthread_join(kernel->disk_thread, NULL);
-  free(disk);
+
   free(kernel->BCP);
   free(kernel->scheduler);
   free(kernel->queue_requests);
   free(kernel);
+  puts("Todos liberados");
 }
 
 void processFinish(Process *process) {
@@ -246,7 +267,7 @@ int rmv_process_of_BCP(int removing_pid) {
 }
 
 int scheduler_POLICY(){
-  int idx = -1, min_rw=INT_MAX;
+  int idx = -1, min_rw = INT_MAX;
   for(int i=0;i<MAX_PROCESSES;i++){
       if(kernel->BCP[i].counter_rw < min_rw &&
         kernel->BCP[i].pid>=0 &&
@@ -268,8 +289,7 @@ void change_process_state(Process **process, ProcessState state){
 
 void context_switch(Process *next, char *arg){
   Process *running_process = kernel->scheduler->running_process;
-  //("Trocando contexto por motivos");
-  print_win(janela_SCHEDULER, "Trocando contexto por motivos");
+  //puts("Trocando contexto por motivos");
 
   if(strcmp(arg, "QUANTUM")==0){
     running_process->slice_time=0;
@@ -280,8 +300,7 @@ void context_switch(Process *next, char *arg){
     print_win_args(janela_SCHEDULER,"Process with PID: %d finished execution...", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
-    //("Processo finalizado removido da BCP!");
-    print_win(janela_SCHEDULER,"Processo finalizado removido da BCP!");
+    //puts("Processo finalizado removido da BCP!");
 
   }
   else if (strcmp(arg, "I/O") == 0) {
@@ -294,7 +313,7 @@ void context_switch(Process *next, char *arg){
   }
   else if (strcmp(arg, "SEM_UNBLOCK") == 0) {
     //printf("Process with PID: %d unblocked by semaphore.\n", running_process->pid);
-    //print_win_args(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
+    print_win_args(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
     change_process_state(&running_process, READY);
  }
   else {
@@ -310,23 +329,22 @@ void processInterrupt(Process *next){ //Quantum atingido.
 
 int exec_Instruction(Process *process, Opcode opcode, int arg){
   //printf("\nExecutando %s...\n",opcode_to_string(opcode));
-  //print_win_args(janela_SCHEDULER,"Executando %s...",opcode_to_string(opcode));
   switch(opcode){
     case READ...WRITE: {
       IORequest *request;
       request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
-      //print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     }
     case PRINT:
       IORequest *print_request;
       print_request = make_request(process, opcode, arg);
-      enqueue(kernel->queue_requests, print_request);
-      pthread_cond_signal(&kernel->queue_requests->iocond);
-      //print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      enqueue(kernel->printer_queue, print_request);
+      pthread_cond_signal(&kernel->printer_queue->iocond);
+      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     case EXEC:
@@ -422,107 +440,29 @@ int processExecute(Process *process){
   return SUCCESS;
 }
 
-
-
-void exec_request(IOQueue *queue){
-    if(kernel->queue_requests->num_elements <=0) return;
-    print_win_args(janela_I_O,"tempedidoexecutar");
-    int idx_request_to_be_executed = sstf_policy(disk);
-    if(idx_request_to_be_executed == FAILURE) return;
-    print_win_args(janela_I_O,"tempedidoexecutar");
-    LOCK_DISK();
-    print_win_args(janela_I_O,"TENTANDO EXEC222");
-    IORequest *request = pick_request(idx_request_to_be_executed);
-    print_win_args(janela_I_O,"PICKEI");
-    if(!request || request->process->pid == EMPTY_BCP_ENTRY) {
-      UNLOCK_DISK();
-      return;
-    }
-    FILE *buffer =  NULL;
-    disk->current_trail = request->arg;
-    switch(request->opcode){
-        case WRITE:
-            buffer = fopen("../src/buffer.txt", "r+");
-            fseek(buffer,  request->arg,SEEK_SET);
-            int to_be_written = rand() % 2;
-            fwrite(&to_be_written,sizeof(int),1,buffer);
-            //printf("%s %d\n", "Escrita da trilha", request->arg);
-            print_win_args(janela_I_O,"Escrita da trilha %d", request->arg);
-            usleep(IO_QUANTUM*100);
-            fclose(buffer);
-            //("Arquivo fechado com sucesso!");
-            print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
-        break;
-        case READ:
-            buffer = fopen("../src/buffer.txt", "r+");
-            fseek(buffer,request->arg,SEEK_SET);
-            int data;
-            fread(&data, sizeof(int), 1, buffer);
-            //printf("Leitura da trilha %d: %c\n", request->arg, data);
-            print_win_args(janela_I_O,"Leitura da trilha %d: %c", request->arg, data);            
-            usleep(IO_QUANTUM*100);
-            pthread_cond_signal(&queue->iocond);
-            fclose(buffer);
-            ("Arquivo fechado com sucesso!");
-        break;
-        case PRINT:
-        int print_timing = 0;
-            while(print_timing < request->arg){
-                if(print_timing % 1000 == 0) print_win_args(janela_I_O,"Program PID Print Operation %d", request->process->pid);            
-
-                //printf("Program PID Print Operation %d\n", request->process->pid);
-                //Simulate screen print from program.
-                //Adjust later.
-                print_timing++;
-                usleep(request->arg);
-            }
-        break;
-        default:
-        break;
-    }
-    LOCK_BCP();
-    if(request->process->state == WAITING) {
-      print_win(janela_SCHEDULER,"Processo estava esperando I/O..");
-      print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(request->opcode), request->arg);
-      change_process_state(&request->process, READY);
-    }
-    pthread_cond_signal(&kernel->bcp_cond);
-    UNLOCK_BCP();
-    print_win_args(janela_SCHEDULER,"Processo PID %d liberado", request->process->pid);
-    disk->buffer_occupation --;
-    pthread_cond_signal(&disk->disk_cond);
-    UNLOCK_DISK();
-    request->process->counter_rw++;
-    return;
-}
-
 void *io_thread_func() {
   while (!kernel->shutdown_request) {
-    
-    if(disk->buffer_occupation > 0){
-      exec_request(kernel->queue_requests);
-    }
+    /*IORequest *req = dequeue(kernel->queue_requests);
+    if (!req)
+      continue;*/
+
+    exec_request(kernel->queue_requests);
+    LOCK_BCP();
+    /*if (req->process->state == WAITING){
+      //puts("Processo estava esperando I/O..");
+      print_win(janela_SCHEDULER,"Processo estava esperando I/O..");
+      //printf("Operação: %s %d\n", opcode_to_string(req->opcode), req->arg);
+      print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(req->opcode), req->arg);
+      change_process_state(&req->process, READY);
+    }*/
+    change_process_state(&disk->current_request, READY);
+
+    free(disk->current_request);
+    UNLOCK_BCP();
+    //printf("Processo PID %d liberado\n", req->process->pid);
+    //print_win_args(janela_SCHEDULER,"Processo PID %d liberado", req->process->pid);
+
+    //print_process(req->process);
   }
   return NULL;
-}
-
-void *disk_thread_func(){
-   pthread_mutex_lock(&kernel->queue_requests->iomutex);
-        while (!kernel->queue_requests->head) {
-            pthread_cond_wait(&kernel->queue_requests->iocond, &kernel->queue_requests->iomutex);
-       }
-        pthread_mutex_unlock(&kernel->queue_requests->iomutex);
-
-  while (!kernel->shutdown_request) {
-        LOCK_DISK();
-        while (disk->buffer_occupation < buffer_size) {
-
-            UNLOCK_DISK();
-            move_to_disk_buffer(&kernel->queue_requests);
-            LOCK_DISK();
-        }
-        UNLOCK_DISK();
-        usleep(100);  
-    }
-    return NULL;
 }
