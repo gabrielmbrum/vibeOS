@@ -5,7 +5,7 @@
 #include <pthread.h>
 
 #define MAX_SEMAPHORES 15
-#define MAX_BLOCKED_PROCESSES 10  
+#define MAX_BLOCKED_PROCESSES 15 
 
 // value = 1: Semáforo livre (processo pode entrar).
 // value = 0: Semáforo ocupado (alguém acabou de pegar).

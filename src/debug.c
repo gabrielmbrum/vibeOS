@@ -161,7 +161,7 @@ void print_process(Process *proc) {
 void print_all_semaphores() {
   printf("=== Current Semaphores ===\n");
   for (int i = 0; i < total_semaphores; i++) {
-    print_win_args(janela_SCHEDULER,"Semaphore '%c': value=%d, blocked=%d",
+    print_win_args(janela_SCHEDULER,"Semaphore '%c': value=%d, blocked=%d\n",
              semaphores[i].name,
              semaphores[i].value,
              semaphores[i].blocked_count);
