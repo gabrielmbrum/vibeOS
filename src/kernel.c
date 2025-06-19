@@ -1,3 +1,14 @@
+/*
+ * kernel.c - Implementation of a simulated operating system kernel.
+ * 
+ * This module handles process management, scheduling, I/O operations, 
+ * and kernel initialization/shutdown. Key features include:
+ * - Process Control Block (BCP) management
+ * - Round-robin scheduling with priority-based policy
+ * - Multithreaded I/O handling (disk, printer)
+ * - User input handling for graceful shutdown
+ * - Synchronization using mutexes and condition variables
+ */
 #include "../include/process.h"
 #include "../include/commons.h"
 #include "../include/kernel.h"
@@ -7,10 +18,14 @@
 #include "../include/iohandler.h"
 #include "../include/interface.h"
 
+// Synchronization macros for BCP access
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
+
+// Constants
 #define IOException -101
 #define RWTimeSlice 30 
+
 Kernel *kernel=NULL;
 
 void *input_thread_func() {
@@ -26,7 +41,6 @@ void *input_thread_func() {
     }
   }
   pthread_join(kernel->input_thread, NULL);
-  ("Encerraaaado");
   return NULL;
 } 
 
@@ -215,7 +229,7 @@ void shutdown_Kernel() {
   pthread_join(kernel->input_thread, NULL);
   pthread_join(kernel->scheduler_thread, NULL);
   pthread_join(kernel->disk_thread, NULL);
-  pthread_join(kernel->printer_queue, NULL);
+  //pthread_join(kernel->printer_queue, NULL);
   free(disk);
   free(kernel->BCP);
   free(kernel->scheduler);
@@ -383,7 +397,6 @@ int processExecute(Process *process){
   //Pega instrução
   Instruction *inst = &page->instructions[current_instruction];
 
-
   //print_instruction(*inst);
 
   Opcode op = P;
@@ -421,8 +434,6 @@ int processExecute(Process *process){
 
   return SUCCESS;
 }
-
-
 
 void exec_request(IOQueue *queue){
     pthread_mutex_lock(&queue->iomutex);
@@ -526,6 +537,7 @@ void *printer_thread_func(){
   }
   return NULL;
 }
+
 void *disk_thread_func() {
     while (!kernel->shutdown_request) {
         // Trava APENAS o mutex da fila para verificar condições
