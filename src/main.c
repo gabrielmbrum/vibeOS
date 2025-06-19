@@ -20,6 +20,7 @@ int main (){
   strcpy(input,"\0");
   init_interface();
   
+  
   while(strcmp(input,"q")){
     if(get_input(input,janela_OUTPUT)!= NULL){
         char aux[MAX_OUTPUT_STR] = "../programs/";
