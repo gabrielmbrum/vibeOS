@@ -42,7 +42,8 @@ void enqueue(IOQueue *queue, IORequest *request){
     }
     queue->num_elements++;
     request->process->waiting_operations++;
-    printf("Processo esperando: %d\n", request->process->waiting_operations);
+    print_win_args(janela_process,"Processo esperando: %d\n", request->process->waiting_operations);
+    //printf("Processo esperando: %d\n", request->process->waiting_operations);
     pthread_mutex_unlock(&queue->iomutex);
     pthread_cond_signal(&queue->iocond);
     return;
@@ -95,7 +96,8 @@ int sstf_policy(Disk *disk){
             closest_trail_idx = i;
         }
     }
-    printf("Request em buffer com menor trilha: %d\n", closest_trail_idx);
+    print_win_args(janela_I_O,"Request em buffer com menor trilha: %d\n", closest_trail_idx);
+    //printf("Request em buffer com menor trilha: %d\n", closest_trail_idx);
     return closest_trail_idx;
 }
 
@@ -125,7 +127,8 @@ void move_to_disk_buffer(IOQueue *queue) {
     // Adiciona ao buffer do disco
     disk->requests[disk->buffer_occupation] = *request_to_be_moved;
     disk->buffer_occupation++;
-    printf("Requests em disco: %d\n", disk->buffer_occupation);
+    print_win_args(janela_I_O,"Requests em disco: %d\n", disk->buffer_occupation);
+    //printf("Requests em disco: %d\n", disk->buffer_occupation);
     // Destrava na ordem inversa
     pthread_mutex_unlock(&disk->disk_lock);
     pthread_mutex_unlock(&queue->iomutex);

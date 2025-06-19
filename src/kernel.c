@@ -16,18 +16,15 @@ Kernel *kernel=NULL;
 void *input_thread_func() {
   char command[10];
   while (!kernel->shutdown_request) {
-    printf("\nDigite 'q' para encerrar o Kernel: \n");
-    fflush(stdout);
-    fgets(command, sizeof(command), stdin);
+        fflush(stdout);
+        fgets(command, sizeof(command), stdin);
 
-    if (command[0] == 'q' || command[0] == 'Q') {
-      kernel->shutdown_request = true;
-      break;
+        if (command[0] == 'q' || command[0] == 'Q') {
+            kernel->shutdown_request = true;
+            break;
+        }
     }
-  }
-  pthread_join(kernel->input_thread, NULL);
-  ("Encerraaaado");
-  return NULL;
+    return NULL;
 } 
 
 void init_BCP() {
@@ -59,9 +56,12 @@ void schedule() {
     print_SCHEDULER(&kernel->BCP);
     current = kernel->scheduler->running_process;
     result = processExecute(current);
-    printf("Executando processo %d\n", kernel->scheduler->running_process->pid);
+    //printf("Executando processo %d\n", kernel->scheduler->running_process->pid);
+    print_win_args(janela_process,"Executando processo %d\n", kernel->scheduler->running_process->pid);
     if (result == IOException){
-      printf("Processo %d bloqueado para I/O \n", current->pid);
+      //printf("Processo %d bloqueado para I/O \n", current->pid);
+      print_win_args(janela_I_O,"Processo %d bloqueado para I/O \n", current->pid);
+    
       kernel->scheduler->running_process = NULL;
     }
     else if (result == TERMINATED) {
@@ -137,7 +137,8 @@ int search_BCP(int process_pid) {
 }
 
 int add_process_to_BCP(Process *process) {
-  printf("Adicionando processo %d\n", process->pid);
+  //printf("Adicionando processo %d\n", process->pid);
+  print_win_args(janela_OUTPUT, "Adicionando processo %d\n", process->pid);
   LOCK_BCP();
   if (kernel->BCP == NULL) {
     init_BCP();
@@ -209,14 +210,10 @@ void init_Kernel() {
 void shutdown_Kernel() {
   kernel->shutdown_request = true;
   kernel->scheduler_running = false;
-  LOCK_BCP();
-  pthread_cond_signal(&kernel->bcp_cond); // Acorda o scheduler
-  UNLOCK_BCP();
+
   pthread_join(kernel->input_thread, NULL);
   pthread_join(kernel->scheduler_thread, NULL);
-  pthread_join(kernel->disk_thread, NULL);
-  pthread_join(kernel->printer_queue, NULL);
-  free(disk);
+
   free(kernel->BCP);
   free(kernel->scheduler);
   free(kernel->queue_requests);
@@ -263,9 +260,11 @@ int scheduler_POLICY(){
           idx = i;
       }
   }
-  puts("politica aplicada encontrou");
-  printf("PID: %d", kernel->BCP[idx].pid);
-  puts("");
+  //puts("politica aplicada encontrou");
+  //printf("PID: %d", kernel->BCP[idx].pid);
+  //puts("");
+  print_win(janela_SCHEDULER,"politica aplicada encontrou");
+  print_win_args(janela_SCHEDULER, "PID: %d", kernel->BCP[idx].pid);
   return idx;
 }
 
@@ -282,7 +281,8 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    printf("Process with PID: %d finished execution...\n", running_process->pid);
+    //printf("Process with PID: %d finished execution...\n", running_process->pid);
+    print_win_args(janela_process,"Process with PID: %d finished execution...", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
     //("Processo finalizado removido da BCP!");
@@ -316,7 +316,8 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       
       IORequest *request;
       request = make_request(process, opcode, arg);
-  printf("\ninserindo %s operation...\n",opcode_to_string(request->opcode));
+      //printf("\ninserindo %s operation...\n",opcode_to_string(request->opcode));
+      print_win_args(janela_process,"inserindo %s operation...",opcode_to_string(request->opcode));
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
       return IOException;
@@ -440,7 +441,8 @@ void exec_request(IOQueue *queue){
       return;
     }
     IORequest *request = pick_request(idx_request_to_be_executed);
-    printf("Request feito por %s with pid %d\n", request->process->name, request->process->pid);
+    //printf("Request feito por %s with pid %d\n", request->process->name, request->process->pid);
+    print_win_args(janela_process, "Request feito por %s with pid %d\n", request->process->name, request->process->pid);
     FILE *buffer =  NULL;
     disk->current_trail = request->arg; 
     for (int i = idx_request_to_be_executed; i < disk->buffer_occupation - 1; i++) {
@@ -450,14 +452,16 @@ void exec_request(IOQueue *queue){
     request->process->waiting_operations--;
     UNLOCK_DISK();
     pthread_mutex_unlock(&queue->iomutex);
-    printf("Executando %s\n", opcode_to_string(request->opcode));
+    //printf("Executando %s\n", opcode_to_string(request->opcode));
+    print_win_args(janela_SCHEDULER,"Executando %s", opcode_to_string(request->opcode));
     switch(request->opcode){
         case WRITE:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,  request->arg,SEEK_SET);
             int to_be_written = rand() % 2;
             fwrite(&to_be_written,sizeof(int),1,buffer);
-            printf("%s %d\n", "Escrita da trilha", request->arg);
+            //printf("%s %d\n", "Escrita da trilha", request->arg);
+            print_win_args(janela_SCHEDULER,"%s %d", "Escrita da trilha", request->arg);
             usleep(IO_QUANTUM);
             fclose(buffer);
             //("Arquivo fechado com sucesso!");
@@ -467,14 +471,16 @@ void exec_request(IOQueue *queue){
             fseek(buffer,request->arg,SEEK_SET);
             int data;
             fread(&data, sizeof(int), 1, buffer);
-            printf("Leitura da trilha %d: %c\n", request->arg, data);        
+            //printf("Leitura da trilha %d: %c\n", request->arg, data);     
+            print_win_args(janela_SCHEDULER,"Leitura da trilha %d: %c", request->arg, data);   
             usleep(IO_QUANTUM);
             fclose(buffer);
         break;
         default:
         break;
     }
-    printf("Processo esperando: %d\n", request->process->waiting_operations);
+    //printf("Processo esperando: %d\n", request->process->waiting_operations);
+    print_win_args(janela_SCHEDULER,"Processo esperando: %d\n", request->process->waiting_operations);
     LOCK_BCP();
     if(request->process->state == WAITING) {
       change_process_state(&request->process, READY);
@@ -482,7 +488,9 @@ void exec_request(IOQueue *queue){
     UNLOCK_BCP();
     pthread_cond_signal(&kernel->bcp_cond);
     request->process->counter_rw++;
-    printf("Pedidos em disco agora: %d", disk->buffer_occupation);
+    //printf("Pedidos em disco agora: %d", disk->buffer_occupation);
+    print_win_args(janela_SCHEDULER,"Pedidos em disco agora: %d", disk->buffer_occupation);
+
     return;   
 }
 
@@ -515,13 +523,15 @@ void *printer_thread_func(){
       IORequest *print_request = dequeue(kernel->printer_queue);
       for(int i=0;i<print_request->arg;i++){
         if(i%20 ==0)
-        printf("Processo: %d solicitou impressora\n", print_request->process->pid);
+        print_win_args(janela_SCHEDULER,"Processo: %d solicitou impressora\n", print_request->process->pid);
+        //printf("Processo: %d solicitou impressora\n", print_request->process->pid);
         //There will be a printer window, where a process will be printing for *arg amount of time (in ms). 
         //Be creative in what can be this action of printing, what will be printed, idk what it must be.
         
       }
       print_request->process->waiting_operations--;
-      printf("Processo esperando ainda %d operações\n", print_request->process->waiting_operations);
+      print_win_args(janela_SCHEDULER,"Processo esperando ainda %d operações\n", print_request->process->waiting_operations);
+      //printf("Processo esperando ainda %d operações\n", print_request->process->waiting_operations);
     }
   }
   return NULL;

@@ -21,15 +21,15 @@
 void print_bcp(Process **BCP) {
   if (*BCP == NULL) {
     //printf("BCP is empty.\n");
-    printf(janela_process,"BCP is empty.");
+    print_win(janela_process,"BCP is empty.");
     return;
   }
 
   //printf("Process Control Block (BCP):\n");
-  printf(janela_process,"Process Control Block (BCP):");
+  print_win(janela_process,"Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      printf("PID: %d, Name: %s, Page Counter: %d\n",
+      print_win_args(janela_process,"PID: %d, Name: %s, Page Counter: %d",
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].page_table->page_count);
     }
   }
@@ -46,8 +46,9 @@ void print_SCHEDULER(Process **BCP) {
   //printf(janela_process,"Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      printf("PID: %d, Name: %s, State: %d, Priority: %d, Counter RW: %d, Time-Slice: %d\n",
-             (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state,
+      print_win_args(janela_process,"PID: %d, Name: %s, State: %d",
+             (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state);
+      print_win_args(janela_process,"Priority: %d, Counter RW: %d, Time-Slice: %d",
              (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }
   }
@@ -96,21 +97,23 @@ const char *boolean_to_string(bool value) {
 
 void print_instruction(Instruction inst) {
   //printf("\t%-6s", opcode_to_string(inst.opcode));
-  printf("%-6s\n", opcode_to_string(inst.opcode));
+  print_win_args(janela_process,"%-6s", opcode_to_string(inst.opcode));
+  //printf("%-6s\n", opcode_to_string(inst.opcode));
 
   switch (inst.opcode) {
     case EXEC:
     case READ:
     case WRITE:
     case PRINT:
-    printf("%d", inst.value);
+    //printf("%d", inst.value);
+    print_win_args(janela_process,"%d", inst.value);
       break;
     case P:
     case V:
-    printf("'%c'", inst.semaphore_name);
+    print_win_args(janela_process,"'%c'", inst.semaphore_name);
       break;
     case WAIT:
-      printf(" (Wait)");
+      print_win_args(janela_process," (Wait)");
       break;
   }
 }
