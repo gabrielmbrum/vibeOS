@@ -17,6 +17,7 @@ void init_semaphores() {
         for (int j = 0; j < MAX_BLOCKED_PROCESSES; j++) {
             semaphores[i].blocked_pids[j] = -1;
         }
+        pthread_mutex_init(&semaphores[i].mutex, NULL);
     }
 }
 
@@ -64,14 +65,18 @@ void sem_P(Process *process, char sem_name) {
     Semaphore *sem = get_semaphore(sem_name);
     if (!sem) return;
 
+    pthread_mutex_lock(&sem->mutex);
+
     sem->value--;
     if (sem->value <= 0) {
-        if (sem->value < -MAX_BLOCKED_PROCESSES) {
+        if (sem->value <= -MAX_BLOCKED_PROCESSES) {
             sem->value++;  
+            pthread_mutex_unlock(&sem->mutex);
             return; 
         }
-        if (sem->blocked_count > MAX_BLOCKED_PROCESSES) {
-            sem->value++;  
+        if (sem->blocked_count >= MAX_BLOCKED_PROCESSES) {
+            sem->value++;
+            pthread_mutex_unlock(&sem->mutex);  
             return; 
         }
         // Bloqueia o processo s context_switch
@@ -84,10 +89,12 @@ void sem_P(Process *process, char sem_name) {
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
 
-        //printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
-        print_win_args(janela_SCHEDULER,"[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+
+        pthread_mutex_unlock(&sem->mutex);
         
         context_switch(process, "SEM_BLOCK");
+        return;
     }
 }
 
@@ -98,6 +105,8 @@ void sem_V(Process *process, char sem_name) {
 
     Semaphore *sem = get_semaphore(sem_name);
     if (!sem) return;
+
+    pthread_mutex_lock(&sem->mutex);
 
     sem->value++;
     if (sem->value <= 0 && sem->blocked_count > 0) {
@@ -114,9 +123,12 @@ void sem_V(Process *process, char sem_name) {
         // if (idx != FAILURE) {
         //     kernel->BCP[idx].state = READY;
 
-        //printf("[SEM_V] Unblocking PID %d from semaphore '%c'", unblocked_pid, sem_name);
-        print_win_args(janela_SCHEDULER,"[SEM_V] Unblocking PID %d from semaphore '%c'", unblocked_pid, sem_name);
+        printf("[SEM_V] Unblocking PID %d from semaphore '%c'\n", unblocked_pid, sem_name);
+
+        pthread_mutex_unlock(&sem->mutex);
       
         context_switch(process, "SEM_UNBLOCK");
+        return;
     }
+    pthread_mutex_unlock(&sem->mutex);
 }

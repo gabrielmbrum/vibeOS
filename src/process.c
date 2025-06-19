@@ -51,6 +51,7 @@ Process *create_process_from_program(Program *program) {
   process->slice_time = 0;
   process->runtime_execution = 0;
   process->semaphores = calloc((strlen(program->header.semaphores) + 1), sizeof(char));
+  init_semaphores(program->header.semaphores);
   strcpy(process->semaphores, program->header.semaphores);
 
   process->page_table = build_page_table(program->instructions, program->instructions_count); // Initialize page table to NULL
