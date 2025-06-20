@@ -1,7 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#define MAX_PROCESSES 5
+#define MAX_PROCESSES 16
 #define EMPTY_BCP_ENTRY -1
 #define SUCCESS 1
 #define FAILURE -1

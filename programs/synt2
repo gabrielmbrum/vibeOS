@@ -5,8 +5,9 @@ sint2
 s t
 
 exec 1000
-read k
+write l
 exec 400
+read k
 print 15
 read k
 exec 500
@@ -14,7 +15,6 @@ P(s)
 exec 200
 P(t)
 exec 20000
-write l
 print 150
 V(t)
 V(s)

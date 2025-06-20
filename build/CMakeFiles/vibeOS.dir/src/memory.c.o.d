@@ -1,6 +1,6 @@
 CMakeFiles/vibeOS.dir/src/memory.c.o: \
- /mnt/c/Users/User/vibeOS2/vibeos/src/memory.c /usr/include/stdc-predef.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/commons.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/memory.c /usr/include/stdc-predef.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/commons.h \
  /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -60,20 +60,29 @@ CMakeFiles/vibeOS.dir/src/memory.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/debug.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/process.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/memory.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/instruction.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/program.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/semaphore.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/interface.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/debug.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/process.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/memory.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/instruction.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/program.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/semaphore.h \
+ /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/sched.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/x86_64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/x86_64-linux-gnu/bits/time.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/x86_64-linux-gnu/bits/setjmp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/interface.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-least.h /usr/include/unctrl.h \
- /usr/include/curses.h /usr/include/time.h \
- /usr/include/x86_64-linux-gnu/bits/time.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_tm.h \
- /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h \
- /mnt/c/Users/User/vibeOS2/vibeos/src/../include/memory.h
+ /usr/include/curses.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/commons.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/memory.h

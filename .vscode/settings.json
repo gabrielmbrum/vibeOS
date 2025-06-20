@@ -3,6 +3,7 @@
         "commons.h": "c",
         "limits.h": "c",
         "process.h": "c",
-        "program.h": "c"
+        "program.h": "c",
+        "interface.h": "c"
     }
 }

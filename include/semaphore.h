@@ -2,9 +2,10 @@
 #define SEMAPHORE_H
 
 #include "process.h"
+#include <pthread.h>
 
-#define MAX_SEMAPHORES 10
-#define MAX_BLOCKED_PROCESSES 10  
+#define MAX_SEMAPHORES 15
+#define MAX_BLOCKED_PROCESSES 15 
 
 // value = 1: Semáforo livre (processo pode entrar).
 // value = 0: Semáforo ocupado (alguém acabou de pegar).
@@ -15,6 +16,7 @@ typedef struct {
     int value;
     int blocked_pids[MAX_BLOCKED_PROCESSES];  // Fila de bloqueados
     int blocked_count;
+    pthread_mutex_t mutex;
 } Semaphore;
 
 extern Semaphore semaphores[MAX_SEMAPHORES];

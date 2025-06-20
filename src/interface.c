@@ -24,19 +24,10 @@ void clear_space(int y, int x,int size){
 }
 
 void print_win(WINDOW *local_window, char *input){
-  if(strlen(input)>DEF_WIN_WDH){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    wmove(local_window,2,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",input);
-    wrefresh(local_window);
-  }else{
     wmove(local_window,1,0);
     winsertln(local_window);
     mvwprintw(local_window,1,1,"%s", input);
     wrefresh(local_window);
-  }
 }
 
 int check_input(char *input){
@@ -52,7 +43,9 @@ return 0;
 }
 
 char* get_input(char *input,WINDOW*out){
+  strcpy(input, "\0");
   getstr(input);
+  refresh();
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
    print_win(out,"Invalid input. Try again");
    refresh();
@@ -65,25 +58,19 @@ char* get_input(char *input,WINDOW*out){
 }
 
 void print_win_args(WINDOW *local_window, char*message, ...) {
-  char buffer[MAX_OUTPUT_STR] = " ";
+  //char buffer[MAX_OUTPUT_STR] = " ";
+  char *buffer = malloc((MAX_OUTPUT_STR) * sizeof(char));
+  strcpy(buffer, "\0");
   va_list args;
 
   va_start(args, message); // initialize args after 'message'
   vsnprintf(buffer, MAX_OUTPUT_STR, message, args);
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,"%s",buffer);
+    wrefresh(local_window);
   
-  if(strlen(buffer)>DEF_WIN_WDH){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    wmove(local_window,2,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",buffer);
-    wrefresh(local_window);
-  }else{
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",buffer);
-    wrefresh(local_window);
-  }
+    free(buffer);
 }
 
 // window operations
@@ -132,7 +119,6 @@ WINDOW *janela_intro(){
   WINDOW *intro = newwin(12, 60, ((lin/2) - 5), ((col/2) - 30));
   wrefresh(intro);
   refresh();
-
   wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
   mvwprintw(intro, 1, 3, "%s", "         _  _             ____    _____           _/)");
   mvwprintw(intro, 2, 3, "%s", "        (_)| |           / __ \\  / ____|       .-(_(=:");
@@ -143,7 +129,7 @@ WINDOW *janela_intro(){
   mvwprintw(intro, 7, 7, "%s", "                                          |");
   mvwprintw(intro, 8, 7, "%s", "   Aperte qualquer tecla para iniciar     |");  
   mvwprintw(intro, 9, 7, "%s", "                teste                                 ");
-    wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+  wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
   wrefresh(intro);
 
   int c = getch();

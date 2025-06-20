@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/mnt/c/Users/User/vibeOS2/vibeos/include
+C_INCLUDES = -I/mnt/c/Users/User/vibeOS2/vibeOS/include
 
 C_FLAGS = -std=gnu11 -Wall -Wextra
 

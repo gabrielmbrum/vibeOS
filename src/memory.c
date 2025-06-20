@@ -29,6 +29,7 @@ int sum_of_exec_time(Instruction *instructions, int instructions_count) {
     }
   }
   //print_instructions(instructions, instructions_count);
+  //print_win_args(janela_memory, "sum: %d", sum);
   return sum;
 }
 

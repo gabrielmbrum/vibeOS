@@ -17,6 +17,7 @@ void init_semaphores() {
         for (int j = 0; j < MAX_BLOCKED_PROCESSES; j++) {
             semaphores[i].blocked_pids[j] = -1;
         }
+        pthread_mutex_init(&semaphores[i].mutex, NULL);
     }
 }
 
@@ -62,18 +63,21 @@ void sem_P(Process *process, char sem_name) {
     }
 
     Semaphore *sem = get_semaphore(sem_name);
-    if (!sem) return;
+    if (!sem){
+        sem = find_or_create_semaphore(sem_name);
+        if (!sem) return;
+    }
+
+    pthread_mutex_lock(&sem->mutex);
 
     sem->value--;
     if (sem->value <= 0) {
-        if (sem->value < -MAX_BLOCKED_PROCESSES) {
+        if ((sem->value <= -MAX_BLOCKED_PROCESSES) || (sem->blocked_count >= MAX_BLOCKED_PROCESSES)){
             sem->value++;  
+            pthread_mutex_unlock(&sem->mutex);
             return; 
         }
-        if (sem->blocked_count > MAX_BLOCKED_PROCESSES) {
-            sem->value++;  
-            return; 
-        }
+
         // Bloqueia o processo s context_switch
         // for (int i = 0; i < kernel->process_amount; i++) {
         //     if (kernel->BCP[i].pid == process->pid) {
@@ -83,40 +87,51 @@ void sem_P(Process *process, char sem_name) {
         // }
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
+        print_win_args(janela_process,"[SEM_P] (val=%d, blocked=%d/%d)",sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        print_win_args(janela_process,"[SEM_P] Blocking PID %d from semaphore '%c' ", process->pid, sem_name);
 
-        //printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
-        printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        pthread_mutex_unlock(&sem->mutex);
         
         context_switch(process, "SEM_BLOCK");
+        return;
     }
+    pthread_mutex_unlock(&sem->mutex);
 }
 
 void sem_V(Process *process, char sem_name) {
     if (!process) {
+        print_win(janela_process,"Process not found ");
         return;
     }
 
     Semaphore *sem = get_semaphore(sem_name);
-    if (!sem) return;
+    if (!sem) {
+        print_win(janela_process,"Semaphore not found");   
+        return;
+    }
+
+    pthread_mutex_lock(&sem->mutex);
 
     sem->value++;
-    if (sem->value <= 0 && sem->blocked_count > 0) {
+    if (sem->blocked_count > 0) {
         int unblocked_pid = sem->blocked_pids[0];
 
-        // Remove da fila de processos bloqueados pelo semáforo
+        // Remove da fila de processos bloqueados
         for (int i = 0; i < sem->blocked_count - 1; i++)
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
 
-        //tava fazendo a mudança de estado aqui pq nn tinha o context_switch
+        print_win_args(janela_process,"[SEM_V] ainda restam %d bloqueados",sem->blocked_count);
+        print_win_args(janela_process,"[SEM_V] Semáforo '%c': desbloqueado PID %d", sem_name, unblocked_pid);
 
-        // int idx = search_BCP(unblocked_pid);
-        // if (idx != FAILURE) {
-        //     kernel->BCP[idx].state = READY;
+        pthread_mutex_unlock(&sem->mutex);
 
-        //printf("[SEM_V] Unblocking PID %d from semaphore '%c'", unblocked_pid, sem_name);
-        printf("[SEM_V] Unblocking PID %d from semaphore '%c'\n", unblocked_pid, sem_name);
-      
         context_switch(process, "SEM_UNBLOCK");
+        return;
+
+    } else {
+        sem->value++;  
     }
+
+    pthread_mutex_unlock(&sem->mutex);
 }
