@@ -31,7 +31,8 @@ typedef struct Disk{
 extern Disk *disk;
 IORequest *make_request(Process *process, Opcode opcode, int arg);
 IOQueue *init_queue(IOQueue *queue);
-void enqueue(IOQueue *queue,IORequest *request);
+void enqueue(IOQueue *queue,IORequest *request); //Enqueues at Printer Requests Queue, following "FIFO" method.
+IORequest* dequeue_sstf(IOQueue *queue);  //Dequeues at READ/WRITE on Disk operations, emulating SSTF.
 IORequest *dequeue(IOQueue *queue);
 void exec_request(IOQueue *queue);
 Disk * init_disk();

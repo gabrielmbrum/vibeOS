@@ -27,26 +27,75 @@ IORequest *make_request(Process *process, Opcode opcode, int arg){
 void enqueue(IOQueue *queue, IORequest *request){
     if(!queue || !request) return;
     LOCK_IO();
-    if(!queue->head || request->arg < queue->head->arg){
+    if(!queue->head){
         queue->head = request;
         queue->tail = request;
     }
     else{
-        IORequest *current = queue->head;
-
-        while(request->arg > current->arg && current->next) current = current->next;
-        request->next = current->next;
-        current->next = request;
-
-        if(!request->next){
-            queue->tail = request;
-        }
-    }   
+        queue->tail->next = request;
+        queue->tail = request;
+    }
     queue->num_elements++;
-    pthread_cond_signal(&queue->iocond);
     UNLOCK_IO();
+    pthread_cond_signal(&queue->iocond);
     return;
 }
+
+IORequest* dequeue_sstf(IOQueue *queue) {
+    if (!queue) return NULL;
+
+    LOCK_IO();
+
+    while (!queue->head) {
+        pthread_cond_wait(&queue->iocond, &queue->iomutex);
+    }
+
+    if (queue->num_elements == 1) {
+        IORequest *request = queue->head;
+        queue->head = NULL;
+        queue->tail = NULL;
+        queue->num_elements--;
+        UNLOCK_IO();
+        return request;
+    }
+
+    IORequest *current = queue->head;
+    IORequest *prev = NULL;
+    
+    IORequest *sstf_request = queue->head; 
+    IORequest *sstf_prev = NULL;           
+
+    int min_dist = abs(disk->current_trail - sstf_request->arg);
+    
+    prev = current;
+    current = current->next;
+    while (current) {
+        int dist = abs(disk->current_trail - current->arg);
+        if (dist < min_dist) {
+            min_dist = dist;
+            sstf_request = current;
+            sstf_prev = prev;
+        }
+        prev = current;
+        current = current->next;
+    }
+
+    if (sstf_request == queue->head) { 
+        queue->head = sstf_request->next;
+    } else { 
+        sstf_prev->next = sstf_request->next;
+    }
+
+    if (sstf_request == queue->tail) { // Se o removido era a cauda
+        queue->tail = sstf_prev;
+    }
+    
+    sstf_request->next = NULL; // Isola o request removido
+    queue->num_elements--;
+    UNLOCK_IO();
+    return sstf_request;
+}
+
 
 IORequest* dequeue(IOQueue *queue) {
     if (!queue) return NULL;
@@ -80,7 +129,7 @@ IORequest* dequeue(IOQueue *queue) {
 
 
 void exec_request(IOQueue *queue){
-    IORequest *request = dequeue(queue);
+    IORequest *request = dequeue_sstf(queue);
     if(!request || request->process->pid == EMPTY_BCP_ENTRY) return;
     LOCK_IO();
     FILE *buffer =  NULL;
