@@ -9,6 +9,8 @@
 // * feel the vibe
 // *para pegar o tamanho da tela atual -> getmaxyx(stdscr, linhas, colunas);
 
+#include <string.h>
+
 WINDOW  *janela_menu;
 WINDOW  *janela_OUTPUT;
 WINDOW  *janela_SCHEDULER;
@@ -139,7 +141,7 @@ void print_win(WINDOW *local_window, char *input){
 int check_input(char *input){
   for (int i = 1; i < SYNT; i++) {
     char base[50];
-    sprintf(base, "synt%d", i);
+    sprintf(base, "sint%d", i);
 
     if (strcmp(input, base) == 0) {
         return 1; 
@@ -241,7 +243,6 @@ WINDOW *janela_intro(){
   mvwprintw(intro, 7, 7, "%s", "   Aperte qualquer tecla para iniciar     |");
   wrefresh(intro);
 
-  int c = getch();
   werase(intro);
   wrefresh(intro);
   delete_window(intro);

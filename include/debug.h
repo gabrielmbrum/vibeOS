@@ -12,7 +12,7 @@ const char *opcode_to_string(Opcode opcode);
 void print_page_table(PageTable *page);
 void print_process(Process *proc);
 void print_instruction(Instruction inst);
-void print_instructions(Instruction *instructions, int total_instructions);
+//void print_instructions(Instruction *instructions, int total_instructions);
 void print_all_semaphores();
 
 #endif

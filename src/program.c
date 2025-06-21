@@ -117,7 +117,7 @@ void print_program(Program *program) {
   // Print instructions
   //printf("Instructions:\n");
   print_win(janela_process,"Instructions:");
-  print_instructions(program->instructions, program->instructions_count);
+  //print_instructions(program->instructions, program->instructions_count);
   print_win(janela_process,"--------------------------------------------------");
 }
 

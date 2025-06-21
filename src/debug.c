@@ -96,42 +96,42 @@ const char *boolean_to_string(bool value) {
 
 void print_instruction(Instruction inst) {
   //printf("\t%-6s", opcode_to_string(inst.opcode));
-  print_win_args(janela_SCHEDULER,"%-6s", opcode_to_string(inst.opcode));
+  //print_win_args(janela_SCHEDULER,"%-6s", opcode_to_string(inst.opcode));
 
   switch (inst.opcode) {
     case EXEC:
     case READ:
     case WRITE:
     case PRINT:
-    print_win_args(janela_SCHEDULER,"%d", inst.value);
+    print_win_args(janela_SCHEDULER,"%-6s %d", opcode_to_string(inst.opcode), inst.value);
       break;
     case P:
     case V:
-    print_win_args(janela_SCHEDULER,"'%c'", inst.semaphore_name);
+    print_win_args(janela_SCHEDULER,"%-6s '%c'", opcode_to_string(inst.opcode), inst.semaphore_name);
       break;
     case WAIT:
-      print_win(janela_SCHEDULER," (Wait)");
+      print_win_args(janela_SCHEDULER,"%-6s (Wait)", opcode_to_string(inst.opcode));
       break;
   }
 }
 
-void print_instructions(Instruction *instructions, int total_instructions) {
-  for (int i = 0; i < total_instructions; i++) {
-    //print_win_args(janela_SCHEDULER,"[instruction %d]  ", i);
-    //print_instruction(instructions[i]);
-  }
-}
+// void print_instructions(Instruction *instructions, int total_instructions) {
+//   for (int i = 0; i < total_instructions; i++) {
+//     //print_win_args(janela_SCHEDULER,"[instruction %d]  ", i);
+//     //print_instruction(instructions[i]);
+//   }
+// }
 
 void print_page_table(PageTable *page_table) {
   print_win(janela_SCHEDULER,"---------Page Table ---------");
   for (int i = 0; i < page_table->page_count; i++) {
-    //print_win_args(janela_SCHEDULER,"Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d, Missing Instructions: %s, Last Instruction Loaded: %d",
-      //    page_table->pages[i].page_number, 
-        //  page_table->pages[i].reference_bit,
-          //page_table->pages[i].used_bit, 
-        //  page_table->pages[i].instruction_count,
-        //  boolean_to_string(page_table->missing_instructions),
-        //  page_table->last_instruction_loaded);
+    print_win_args(janela_SCHEDULER,"Page %d: Reference Bit: %d, Used Bit: %d, Instructions Count: %d, Missing Instructions: %s, Last Instruction Loaded: %d",
+         page_table->pages[i].page_number, 
+         page_table->pages[i].reference_bit,
+          page_table->pages[i].used_bit, 
+         page_table->pages[i].instruction_count,
+         boolean_to_string(page_table->missing_instructions),
+         page_table->last_instruction_loaded);
 
     //print_instructions(page_table->pages[i].instructions, page_table->pages[i].instruction_count);
   }

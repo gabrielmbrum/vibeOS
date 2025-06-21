@@ -7,8 +7,11 @@
 #include "../include/iohandler.h"
 #include "../include/interface.h"
 #include <limits.h>
+#include <string.h>
+
 #define LOCK_BCP() pthread_mutex_lock(&kernel->bcp_mutex)
 #define UNLOCK_BCP() pthread_mutex_unlock(&kernel->bcp_mutex)
+
 #define IOException -101
 #define RWTimeSlice 30 
 Kernel *kernel=NULL;
@@ -128,7 +131,6 @@ void *scheduler_thread_func() {
 
 void start_scheduler() {
   if (!kernel->scheduler_running) {
-    puts("Schedular rodando!");
     kernel->scheduler_running = true;
     pthread_create(&kernel->scheduler_thread, NULL, scheduler_thread_func,
                    NULL);
@@ -360,7 +362,7 @@ int exec_Instruction_semaphore(Process *process, Opcode opcode, char arg){
   switch(opcode){
     case P:
       if (process->state == WAITING) {
-        break;; 
+        break;
       }
       sem_P(process, arg);
       break;
@@ -379,6 +381,7 @@ int get_total_instructions(PageTable *pt) {
   }
   return total;
 }
+
 int processExecute(Process *process){
   if(!process || process->state == TERMINATED){
     return FAILURE;
@@ -389,8 +392,28 @@ int processExecute(Process *process){
 
   // Verifica se o processo já terminou (PC >= total_instructions)
   if (process->pc.global_index >= total_instructions) {
-    change_process_state(&process, TERMINATED);
-    return TERMINATED;
+    if (current_pt->missing_instructions) {
+      print_win_args(janela_OUTPUT,"process name: %s\n", process->name);
+      char program_name[MAX_OUTPUT_STR] = "../programs/";
+      strcat(program_name, process->name);
+      Program *program = read_program(program_name);
+      if (program == NULL) {
+        print_win(janela_memory, "Failed to read program with the rest of instructions!");
+        return FAILURE;
+      }
+      print_win(janela_OUTPUT,"atualizando tabela de páginas");
+      refresh_page_table(&process->page_table, program->instructions, program->instructions_count, current_pt->last_instruction_loaded);
+      //print_page_table(process->page_table);
+      free_program(program);
+      process->pc.global_index = 0; // Reseta o índice global do PC
+      process->pc.last_page = 0; // Reseta a última página
+      process->pc.last_instruction = 0; // Reseta a última instrução
+      processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
+    } else {
+      print_win(janela_OUTPUT,"finalizou o processo");
+      change_process_state(&process, TERMINATED);
+      return TERMINATED;
+    }
   }
 
   // Obtém a página e instrução atual
@@ -433,8 +456,28 @@ int processExecute(Process *process){
 
   // Verifica se terminou todas as instruções
   if (process->pc.global_index >= total_instructions) {
+    if (current_pt->missing_instructions) {
+      char program_name[MAX_OUTPUT_STR] = "../programs/";
+      strcat(program_name, process->name);
+      print_win_args(janela_OUTPUT,"process name: %s\n", process->name);
+      Program *program = read_program(program_name);
+      if (program == NULL) {
+        print_win(janela_memory, "Failed to read program with the rest of instructions!");
+        return FAILURE;
+      }
+      print_win(janela_OUTPUT,"atualizando tabela de páginas");
+      refresh_page_table(&process->page_table, program->instructions, program->instructions_count, current_pt->last_instruction_loaded);
+      //print_page_table(process->page_table);
+      free_program(program);
+      process->pc.global_index = 0; // Reseta o índice global do PC
+      process->pc.last_page = 0; // Reseta a última página
+      process->pc.last_instruction = 0; // Reseta a última instrução
+      processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
+    } else {
+      print_win(janela_OUTPUT,"finalizou o processo");
       change_process_state(&process, TERMINATED);
       return TERMINATED;
+    }
   }
 
   return SUCCESS;
@@ -455,7 +498,7 @@ void *io_thread_func() {
       print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(req->opcode), req->arg);
       change_process_state(&req->process, READY);
     }*/
-    change_process_state(&disk->current_request, READY);
+    change_process_state(&disk->current_request->process, READY);
 
     free(disk->current_request);
     UNLOCK_BCP();

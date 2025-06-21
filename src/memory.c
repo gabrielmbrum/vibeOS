@@ -4,13 +4,13 @@
 int page_counter = 0;
 
 void memory_status() {
-  print_win(janela_memory,"--------*-------- Memory status --------*--------");
+  //print_win(janela_memory,"--------*-------- Memory status --------*--------");
   print_win_args(janela_memory,"Total memory: %d KB", MEM_LENGTH);
   print_win_args(janela_memory,"OS memory: %d KB", OS_MEMORY_SIZE);
   print_win_args(janela_memory,"Pages allocated: %d page(s)", page_counter);
   print_win_args(janela_memory,"Pages available: %d KB", MEM_LENGTH - OS_MEMORY_SIZE - page_counter*PAGE_SIZE);
   print_win_args(janela_memory,"MEMORY OCUPATION: %.2f%% [%d/%d]", ((float)page_counter*PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) * 100, page_counter*PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
-  print_win(janela_memory,"------------------------------------------------");
+  //print_win(janela_memory,"------------------------------------------------");
 }
 
 void initialize_page(Page *page, int page_num, int instructions_count) {
