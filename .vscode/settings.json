@@ -4,6 +4,13 @@
         "limits.h": "c",
         "process.h": "c",
         "program.h": "c",
-        "interface.h": "c"
+        "interface.h": "c",
+        "semaphore.h": "c",
+        "iohandler.h": "c",
+        "kernel.h": "c",
+        "stdlib.h": "c",
+        "cstdarg": "c",
+        "typeinfo": "c",
+        "debug.h": "c"
     }
 }

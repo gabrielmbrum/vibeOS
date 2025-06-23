@@ -28,5 +28,8 @@ void register_process_semaphores(Process *process);
 Semaphore* find_or_create_semaphore(char name);
 void sem_P(Process *process, char sem_name);
 void sem_V(Process *process, char sem_name);
+Semaphore* create_semaphore_define_value(char name, int value);
+
+
 
 #endif

@@ -21,6 +21,9 @@
 #define DEF_WIN_MAX_PRINTS_BIG 8
 #define DEF_WIN_MAX_PRINTS_BIGGER 14
 #define SYNT 11
+#define name1 'A'
+#define name2 'B'
+#define name3 "interface_process"
 
 // Including external windows for referencing 
 extern WINDOW  *janela_menu;
@@ -30,32 +33,31 @@ extern WINDOW  *janela_memory;
 extern WINDOW  *janela_process;
 extern WINDOW  *janela_I_O;
 
-// input operations
-void clear_space(int y, int x,int size);
+WINDOW *janela_intro();
 
-//input operations
-char* get_input(char *input,WINDOW*out);
-
-int check_input(char *input);
-
-//* New print function - more stable, use in any file to print strings only
-void print_win(WINDOW *local_window, char*input);
-
-//* New print function - supports arguments, use in any file to print strings with variables
-void print_win_args(WINDOW *local_window, char*message, ...);
-
-
-// window operations
 void init_interface();
 
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title);
 
 WINDOW *delete_window(WINDOW *local_win);
 
+char *get_input(char *input);
+
+int check_input(char *input);
+
 WINDOW *init_menu_components(WINDOW *menu);
 
-WINDOW *janela_intro();
+void print_win_args(WINDOW *local_window, char *message, ...);
 
-WINDOW *close_window();
+void clear_space(int y, int x, int size);
+
+void *update_main_window();
+
+char* update_dados(WINDOW *local, char *message, ...);
+
+
+char *update_dados_scheduler(char *message, ...);
+void *update_main_window();
+void *update_window_scheduler();
 
 #endif

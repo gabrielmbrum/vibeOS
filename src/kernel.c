@@ -36,7 +36,7 @@ void *printer_thread_func(){
 
       for(int i=0;i<print_request->arg;i++){
           usleep(10000);
-          print_win_args(janela_memory,"PID (%d) using printer..", print_request->process->pid);
+        //print_win_args(janela_memory,"PID (%d) using printer..", print_request->process->pid);
         //Implementem uma janela escrito "Printer", pra seguir o padrão em inglês;
         //A ideia é que durante o tempo que tá no programa sintético, tipo
         //print 1000
@@ -77,11 +77,9 @@ void schedule() {
     //print_SCHEDULER(&kernel->BCP);
     current = kernel->scheduler->running_process;
     result = processExecute(current);
-    //printf("Executando processo %d\n", kernel->scheduler->running_process->pid);
-    print_win_args(janela_process,"Executando processo %d", kernel->scheduler->running_process->pid);
+    //print_win_args(janela_process,"Executando processo %d", kernel->scheduler->running_process->pid);
     if (result == IOException){
-      //printf("Processo %d bloqueado para I/O \n", current->pid);
-      print_win_args(janela_I_O,"Processo %d bloqueado para I/O", current->pid);
+      //print_win_args(janela_I_O,"Processo %d bloqueado para I/O", current->pid);
     
       kernel->scheduler->running_process = NULL;
     }
@@ -131,7 +129,7 @@ void *scheduler_thread_func() {
 
 void start_scheduler() {
   if (!kernel->scheduler_running) {
-    print_win(janela_OUTPUT,"Schedular rodando!");
+    //print_win(janela_OUTPUT,"Schedular rodando!");
     kernel->scheduler_running = true;
     pthread_create(&kernel->scheduler_thread, NULL, scheduler_thread_func,
                    NULL);
@@ -159,8 +157,7 @@ int search_BCP(int process_pid) {
 }
 
 int add_process_to_BCP(Process *process) {
-  //printf("Adicionando processo %d\n", process->pid);
-  print_win_args(janela_OUTPUT, "Adicionando processo %d", process->pid);
+  //print_win_args(janela_OUTPUT, "Adicionando processo %d", process->pid);
   LOCK_BCP();
   if (kernel->BCP == NULL) {
     init_BCP();
@@ -283,8 +280,8 @@ int scheduler_POLICY(){
       }
   }
   if(idx != FAILURE)
-      print_win_args(janela_SCHEDULER, "politica aplicada encontrou PID: %d", kernel->BCP[idx].pid);
-  
+      //print_win_args(janela_SCHEDULER, "politica aplicada encontrou PID: %d", kernel->BCP[idx].pid);
+      //update_dados_scheduler("politica aplicada encontrou PID: %d", kernel->BCP[idx].pid);
     return idx;
 }
 
@@ -301,8 +298,7 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    //printf("Process with PID: %d finished execution...\n", running_process->pid);
-    print_win_args(janela_process,"Process with PID: %d finished execution...", running_process->pid);
+    //print_win_args(janela_process,"Process with PID: %d finished execution...", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
     //puts("Processo finalizado removido da BCP!");
@@ -312,12 +308,10 @@ void context_switch(Process *next, char *arg){
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_BLOCK") == 0) {
-      //printf("Process with PID: %d blocked by semaphore.\n", running_process->pid);
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_UNBLOCK") == 0) {
-    //printf("Process with PID: %d unblocked by semaphore.\n", running_process->pid);
-    print_win_args(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore", running_process->pid);
+    //print_win_args(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore", running_process->pid);
     change_process_state(&running_process, READY);
  }
   else {
@@ -332,17 +326,15 @@ void processInterrupt(Process *next){ //Quantum atingido.
 }
 
 int exec_Instruction(Process *process, Opcode opcode, int arg){
-  //printf("\nExecutando %s...\n",opcode_to_string(opcode));
   switch(opcode){
     case READ...WRITE: {
       
       IORequest *request;
       request = make_request(process, opcode, arg);
-      //printf("\ninserindo %s operation...\n",opcode_to_string(request->opcode));
-      print_win_args(janela_process,"inserindo %s operation...",opcode_to_string(request->opcode));
+      //print_win_args(janela_process,"inserindo %s operation...",opcode_to_string(request->opcode));
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
-      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid, opcode_to_string(opcode));
+      //print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid, opcode_to_string(opcode));
       return IOException;
       break;
     }
@@ -351,7 +343,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       print_request = make_request(process, opcode, arg);
       enqueue(kernel->printer_queue, print_request);
       pthread_cond_signal(&kernel->printer_queue->iocond);
-      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      //print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     case EXEC:
@@ -458,7 +450,6 @@ void *io_thread_func() {
     /*if (req->process->state == WAITING){
       //puts("Processo estava esperando I/O..");
       print_win(janela_SCHEDULER,"Processo estava esperando I/O..");
-      //printf("Operação: %s %d\n", opcode_to_string(req->opcode), req->arg);
       print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(req->opcode), req->arg);
       change_process_state(&req->process, READY);
     }*/
@@ -466,7 +457,6 @@ void *io_thread_func() {
 
     free(disk->current_request);
     UNLOCK_BCP();
-    //printf("Processo PID %d liberado\n", req->process->pid);
     //print_win_args(janela_SCHEDULER,"Processo PID %d liberado", req->process->pid);
 
     //print_process(req->process);

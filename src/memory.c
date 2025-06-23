@@ -4,14 +4,14 @@
 int page_counter = 0;
 
 void memory_status() {
-  printf("--------*-------- Memory status --------*--------\n");
+  /* printf("--------*-------- Memory status --------*--------\n");
   printf("Total memory: %d KB\n", MEM_LENGTH);
   printf("OS memory: %d KB\n", OS_MEMORY_SIZE);
   printf("Pages allocated: %d page(s)\n", page_counter);
   printf("Pages available: %d KB\n", MEM_LENGTH - OS_MEMORY_SIZE - page_counter*PAGE_SIZE);
   printf("MEMORY OCUPATION: %.2f%% [%d/%d]\n", ((float)page_counter*PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) * 100, page_counter*PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
   printf("------------------------------------------------\n");
-}
+ */}
 
 void initialize_page(Page *page, int page_num, int instructions_count) {
   page->page_number = page_num;
@@ -28,8 +28,6 @@ int sum_of_exec_time(Instruction *instructions, int instructions_count) {
       sum += instructions[i].value;
     }
   }
-  //print_instructions(instructions, instructions_count);
-  //print_win_args(janela_memory, "sum: %d", sum);
   return sum;
 }
 
@@ -38,7 +36,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   
   page_table->pages = malloc(sizeof(Page) * RESIDENT_SET); // allocate 16 pages (resident set amount)
   if (page_table->pages == NULL) {
-    printf("Memory allocation failed\n");
+    //printf("Memory allocation failed\n");
     exit(1);
   }
 
@@ -129,7 +127,7 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   (*page_table)->missing_instructions = (i < instructions_count && (*page_table)->page_count == RESIDENT_SET) ? true : false;
   (*page_table)->last_instruction_loaded = i-1;
 
-  printf("Page table refreshed. Old size: %d, New size: %d, Instructions Loaded [%d/%d]\n", old_page_table_size, (*page_table)->page_count, i, instructions_count);
+  //printf("Page table refreshed. Old size: %d, New size: %d, Instructions Loaded [%d/%d]\n", old_page_table_size, (*page_table)->page_count, i, instructions_count);
   while (i < old_page_table_size) {
     free((*page_table)->pages[i].instructions);
     i++;

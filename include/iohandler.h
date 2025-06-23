@@ -8,6 +8,7 @@
 #define UNLOCK_IO() pthread_mutex_unlock(&queue->iomutex)
 #define IO_Quantum 4
 #define Buffer_Size 16 //Buffer size is equal MAX PROCESSES. 
+
 typedef struct IORequest{
     Process *process;
     Opcode opcode;

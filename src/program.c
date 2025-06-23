@@ -9,8 +9,7 @@
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    //fprintf(stderr, "Error opening file: %s\n", filename);
-    return NULL;
+     return NULL;
   }
 
   Program *program = malloc(sizeof(Program));
@@ -36,24 +35,18 @@ Program* read_program(const char *filename) {
   program->header.segment_size = atoi(line);
   
   fgets(line, BUFFER_READER_SIZE, file);
-  //printf("\n\tsemaphores line: %s", line);
-  line[strcspn(line, "\n")] = '\0';
+   line[strcspn(line, "\n")] = '\0';
   program->header.semaphores = malloc(sizeof(char) * (strlen(line) + 1));
   strcpy(program->header.semaphores, "");
   for (int i = 0; i < (int) strlen(line); i++) {
     if (line[i] != ' ') {
       char *aux = malloc(sizeof(char) * 2); aux[0] = line[i]; aux[1] = '\0';
       strcat(program->header.semaphores, aux);
-      //printf("\n\t\tsemaphore list in char %d -> sem: %s | aux: %s\n", i, program->header.semaphores, aux);
     }
   }
-  //printf("semaphores: %s[FIM]\n", program->header.semaphores);
-  //puts("header readed :>");
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 
-  //puts("reading instructions....");
-  //printf("reading instructions of process %s\n", program->header.name);
   // reading instructions
   program->instructions = malloc(sizeof(Instruction) * MAX_INSTRUCTIONS);
   int instruction_count = 0;
@@ -68,7 +61,6 @@ Program* read_program(const char *filename) {
         break;
       }
       name[i] = line[i];
-      //printf("name[%d]: %c ", i, name[i]);
     }
     name[i] = '\0';
 
@@ -78,21 +70,16 @@ Program* read_program(const char *filename) {
       runtime_str[j] = line[i + j + 1];
     }
     runtime_str[j] = '\0';    
-    // printf("\n\tsizeofs: line(%d) %s, name(%d) %s, runtime_str(%d) %s\n", (int) strlen(line), line, (int) strlen(name), name, (int) strlen(runtime_str), runtime_str);
-    // printf("\n\n\t[instruction %d] name:%s & value: %s\n\n", instruction_count, name, runtime_str);
 
     Instruction *instruction = instruction_builder(name, runtime_str);
     program->instructions[instruction_count] = *instruction;
-    // print_instruction(program->instructions[instruction_count]);
     instruction_count++;
 
     free(name);
     free(runtime_str);
     free(instruction);
   }
-  //printf("instructions cont: %d\n", instruction_count);
   program->instructions_count = instruction_count;
-  //puts("instructions readed :>");
 
   fclose(file);
 
@@ -101,24 +88,20 @@ Program* read_program(const char *filename) {
 
 void print_program(Program *program) {
   if (program == NULL) {
-      printf("NULL program\n");
+      //printf("NULL program\n");
       return;
   }
 
   // Print header information
   
-  printf("--------------------------------------------------\n");
+ /*  printf("--------------------------------------------------\n");
   printf("Printing program: %s\n", program->header.name);
   printf("Segment ID: %d\n", program->header.segment_id);
   printf("Original Priority: %d\n", program->header.original_priority);
   printf("Segment Size: %d\n", program->header.segment_size);
   printf("Semaphores: %s\n", program->header.semaphores);
   
-  // Print instructions
-  //printf("Instructions:\n");
-  printf("Instructions:");
-  //print_instructions(program->instructions, program->instructions_count);
-  printf("--------------------------------------------------");
+  printf("--------------------------------------------------"); */
 }
 
 void free_program(Program *program) {

@@ -57,6 +57,21 @@ Semaphore* find_or_create_semaphore(char name) {
     return NULL;
 }
 
+Semaphore* create_semaphore_define_value(char name, int value) {
+    
+    if (total_semaphores < MAX_SEMAPHORES) {
+        Semaphore *sem = &semaphores[total_semaphores];
+        sem->name = name;
+        sem->value = value; 
+        sem->blocked_count = 0;
+        total_semaphores++;
+        //printf("Created new semaphore '%c' at slot %d\n", name, total_semaphores-1);
+        return sem;
+    }
+    
+    return NULL;
+}
+
 void sem_P(Process *process, char sem_name) {
     if (!process) {
         return;
@@ -87,8 +102,8 @@ void sem_P(Process *process, char sem_name) {
         // }
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
-        print_win_args(janela_process,"[SEM_P] (val=%d, blocked=%d/%d)",sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
-        print_win_args(janela_process,"[SEM_P] Blocking PID %d from semaphore '%c' ", process->pid, sem_name);
+
+        //printf("[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
 
         pthread_mutex_unlock(&sem->mutex);
         
@@ -100,13 +115,13 @@ void sem_P(Process *process, char sem_name) {
 
 void sem_V(Process *process, char sem_name) {
     if (!process) {
-        print_win(janela_process,"Process not found ");
+        //printf("Process not found \n");
         return;
     }
 
     Semaphore *sem = get_semaphore(sem_name);
     if (!sem) {
-        print_win(janela_process,"Semaphore not found");   
+        //printf("Semaphore not found \n");   
         return;
     }
 
@@ -121,8 +136,8 @@ void sem_V(Process *process, char sem_name) {
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
 
-        print_win_args(janela_process,"[SEM_V] ainda restam %d bloqueados",sem->blocked_count);
-        print_win_args(janela_process,"[SEM_V] Semáforo '%c': desbloqueado PID %d", sem_name, unblocked_pid);
+        /* printf("[SEM_V] Semáforo '%c': desbloqueado PID %d, ainda restam %d bloqueados\n",
+               sem_name, unblocked_pid, sem->blocked_count); */
 
         pthread_mutex_unlock(&sem->mutex);
 

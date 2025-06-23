@@ -21,29 +21,24 @@
 void print_bcp(Process **BCP) {
   if (*BCP == NULL) {
     //printf("BCP is empty.\n");
-    print_win(janela_process,"BCP is empty.");
+    //print_win(janela_process,"BCP is empty.");
     return;
   }
 
   //printf("Process Control Block (BCP):\n");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      print_win_args(janela_process,"[BCP] PID: %d, Name: %s, Page Counter: %d",
-             (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].page_table->page_count);
+      //print_win_args(janela_process,"[BCP] PID: %d, Name: %s, Page Counter: %d",(*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].page_table->page_count);
     }
   }
-  print_win(janela_process,"[BCP] Process Control Block:");
+  //print_win(janela_process,"[BCP] Process Control Block:");
 }
 
 void print_SCHEDULER(Process **BCP) {
   if (*BCP == NULL) {
     //printf("BCP is empty.\n");
-    printf("BCP is empty.\n");
     return;
   }
-
-  //printf("Process Control Block (BCP):\n");
-  //printf(janela_process,"Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       //print_win_args(janela_SCHEDULER,"PID: %d, Name: %s, State: %d, Priority: %d, Counter RW: %d, Time-Slice: %d",

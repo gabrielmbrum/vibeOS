@@ -84,4 +84,8 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
- /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/interface.h
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/interface.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/semaphore.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/commons.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/kernel.h \
+ /mnt/c/Users/User/vibeOS2/vibeOS/src/../include/iohandler.h

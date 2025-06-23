@@ -200,6 +200,8 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: /mnt/c/Users/User/vibeOS2/vibeOS/src/in
   /mnt/c/Users/User/vibeOS2/vibeOS/include/debug.h \
   /mnt/c/Users/User/vibeOS2/vibeOS/include/instruction.h \
   /mnt/c/Users/User/vibeOS2/vibeOS/include/interface.h \
+  /mnt/c/Users/User/vibeOS2/vibeOS/include/iohandler.h \
+  /mnt/c/Users/User/vibeOS2/vibeOS/include/kernel.h \
   /mnt/c/Users/User/vibeOS2/vibeOS/include/memory.h \
   /mnt/c/Users/User/vibeOS2/vibeOS/include/process.h \
   /mnt/c/Users/User/vibeOS2/vibeOS/include/program.h \
@@ -998,11 +1000,11 @@ CMakeFiles/vibeOS.dir/src/semaphore.c.o: /mnt/c/Users/User/vibeOS2/vibeOS/src/se
 
 /usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
-/mnt/c/Users/User/vibeOS2/vibeOS/include/kernel.h:
-
 /usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
 
 /mnt/c/Users/User/vibeOS2/vibeOS/src/kernel.c:
+
+/mnt/c/Users/User/vibeOS2/vibeOS/include/kernel.h:
 
 /mnt/c/Users/User/vibeOS2/vibeOS/include/iohandler.h:
 
