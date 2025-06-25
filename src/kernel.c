@@ -44,7 +44,7 @@ void *printer_thread_func(){
       IORequest *print_request = dequeue(kernel->printer_queue);
       for(int i=0;i<print_request->arg;i++){
         if(i%10 == 0){
-          update_dados(janela_memory,"PID (%d) using printer..", print_request->process->pid);
+          update_dados(janela_PRINT,"PID (%d) using printer..", print_request->process->pid);
         }
         //Implementem uma janela escrito "Printer", pra seguir o padrão em inglês;
         //A ideia é que durante o tempo que tá no programa sintético, tipo
@@ -308,11 +308,11 @@ void context_switch(Process *next, char *arg){
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_BLOCK") == 0) {
-      update_dados(janela_SCHEDULER,"Process with PID: %d blocked by semaphore.", running_process->pid);
+      //update_dados(janela_SCHEDULER,"Process with PID: %d blocked by semaphore.", running_process->pid);
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_UNBLOCK") == 0) {
-    update_dados(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
+    //update_dados(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
     change_process_state(&running_process, READY);
  }
   else {
@@ -390,7 +390,7 @@ int processExecute(Process *process){
   // Verifica se o processo já terminou (PC >= total_instructions)
   if (process->pc.global_index >= total_instructions) {
     if (current_pt->missing_instructions) {
-      update_dados(janela_OUTPUT,"process name: %s\n", process->name);
+      update_dados(janela_OUTPUT,"Process name: %s\n", process->name);
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
       Program *program = read_program(program_name);
@@ -407,7 +407,7 @@ int processExecute(Process *process){
       process->pc.last_instruction = 0; // Reseta a última instrução
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
-      update_dados(janela_OUTPUT,"finalizou o processo");
+      update_dados(janela_OUTPUT,"Process finished!");
       change_process_state(&process, TERMINATED);
       return TERMINATED;
     }

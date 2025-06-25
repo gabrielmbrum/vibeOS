@@ -88,7 +88,7 @@ void sem_P(Process *process, char sem_name) {
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
 
-        update_dados(janela_process,"[SEM_P] Blocking PID %d from semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        update_dados(janela_process,"PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
 
         pthread_mutex_unlock(&sem->mutex);
         
@@ -121,8 +121,7 @@ void sem_V(Process *process, char sem_name) {
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
 
-        update_dados(janela_process, "[SEM_V] Semáforo '%c': desbloqueado PID %d, ainda restam %d bloqueados\n",
-               sem_name, unblocked_pid, sem->blocked_count);
+        update_dados(janela_process, "PID: %d unblocked by semaphore %c, restam %d bloqueados\n", unblocked_pid, sem_name, sem->blocked_count);
 
         pthread_mutex_unlock(&sem->mutex);
 

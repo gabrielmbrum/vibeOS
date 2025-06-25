@@ -28,6 +28,7 @@ extern WINDOW  *janela_SCHEDULER;
 extern WINDOW  *janela_memory;
 extern WINDOW  *janela_process;
 extern WINDOW  *janela_I_O;
+extern WINDOW  *janela_PRINT;
 
 // input operations
 void clear_space(int y, int x,int size);

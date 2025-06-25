@@ -16,10 +16,20 @@ int main() {
 
   init_interface();
 
+  int lin, col;
+  getmaxyx(janela_menu, lin, col);
+  int men = col/3.4;
+
   // input loop
   while (strcmp(input, "q")) {
-    clear_space(6, 34, strlen(input));
-    move(6, 34);
+    if(men <= 17){
+    clear_space(6, 33, strlen(input));
+    move(6, 33);
+    }else{
+    clear_space((lin/4) + 5, 33, strlen(input));
+    move((lin/4) + 5, 33);
+    }
+    
     if (get_input(input, janela_OUTPUT) != NULL) {
       char aux[MAX_OUTPUT_STR] = "../programs/";
       strcat(aux, input);
@@ -36,8 +46,13 @@ int main() {
       }
     }
   }
-  clear_space(6, 34, strlen(input));
-  move(6, 34);
+   if(men <= 17){
+    clear_space(6, 33, strlen(input));
+    move(6, 33);
+    }else{
+    clear_space((lin/4) + 5, 33, strlen(input));
+    move((lin/4) + 5, 33);
+    }
 
   pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();

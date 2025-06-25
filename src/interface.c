@@ -6,6 +6,7 @@ WINDOW  *janela_menu;
 WINDOW  *janela_OUTPUT;
 WINDOW  *janela_SCHEDULER;
 WINDOW  *janela_memory;
+WINDOW  *janela_PRINT;
 WINDOW  *janela_process;
 WINDOW  *janela_I_O;
 WINDOW *selected_window;
@@ -64,25 +65,35 @@ char* get_input(char *input,WINDOW*out){
 }
 
 // window operations
+int lin, col;
 void init_interface(){
     janela_intro();
-
     // Draw main window, sub-windows and components
-    janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
+    getmaxyx(stdscr, lin, col);
+    int largura = col/2;
+    int altura = lin/4.5;
+    col = lin/3.1;
+    janela_menu = create_newwin(col, largura, 0, 0," MENU ");
     janela_menu = init_menu_components(janela_menu);
-    janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
-    janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
-    janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
-    janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
-    janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
-  
+    janela_OUTPUT = create_newwin(altura, largura, col, 0," OUTPUT ");
+    janela_SCHEDULER = create_newwin(lin - (col + altura), largura, (altura + col), 0," SCHEDULER ");
+
+    janela_memory = create_newwin(altura, largura, 0, largura," MEMORY ");
+    janela_I_O = create_newwin(altura, largura, altura, largura," I/O ");
+    janela_PRINT = create_newwin(altura, largura, (altura*2), largura, " PRINTER ");
+    janela_process = create_newwin(lin - (altura*3), largura, (altura*3), largura, " PROCESS ");
+
     pthread_create(&interface_thread, NULL, (void *) update_main_window, NULL);
 
-
     // change window to get user input
+    int men = col/3.4;
     curs_set(1);
+      if(men <= 17){
+      move(6, 33);
+      }else{
+      move((lin/4) + 5, 33);
+      }
     echo();
-    move(6, 34);
 }
 
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title){
@@ -135,14 +146,33 @@ WINDOW *janela_intro(){
 }
 
 WINDOW *init_menu_components(WINDOW *menu){
-  mvwprintw(menu, 1, 15, "%s", " ___   _____       ____  ____ ");
-  mvwprintw(menu, 2, 15, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
-  mvwprintw(menu, 3, 15, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
-  mvwprintw(menu, 4, 15, "%s", " |___/_/_.__/\\__/\\____/___/ ");
-  mvwprintw(menu, 6, 2, "%s", "Insira a versão Syst desejada:");
-  mvwprintw(menu, 7, 2, "%s", "Pressione q para sair");
-  wrefresh(menu);
+  int linha, coluna;
+  getmaxyx(menu, linha, coluna);
+  int men = coluna/3.4;
 
+  if(men <= 17){
+    mvwprintw(menu, 1, men, "%s", " ___   _____       ____  ____ ");
+    mvwprintw(menu, 2, men, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
+    mvwprintw(menu, 3, men, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
+    mvwprintw(menu, 4, men, "%s", " |___/_/_.__/\\__/\\____/___/ ");
+    mvwprintw(menu, 6, 2, "%s", "Insira a versão Syst desejada:");
+    mvwprintw(menu, 7, 2, "%s", "Pressione q para sair");
+    wrefresh(menu);
+    move(6,33);
+    curs_set(1);
+  }else{
+    men = coluna/3;
+    int alt = linha/4;
+    mvwprintw(menu, alt, men, "%s", " ___   _____       ____  ____ ");
+    mvwprintw(menu, alt+1, men, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
+    mvwprintw(menu, alt+2, men, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
+    mvwprintw(menu, alt+3, men, "%s", " |___/_/_.__/\\__/\\____/___/ ");
+    mvwprintw(menu, alt+5, 2, "%s", "Insira a versão Syst desejada:");
+    mvwprintw(menu, alt+6, 2, "%s", "Pressione q para sair");
+    wrefresh(menu);
+    move(alt+5,33);
+    curs_set(1);
+  }
   return menu;
 }
 
