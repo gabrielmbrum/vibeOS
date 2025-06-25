@@ -88,7 +88,13 @@ void sem_P(Process *process, char sem_name) {
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
 
-        update_dados(janela_process,"PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        //attron(COLOR_PAIR(1));
+       //attron(janela_process, COLOR_PAIR(3));
+        update_dados(janela_process, "PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", 3, process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        //attroff(COLOR_PAIR(1));
+        //wattron(janela_process, COLOR_PAIR(3));
+
+        //update_dados(janela_process,"PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
 
         pthread_mutex_unlock(&sem->mutex);
         
@@ -100,13 +106,13 @@ void sem_P(Process *process, char sem_name) {
 
 void sem_V(Process *process, char sem_name) {
     if (!process) {
-        update_dados(janela_OUTPUT, "Process not found \n");
+        update_dados(janela_OUTPUT, "Process not found \n", NULL);
         return;
     }
 
     Semaphore *sem = get_semaphore(sem_name);
     if (!sem) {
-        update_dados(janela_OUTPUT,"Semaphore not found \n");   
+        update_dados(janela_OUTPUT,"Semaphore not found \n", NULL);   
         return;
     }
 
@@ -121,7 +127,11 @@ void sem_V(Process *process, char sem_name) {
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
 
-        update_dados(janela_process, "PID: %d unblocked by semaphore %c, restam %d bloqueados\n", unblocked_pid, sem_name, sem->blocked_count);
+        //attron(COLOR_PAIR(1));
+        //wattron(janela_process, COLOR_PAIR(2));
+        update_dados(janela_process, "PID: %d unblocked by semaphore %c, restam %d bloqueados\n", 2, unblocked_pid, sem_name, sem->blocked_count);
+        //attroff(COLOR_PAIR(1));
+        //wattroff(janela_process, COLOR_PAIR(2));
 
         pthread_mutex_unlock(&sem->mutex);
 

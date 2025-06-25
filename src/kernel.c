@@ -44,7 +44,7 @@ void *printer_thread_func(){
       IORequest *print_request = dequeue(kernel->printer_queue);
       for(int i=0;i<print_request->arg;i++){
         if(i%10 == 0){
-          update_dados(janela_PRINT,"PID (%d) using printer..", print_request->process->pid);
+          update_dados(janela_PRINT,"PID (%d) using printer..", NULL, print_request->process->pid);
         }
         //Implementem uma janela escrito "Printer", pra seguir o padrão em inglês;
         //A ideia é que durante o tempo que tá no programa sintético, tipo
@@ -60,7 +60,7 @@ void *printer_thread_func(){
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
     if (kernel->BCP == NULL) {
-      update_dados(janela_memory, "Memory allocation failed");
+      update_dados(janela_memory, "Memory allocation failed", NULL);
       exit(EXIT_FAILURE);
     }
   
@@ -88,7 +88,7 @@ void schedule() {
     result = processExecute(current);
 
     if (result == IOException){
-      update_dados(janela_I_O,"Processo %d bloqueado para I/O", current->pid);
+      update_dados(janela_I_O,"Processo %d bloqueado para I/O", NULL, current->pid);
     }else if (result == TERMINATED) {
       int idx = scheduler_POLICY();
       if (idx != FAILURE) {
@@ -191,14 +191,14 @@ int add_process_to_BCP(Process *process) {
 
 void init_Kernel() {
   if (kernel != NULL) {
-    update_dados(janela_SCHEDULER, "Kernel already initialized");
+    update_dados(janela_SCHEDULER, "Kernel already initialized", NULL);
 
     return;
   }
 
   kernel = malloc(sizeof(Kernel));
   if (kernel == NULL) {
-    update_dados(janela_memory, "Failed to allocate memory for Kernel");
+    update_dados(janela_memory, "Failed to allocate memory for Kernel", NULL);
     exit(EXIT_FAILURE);
   }
 
@@ -298,7 +298,7 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    update_dados(janela_SCHEDULER,"Process with PID: %d finished execution...", running_process->pid);
+    update_dados(janela_SCHEDULER,"Process with PID: %d finished execution...", 1, running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
     //puts("Processo finalizado removido da BCP!");
@@ -334,7 +334,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
-      update_dados(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      update_dados(janela_I_O,"PID: %d Request %s operation", NULL, process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     }
@@ -343,7 +343,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       print_request = make_request(process, opcode, arg);
       enqueue(kernel->printer_queue, print_request);
       pthread_cond_signal(&kernel->printer_queue->iocond);
-      update_dados(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      update_dados(janela_I_O,"PID: %d Request %s operation", NULL, process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     case EXEC:
@@ -390,7 +390,7 @@ int processExecute(Process *process){
   // Verifica se o processo já terminou (PC >= total_instructions)
   if (process->pc.global_index >= total_instructions) {
     if (current_pt->missing_instructions) {
-      update_dados(janela_OUTPUT,"Process name: %s\n", process->name);
+      update_dados(janela_OUTPUT,"Process name: %s\n", NULL, process->name);
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
       Program *program = read_program(program_name);
@@ -407,7 +407,7 @@ int processExecute(Process *process){
       process->pc.last_instruction = 0; // Reseta a última instrução
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
-      update_dados(janela_OUTPUT,"Process finished!");
+      update_dados(janela_OUTPUT,"Process finished!", 1);
       change_process_state(&process, TERMINATED);
       return TERMINATED;
     }

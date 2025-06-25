@@ -13,6 +13,10 @@ WINDOW *selected_window;
 
 char dados[MAX_OUTPUT_STR];
 
+int PAR = 1;
+//init_color(COLOR_GREEN, 100, 700, 100);
+//init_pair(PAR, COLOR_GREEN, COLOR_BLACK);
+
 // support functions
 void clear_space(int y, int x,int size){
   for (int i = 0; i < size; i++) {
@@ -54,11 +58,11 @@ return 0;
 char* get_input(char *input,WINDOW*out){
   getstr(input);
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   update_dados(out,"Invalid input. Try again");
+   update_dados(out,"Invalid input. Try again", NULL);
    refresh();
      return NULL;
   }else{
-   update_dados(out,"Valid Input");
+   update_dados(out,"Valid Input", NULL);
    refresh();
      return input;
   }
@@ -118,12 +122,22 @@ WINDOW *delete_window(WINDOW  *local_win){
 }
 
 WINDOW *janela_intro(){
-  int lin, col;
+  int lin, col, si;
   initscr();	
+  if(has_colors() == FALSE){
+    si = 1;
+  }else{ 
+    start_color();
+    use_default_colors();
+    //init_color(COLOR_GREEN, 69, 255, 133);
+    init_pair(1, COLOR_BLACK, COLOR_GREEN);
+    init_pair(2, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(3, COLOR_BLACK, COLOR_RED);
+  }
   getmaxyx(stdscr, lin, col);
   curs_set(0);
   noecho();
-  WINDOW *intro = newwin(8, 60, ((lin/2) - 5), ((col/2) - 30));
+  WINDOW *intro = newwin(10, 60, ((lin/2) - 5), ((col/2) - 30));
   refresh();
 
   wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -135,6 +149,7 @@ WINDOW *janela_intro(){
   mvwprintw(intro, 5, 3, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/      \\| ");
   mvwprintw(intro, 6, 7, "%s", "                                          |");
   mvwprintw(intro, 7, 7, "%s", "   Aperte qualquer tecla para iniciar     |");
+  if (si == 1) mvwprintw(intro, 9, 10, "%s", "Seu terminal não suporta cores T.T");
   wrefresh(intro);
 
   getch();
@@ -177,9 +192,10 @@ WINDOW *init_menu_components(WINDOW *menu){
 }
 
 //testing
-char *update_dados(WINDOW *local, char *message, ...){
+char *update_dados(WINDOW *local, char *message, int *par, ...){
   va_list args;
-  pthread_mutex_lock(&dados_mutex);   
+  pthread_mutex_lock(&dados_mutex);  
+    wattrset(local, COLOR_PAIR(par)); 
     va_start(args, message);
     vsnprintf(dados, MAX_OUTPUT_STR, message, args);
     va_end(args);

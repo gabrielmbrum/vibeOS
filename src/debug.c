@@ -2,31 +2,31 @@
 
 void print_BCP(Process **BCP, int processes) {
   if (*BCP == NULL) {
-    update_dados(janela_process,"BCP is empty.");
+    update_dados(janela_process,"BCP is empty.", NULL);
     return;
   }
 
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      update_dados(janela_SCHEDULER,"[BCP] PID: %d, Name: %s, State: %d",
+      update_dados(janela_SCHEDULER,"[BCP] PID: %d, Name: %s, State: %d", NULL, 
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state);
-      update_dados(janela_SCHEDULER,"PC: %d, Priority: %d, Counter RW: %d, Time-Slice: %d",
+      update_dados(janela_SCHEDULER,"PC: %d, Priority: %d, Counter RW: %d, Time-Slice: %d", NULL, 
       (*BCP)[i].pc, (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }
   }
-    update_dados(janela_process,"Process Control Block (BCP):");
+    update_dados(janela_process,"Process Control Block (BCP):", NULL);
 }
 
 void print_bcp(Process **BCP) {
   if (*BCP == NULL) {
-    update_dados(janela_process,"BCP is empty.");
+    update_dados(janela_process,"BCP is empty.", NULL);
     return;
   }
 
-  update_dados(janela_process,"Process Control Block (BCP):");
+  update_dados(janela_process,"Process Control Block (BCP):", NULL);
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      update_dados(janela_process,"PID: %d, Name: %s, Page Counter: %d",
+      update_dados(janela_process,"PID: %d, Name: %s, Page Counter: %d", NULL, 
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].page_table->page_count);
     }
   }
@@ -34,14 +34,14 @@ void print_bcp(Process **BCP) {
 
 void print_SCHEDULER(Process **BCP) {
   if (*BCP == NULL) {
-    update_dados(janela_process,"BCP is empty.");
+    update_dados(janela_process,"BCP is empty.", NULL);
     return;
   }
 
-  update_dados(janela_process,"Process Control Block (BCP):");
+  update_dados(janela_process,"Process Control Block (BCP):", NULL);
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      update_dados(janela_SCHEDULER,"PID: %d, Name: %s, State: %d, Priority: %d, Counter RW: %d, Time-Slice: %d",
+      update_dados(janela_SCHEDULER,"PID: %d, Name: %s, State: %d, Priority: %d, Counter RW: %d, Time-Slice: %d", NULL, 
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state,
              (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }

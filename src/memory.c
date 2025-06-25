@@ -29,7 +29,7 @@ int sum_of_exec_time(Instruction *instructions, int instructions_count) {
     }
   }
   //print_instructions(instructions, instructions_count);
-  update_dados(janela_memory, "sum: %d", sum);
+  update_dados(janela_memory, "sum: %d", sum, NULL);
   return sum;
 }
 
@@ -38,7 +38,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   
   page_table->pages = malloc(sizeof(Page) * RESIDENT_SET); // allocate 16 pages (resident set amount)
   if (page_table->pages == NULL) {
-    update_dados(janela_memory,"Memory allocation failed");
+    update_dados(janela_memory,"Memory allocation failed", NULL);
     exit(1);
   }
 
@@ -129,7 +129,7 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions, int i
   (*page_table)->missing_instructions = (i < instructions_count && (*page_table)->page_count == RESIDENT_SET) ? true : false;
   (*page_table)->last_instruction_loaded = i-1;
 
-  update_dados(janela_memory,"Page table refreshed. Old size: %d, New size: %d, Instructions Loaded [%d/%d]", old_page_table_size, (*page_table)->page_count, i, instructions_count);
+  update_dados(janela_memory,"Page table refreshed. Old size: %d, New size: %d, Instructions Loaded [%d/%d]", old_page_table_size, (*page_table)->page_count, i, instructions_count, NULL);
   while (i < old_page_table_size) {
     free((*page_table)->pages[i].instructions);
     i++;

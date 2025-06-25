@@ -61,6 +61,6 @@ WINDOW *close_window();
 //coloquei
 void *update_main_window() ;
 
-char *update_dados(WINDOW *local, char *message, ...);
+char *update_dados(WINDOW *local, char *message, int *par, ...);
 
 #endif
