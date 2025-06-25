@@ -8,7 +8,7 @@ Process *processCreate(int pid, const char *name, int priority) {
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
     //fprintf(stderr, "Memory allocation failed\n");
-    print_win(janela_memory, "Memory allocation failed");
+    //print_win(janela_memory, "Memory allocation failed");
 
     return NULL;
   }
@@ -28,7 +28,7 @@ Process *create_process_from_program(Program *program) {
   Process *process = (Process *) malloc(sizeof(Process));
   if (process == NULL) {
     //fprintf(stderr, "Memory allocation failed\n");
-    print_win(janela_memory, "Memory allocation failed");
+    //print_win(janela_memory, "Memory allocation failed");
     return NULL;
   }
 

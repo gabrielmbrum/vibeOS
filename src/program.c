@@ -106,7 +106,7 @@ void print_program(Program *program) {
   }
 
   // Print header information
-  
+  /* 
   print_win(janela_process,"--------------------------------------------------");
   print_win_args(janela_process,"Printing program: %s", program->header.name);
   print_win_args(janela_process,"Segment ID: %d", program->header.segment_id);
@@ -119,7 +119,7 @@ void print_program(Program *program) {
   print_win(janela_process,"Instructions:");
   //print_instructions(program->instructions, program->instructions_count);
   print_win(janela_process,"--------------------------------------------------");
-}
+ */}
 
 void free_program(Program *program) {
   if (program == NULL) {

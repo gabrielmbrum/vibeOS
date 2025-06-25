@@ -57,4 +57,9 @@ WINDOW *janela_intro();
 
 WINDOW *close_window();
 
+//coloquei
+void *update_main_window() ;
+
+char *update_dados(WINDOW *local, char *message, ...);
+
 #endif

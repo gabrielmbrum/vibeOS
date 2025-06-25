@@ -14,7 +14,6 @@ int main() {
   char *input = malloc((MAX_OUTPUT_STR) * sizeof(char));
   strcpy(input, "\0");
 
-  janela_intro();
   init_interface();
 
   // input loop

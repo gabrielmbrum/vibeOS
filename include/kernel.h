@@ -29,6 +29,9 @@ typedef struct Kernel{
 }Kernel;
 
 extern Kernel *kernel;
+extern pthread_mutex_t interface_mutex;
+extern pthread_mutex_t dados_mutex;
+extern pthread_t interface_thread;
 
 void *input_thread_func();
 void init_BCP();

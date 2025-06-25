@@ -1,15 +1,6 @@
 #include "../include/interface.h"
-
-// *         _  _             ____    _____ *
-// *        (_)| |           / __ \  / ____|*
-// * __   __ _ | |__    ___ | |  | || (___  *
-// * \ \ / /| || '_ \  / _ \| |  | | \___ \ *
-// *  \ V / | || |_) ||  __/| |__| | ____) |*
-// *   \_/  |_||_.__/  \___| \____/ |_____/ *
-// * feel the vibe
-// *para pegar o tamanho da tela atual -> getmaxyx(stdscr, linhas, colunas);
-
 #include <string.h>
+#include "../include/kernel.h"
 
 WINDOW  *janela_menu;
 WINDOW  *janela_OUTPUT;
@@ -17,6 +8,9 @@ WINDOW  *janela_SCHEDULER;
 WINDOW  *janela_memory;
 WINDOW  *janela_process;
 WINDOW  *janela_I_O;
+WINDOW *selected_window;
+
+char dados[MAX_OUTPUT_STR];
 
 // support functions
 void clear_space(int y, int x,int size){
@@ -25,117 +19,23 @@ void clear_space(int y, int x,int size){
   }
 }
 
-/*
-! DEPRECIATED
-char *generate_blank_space(int size){
-  if (size <= 0) return NULL;
-  char *str = malloc(size);
-  for (int i = 0; i < size; i++) {
-      str[i] = ' ';
-  }
-  return str;
-}
-
-char **init_string_array(char**list,int bound, int stringSize){
-  list = (char**)malloc(bound * sizeof(char*));
-  for (int i = 0; i < bound; i++) {
-    list[i] = (char*)malloc((stringSize) * sizeof(char));
-    strcpy(list[i],"/0");
-  }
-  return list;
-}
-
-int *init_int_array(int *list, int size){
-  list = (int*)malloc(size * sizeof(int));
-  for(int i=0;i<size;i++){
-    list[i] =0;
-  }
-
-  return list;
-}
-*/
-
-// input and output message operations
-/*
-! DEPRECIATED
-void add_element_list(char **list, char *input, int *num, int Vbound, int Hbound){
-  int width = strlen(input);
-
-  if (width < Hbound) {
-    if (*num < Vbound) {
-      strcpy(list[*num], input);
-      (*num)++;
-    } else {
-      for (int i = 0; i < Vbound - 1; i++) {
-        strcpy(list[i], list[i + 1]);
-      }
-      strcpy(list[Vbound - 1], input);
-    }
-  } else {
-    char str1[Hbound];
-    char str2[Hbound];
-
-    strncpy(str1, input, Hbound - 1);
-    str1[Hbound - 1] = '\0';
-
-    strncpy(str2, input + Hbound - 2, Hbound - 1);
-    str2[Hbound - 1] = '\0';
-
-    if (*num <= Vbound - 2) {
-      strcpy(list[*num], str1);
-      (*num)++;
-      strcpy(list[*num], str2);
-      (*num)++;
-    } else {
-
-      int shifts = (*num >= Vbound) ? 2 : 1;
-      for (int i = 0; i < Vbound - shifts; i++) {
-        strcpy(list[i], list[i + shifts]);
-      }
-      if (Vbound >= 2) {
-        strcpy(list[Vbound - 2], str1);
-        strcpy(list[Vbound - 1], str2);
-      }
-      *num = Vbound;
-    }
-  }
-}
-
-void print_message(WINDOW *local_window, char *message){
-    mvwprintw(local_window, POS_Y, POS_X, "%s",message);
-    wrefresh(local_window);
-}
-
-void print_multiple_messages(WINDOW *local_window, char **list, int *size) {
-  int win_width = getmaxx(local_window);
-  int win_heigth = getmaxy(local_window);
-
-  for (int i = 0; i < *size; i++) {
-    if (*size >= (win_heigth-1)){
-      char *blank = generate_blank_space(win_width - POS_X - 1);
-      mvwprintw(local_window, i + 1, POS_X, "%s", blank);
-      free(blank);
-    }
-    mvwprintw(local_window, i + 1, POS_X, "%s", list[i]);
-  }
-  wrefresh(local_window);  // faz refresh apenas uma vez no final
-}
-*/
-
 void print_win(WINDOW *local_window, char *input){
-  if(strlen(input)>DEF_WIN_WDH){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    wmove(local_window,2,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",input);
-    wrefresh(local_window);
-  }else{
     wmove(local_window,1,0);
     winsertln(local_window);
     mvwprintw(local_window,1,1,"%s", input);
     wrefresh(local_window);
-  }
+} //! DEPRICIATED
+
+void print_win_args(WINDOW *local_window, char*message, ...) {
+  char buffer[MAX_OUTPUT_STR] = " ";
+  va_list args;
+
+  va_start(args, message); // initialize args after 'message'
+  vsnprintf(buffer, MAX_OUTPUT_STR, message, args);
+    wmove(local_window,1,0);
+    winsertln(local_window);
+    mvwprintw(local_window,1,1,"%s",buffer);
+    wrefresh(local_window);
 }
 
 int check_input(char *input){
@@ -153,40 +53,20 @@ return 0;
 char* get_input(char *input,WINDOW*out){
   getstr(input);
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   print_win(out,"Invalid input. Try again");
+   update_dados(out,"Invalid input. Try again");
    refresh();
      return NULL;
   }else{
-   print_win(out,"Valid Input");
+   update_dados(out,"Valid Input");
    refresh();
      return input;
   }
 }
 
-void print_win_args(WINDOW *local_window, char*message, ...) {
-  char buffer[MAX_OUTPUT_STR] = " ";
-  va_list args;
-
-  va_start(args, message); // initialize args after 'message'
-  vsnprintf(buffer, MAX_OUTPUT_STR, message, args);
-  
-  if(strlen(buffer)>DEF_WIN_WDH){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    wmove(local_window,2,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",buffer);
-    wrefresh(local_window);
-  }else{
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",buffer);
-    wrefresh(local_window);
-  }
-}
-
 // window operations
 void init_interface(){
+    janela_intro();
+
     // Draw main window, sub-windows and components
     janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
     janela_menu = init_menu_components(janela_menu);
@@ -196,9 +76,13 @@ void init_interface(){
     janela_process = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
     janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
   
+    pthread_create(&interface_thread, NULL, (void *) update_main_window, NULL);
+
+
     // change window to get user input
-    move(6,34);
     curs_set(1);
+    echo();
+    move(6, 34);
 }
 
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title){
@@ -216,7 +100,6 @@ WINDOW *create_newwin(int height, int width, int starty, int startx, char *title
 
 WINDOW *delete_window(WINDOW  *local_win){
   wborder(local_win, ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ');
-
   wrefresh(local_win);
   delwin(local_win);
 
@@ -228,8 +111,8 @@ WINDOW *janela_intro(){
   initscr();	
   getmaxyx(stdscr, lin, col);
   curs_set(0);
+  noecho();
   WINDOW *intro = newwin(8, 60, ((lin/2) - 5), ((col/2) - 30));
-  wrefresh(intro);
   refresh();
 
   wborder (intro, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
@@ -243,6 +126,7 @@ WINDOW *janela_intro(){
   mvwprintw(intro, 7, 7, "%s", "   Aperte qualquer tecla para iniciar     |");
   wrefresh(intro);
 
+  getch();
   werase(intro);
   wrefresh(intro);
   delete_window(intro);
@@ -261,54 +145,24 @@ WINDOW *init_menu_components(WINDOW *menu){
 
   return menu;
 }
-/*  
-!DEPRECIATED
-WINDOW *init_interface(){
-  // malloc the screen windows, display arrays and sizes
-  WINDOW *janela_menu, *janela_OUTPUT, *janela_I_O, *janela_memory, *local_window, *janela_SCHEDULER;
 
-   // Draw main window, sub-windows and components
-  janela_menu = create_newwin(DEF_WIN_HGH_MEDIUM, DEF_WIN_WDH, 0, 1," MENU ");
-  janela_menu = init_menu_components(janela_menu);
-  janela_OUTPUT = create_newwin(DEF_WIN_HGH_SMALL, DEF_WIN_WDH, 9, 1," OUTPUT ");
-  janela_SCHEDULER = create_newwin(DEF_WIN_HGH_BIGGER, DEF_WIN_WDH, 14, 1," SCHEDULER ");
-  janela_memory = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 0, 61," MEMORY ");
-  local_window = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 10, 61, " PROCESS ");
-  janela_I_O = create_newwin(DEF_WIN_HGH_BIG, DEF_WIN_WDH, 20, 61," I/O ");
-
-  // change window to get user input
-  move(6,34);
-  curs_set(1); 
-  //! input loop: this code DOES NOT GO HERE 
-   while(strcmp(input,"q")){
-    getstr(input);
-    if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-        print_message(janela_OUTPUT,"Entrada inválida");
-    }else{
-      // handle the correct user input 
-      add_element_list(displayProcessos,input,&sizes[3],(DEF_WIN_HGH_BIG-2));
-      mvwprintw(janela_I_O, POS_Y, POS_X, "%d",sizes[3]);
-      wrefresh(janela_I_O);
-      print_multiple_messages(local_window, displayProcessos,&sizes[3]); 
-
-    }
-    clear_space(6,34,strlen(input));
-    move(6,34);
-    refresh();
-  }
-
-  // free memory
-  free(input);
-
-  // close lncurses window
-  endwin();			 
+//testing
+char *update_dados(WINDOW *local, char *message, ...){
+  va_list args;
+  pthread_mutex_lock(&dados_mutex);   
+    va_start(args, message);
+    vsnprintf(dados, MAX_OUTPUT_STR, message, args);
+    va_end(args);
+    selected_window = local;
+  pthread_mutex_unlock(&interface_mutex);
+    return dados;
 }
-*/
 
-WINDOW *close_window(){
-/*      // free memory
-     free(input); */
-     endwin();
-
-     return 0;
+void *update_main_window() {
+  while (TRUE) {
+    pthread_mutex_lock(&interface_mutex);     
+    usleep(200); 
+    print_win_args(selected_window,dados);
+    pthread_mutex_unlock(&dados_mutex);    
+  }
 }

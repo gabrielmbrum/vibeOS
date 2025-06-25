@@ -16,6 +16,11 @@
 #define RWTimeSlice 30 
 Kernel *kernel=NULL;
 
+//coloquei
+pthread_mutex_t interface_mutex;
+pthread_mutex_t dados_mutex;
+pthread_t interface_thread;  
+
 void *input_thread_func() {
   char command[10];
   while (!kernel->shutdown_request) {
@@ -39,7 +44,7 @@ void *printer_thread_func(){
       IORequest *print_request = dequeue(kernel->printer_queue);
       for(int i=0;i<print_request->arg;i++){
         if(i%10 == 0){
-          print_win_args(janela_memory,"PID (%d) using printer..", print_request->process->pid);
+          update_dados(janela_memory,"PID (%d) using printer..", print_request->process->pid);
         }
         //Implementem uma janela escrito "Printer", pra seguir o padrão em inglês;
         //A ideia é que durante o tempo que tá no programa sintético, tipo
@@ -55,8 +60,7 @@ void *printer_thread_func(){
 void init_BCP() {
     kernel->BCP = malloc(sizeof(Process) * MAX_PROCESSES);
     if (kernel->BCP == NULL) {
-      //fprintf(stderr, "Memory allocation failed\n");
-      print_win(janela_memory, "Memory allocation failed");
+      update_dados(janela_memory, "Memory allocation failed");
       exit(EXIT_FAILURE);
     }
   
@@ -83,10 +87,9 @@ void schedule() {
     current = kernel->scheduler->running_process;
     result = processExecute(current);
 
-    if (result == IOException)
-      //printf("Processo %d bloqueado para I/O \n", current->pid);
-      print_win_args(janela_I_O,"Processo %d bloqueado para I/O", current->pid);
-    else if (result == TERMINATED) {
+    if (result == IOException){
+      update_dados(janela_I_O,"Processo %d bloqueado para I/O", current->pid);
+    }else if (result == TERMINATED) {
       int idx = scheduler_POLICY();
       if (idx != FAILURE) {
         Process *next = &kernel->BCP[idx];
@@ -158,7 +161,7 @@ int search_BCP(int process_pid) {
 }
 
 int add_process_to_BCP(Process *process) {
-  //print_win(janela_process, "Adicionando");
+  ////print_win(janela_process, "Adicionando");
   LOCK_BCP();
   if (kernel->BCP == NULL) {
     init_BCP();
@@ -188,24 +191,21 @@ int add_process_to_BCP(Process *process) {
 
 void init_Kernel() {
   if (kernel != NULL) {
-    //fprintf(stderr, "Kernel already initialized\n");
-    print_win(janela_SCHEDULER, "Kernel already initialized");
+    update_dados(janela_SCHEDULER, "Kernel already initialized");
 
     return;
   }
 
   kernel = malloc(sizeof(Kernel));
   if (kernel == NULL) {
-    //fprintf(stderr, "Failed to allocate memory for Kernel\n");
-    print_win(janela_memory, "Failed to allocate memory for Kernel");
+    update_dados(janela_memory, "Failed to allocate memory for Kernel");
     exit(EXIT_FAILURE);
   }
 
   // Aloca e inicializa o scheduler
   kernel->scheduler = malloc(sizeof(Scheduler));
   if (kernel->scheduler == NULL) {
-    //fprintf(stderr, "Failed to allocate memory for Scheduler\n");
-    print_win(janela_memory, "Failed to allocate memory for Scheduler");
+    //print_win(janela_memory, "Failed to allocate memory for Scheduler");
     free(kernel);
     exit(EXIT_FAILURE);
   }
@@ -298,8 +298,7 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    //printf("Process with PID: %d finished execution...\n", running_process->pid);
-    print_win_args(janela_SCHEDULER,"Process with PID: %d finished execution...", running_process->pid);
+    update_dados(janela_SCHEDULER,"Process with PID: %d finished execution...", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
     //puts("Processo finalizado removido da BCP!");
@@ -309,13 +308,11 @@ void context_switch(Process *next, char *arg){
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_BLOCK") == 0) {
-      //printf("Process with PID: %d blocked by semaphore.\n", running_process->pid);
-      print_win_args(janela_SCHEDULER,"Process with PID: %d blocked by semaphore.", running_process->pid);
+      update_dados(janela_SCHEDULER,"Process with PID: %d blocked by semaphore.", running_process->pid);
       change_process_state(&running_process, WAITING);
   }
   else if (strcmp(arg, "SEM_UNBLOCK") == 0) {
-    //printf("Process with PID: %d unblocked by semaphore.\n", running_process->pid);
-    print_win_args(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
+    update_dados(janela_SCHEDULER,"Process with PID: %d unblocked by semaphore.", running_process->pid);
     change_process_state(&running_process, READY);
  }
   else {
@@ -337,7 +334,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
-      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      update_dados(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     }
@@ -346,7 +343,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       print_request = make_request(process, opcode, arg);
       enqueue(kernel->printer_queue, print_request);
       pthread_cond_signal(&kernel->printer_queue->iocond);
-      print_win_args(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
+      update_dados(janela_I_O,"PID: %d Request %s operation", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     case EXEC:
@@ -393,15 +390,15 @@ int processExecute(Process *process){
   // Verifica se o processo já terminou (PC >= total_instructions)
   if (process->pc.global_index >= total_instructions) {
     if (current_pt->missing_instructions) {
-      print_win_args(janela_OUTPUT,"process name: %s\n", process->name);
+      update_dados(janela_OUTPUT,"process name: %s\n", process->name);
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
       Program *program = read_program(program_name);
       if (program == NULL) {
-        print_win(janela_memory, "Failed to read program with the rest of instructions!");
+        //print_win(janela_memory, "Failed to read program with the rest of instructions!");
         return FAILURE;
       }
-      print_win(janela_OUTPUT,"atualizando tabela de páginas");
+      //print_win(janela_OUTPUT,"atualizando tabela de páginas");
       refresh_page_table(&process->page_table, program->instructions, program->instructions_count, current_pt->last_instruction_loaded);
       //print_page_table(process->page_table);
       free_program(program);
@@ -410,7 +407,7 @@ int processExecute(Process *process){
       process->pc.last_instruction = 0; // Reseta a última instrução
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
-      print_win(janela_OUTPUT,"finalizou o processo");
+      update_dados(janela_OUTPUT,"finalizou o processo");
       change_process_state(&process, TERMINATED);
       return TERMINATED;
     }
@@ -459,13 +456,13 @@ int processExecute(Process *process){
     if (current_pt->missing_instructions) {
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
-      print_win_args(janela_OUTPUT,"process name: %s\n", process->name);
+      //print_win_args(janela_OUTPUT,"process name: %s\n", process->name);
       Program *program = read_program(program_name);
       if (program == NULL) {
-        print_win(janela_memory, "Failed to read program with the rest of instructions!");
+        //print_win(janela_memory, "Failed to read program with the rest of instructions!");
         return FAILURE;
       }
-      print_win(janela_OUTPUT,"atualizando tabela de páginas");
+      //print_win(janela_OUTPUT,"atualizando tabela de páginas");
       refresh_page_table(&process->page_table, program->instructions, program->instructions_count, current_pt->last_instruction_loaded);
       //print_page_table(process->page_table);
       free_program(program);
@@ -474,7 +471,7 @@ int processExecute(Process *process){
       process->pc.last_instruction = 0; // Reseta a última instrução
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
-      print_win(janela_OUTPUT,"finalizou o processo");
+      //print_win(janela_OUTPUT,"finalizou o processo");
       change_process_state(&process, TERMINATED);
       return TERMINATED;
     }
@@ -493,18 +490,16 @@ void *io_thread_func() {
     LOCK_BCP();
     /*if (req->process->state == WAITING){
       //puts("Processo estava esperando I/O..");
-      print_win(janela_SCHEDULER,"Processo estava esperando I/O..");
+      //print_win(janela_SCHEDULER,"Processo estava esperando I/O..");
       //printf("Operação: %s %d\n", opcode_to_string(req->opcode), req->arg);
-      print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(req->opcode), req->arg);
+      //print_win_args(janela_SCHEDULER,"Operação: %s %d", opcode_to_string(req->opcode), req->arg);
       change_process_state(&req->process, READY);
     }*/
     change_process_state(&disk->current_request->process, READY);
 
     free(disk->current_request);
     UNLOCK_BCP();
-    //printf("Processo PID %d liberado\n", req->process->pid);
-    //print_win_args(janela_SCHEDULER,"Processo PID %d liberado", req->process->pid);
-
+    //update_dados(janela_SCHEDULER,"Processo PID %d liberado", req->process->pid);
     //print_process(req->process);
   }
   return NULL;
