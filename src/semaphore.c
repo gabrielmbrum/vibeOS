@@ -57,6 +57,7 @@ Semaphore* find_or_create_semaphore(char name) {
 
 void sem_P(Process *process, char sem_name) {
     if (!process) {
+        update_dados(janela_process, 3, "Process not found \n");
         return;
     }
 
@@ -87,13 +88,13 @@ void sem_P(Process *process, char sem_name) {
 
 void sem_V(Process *process, char sem_name) {
     if (!process) {
-        update_dados(janela_OUTPUT, 0, "Process not found");
+        update_dados(janela_process, 3, "Process not found \n");
         return;
     }
 
     Semaphore *sem = get_semaphore(sem_name);
     if (!sem) {
-        update_dados(janela_OUTPUT, 0,"Semaphore not found");   
+        update_dados(janela_process, 3, "Semaphore not found \n");   
         return;
     }
 
@@ -107,7 +108,9 @@ void sem_V(Process *process, char sem_name) {
         for (int i = 0; i < sem->blocked_count - 1; i++)
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
-        update_dados(janela_process,2, "PID: %d unblocked by semaphore %c, restam %d bloqueados",unblocked_pid, sem_name, sem->blocked_count);
+
+        update_dados(janela_process, 2, "PID: %d unblocked by semaphore %c, restam %d bloqueados\n",  unblocked_pid, sem_name, sem->blocked_count);
+
         pthread_mutex_unlock(&sem->mutex);
         context_switch(process, "SEM_UNBLOCK");
         return;

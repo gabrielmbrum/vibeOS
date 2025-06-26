@@ -9,7 +9,7 @@
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    //! update_dados
+    update_dados(janela_OUTPUT, 3, "Error opening file: %s", filename);
     return NULL;
   }
 
@@ -44,10 +44,10 @@ Program* read_program(const char *filename) {
       strcat(program->header.semaphores, aux);
     }
   }
-  update_dados(janela_process, 0,"semaphores: %s[FIM]", program->header.semaphores);
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 
+  // reading instructions
   program->instructions = malloc(sizeof(Instruction) * MAX_INSTRUCTIONS);
   int instruction_count = 0;
   while (fgets(line, BUFFER_READER_SIZE, file) != NULL) {
@@ -78,6 +78,7 @@ Program* read_program(const char *filename) {
     free(runtime_str);
     free(instruction);
   }
+
   program->instructions_count = instruction_count;
 
   fclose(file);

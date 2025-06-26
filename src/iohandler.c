@@ -86,7 +86,7 @@ IORequest* dequeue_sstf(IOQueue *queue) {
         sstf_prev->next = sstf_request->next;
     }
 
-    if (sstf_request == queue->tail) { // Se o removido era a cauda
+    if (sstf_request == queue->tail) { // Se o removido era a causa
         queue->tail = sstf_prev;
     }
     
@@ -126,8 +126,6 @@ IORequest* dequeue(IOQueue *queue) {
     return request;
 }
 
-
-
 void exec_request(IOQueue *queue){
     IORequest *request = dequeue_sstf(queue);
     if(!request || request->process->pid == EMPTY_BCP_ENTRY) return;
@@ -139,7 +137,7 @@ void exec_request(IOQueue *queue){
         case WRITE:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,  request->arg,SEEK_SET);
-            update_dados(janela_I_O,0,"Writing on trail %d.", request->arg);
+            update_dados(janela_I_O, 0, "Writing on trail %d.", request->arg);
             sleep(IO_Quantum);
             fclose(buffer);
             //print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
@@ -147,14 +145,14 @@ void exec_request(IOQueue *queue){
         case READ:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,request->arg,SEEK_SET);
-            update_dados(janela_OUTPUT,0,"Disk Current Trail: %d.", disk->current_trail);
+            update_dados(janela_I_O, 0,"Current disk on trail %d.", disk->current_trail);
             char data;
             fread(&data, 1, 1, buffer);
-            update_dados(janela_I_O,0,"Reading trail %d.", request->arg, data);            
+            update_dados(janela_I_O,0,"Reading on trail %d.", request->arg, data);            
             sleep(IO_Quantum);
             pthread_cond_signal(&queue->iocond);
             fclose(buffer);
-            update_dados(janela_OUTPUT, 0,"file closed");
+            //update_dados(janela_I_O, 0,"File closed");
         break;
         default:
         
