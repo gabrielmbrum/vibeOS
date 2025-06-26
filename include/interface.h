@@ -42,6 +42,6 @@ WINDOW *init_menu_components(WINDOW *menu);
 WINDOW *janela_intro();
 WINDOW *close_window();
 void *update_main_window() ;
-char *update_dados(WINDOW *local, char *message, int *par, ...); //! change
+char *update_dados(WINDOW *local, int par, char *message, ...);
 
 #endif

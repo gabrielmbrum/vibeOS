@@ -44,7 +44,7 @@ Program* read_program(const char *filename) {
       strcat(program->header.semaphores, aux);
     }
   }
-  //! update_dados("semaphores: %s[FIM]\n", program->header.semaphores);
+  update_dados(janela_process, 0,"semaphores: %s[FIM]", program->header.semaphores);
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 
