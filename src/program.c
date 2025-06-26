@@ -9,7 +9,7 @@
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    //! update_dados
+    update_dados(janela_OUTPUT, "Error opening file: %s.", filename);
     return NULL;
   }
 
@@ -44,7 +44,7 @@ Program* read_program(const char *filename) {
       strcat(program->header.semaphores, aux);
     }
   }
-  update_dados(janela_process, 0,"semaphores: %s[FIM]", program->header.semaphores);
+  //update_dados(janela_process,"semaphores: %s[FIM]", program->header.semaphores);
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 

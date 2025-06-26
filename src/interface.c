@@ -51,11 +51,11 @@ return 0;
 char* get_input(char *input,WINDOW*out){
   getstr(input);
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   update_dados(out,0,"Invalid input. Try again");
+   update_dados(out, "Invalid input. Try again");
    refresh();
      return NULL;
   }else{
-   update_dados(out, 0,"Valid Input");
+   update_dados(out, "Valid Input");
    refresh();
      return input;
   }
@@ -73,12 +73,12 @@ void init_interface(){
     janela_menu = create_newwin(col, largura, 0, 0," MENU ");
     janela_menu = init_menu_components(janela_menu);
     janela_OUTPUT = create_newwin(altura, largura, col, 0," OUTPUT ");
-    janela_SCHEDULER = create_newwin(lin - (col + altura), largura, (altura + col), 0," SCHEDULER ");
+    janela_process = create_newwin(lin - (col + altura), largura, (altura + col), 0," PROCESS ");
 
     janela_memory = create_newwin(altura, largura, 0, largura," MEMORY ");
     janela_I_O = create_newwin(altura, largura, altura, largura," I/O ");
     janela_PRINT = create_newwin(altura, largura, (altura*2), largura, " PRINTER ");
-    janela_process = create_newwin(lin - (altura*3), largura, (altura*3), largura, " PROCESS ");
+    janela_SCHEDULER = create_newwin(lin - (altura*3), largura, (altura*3), largura, " SCHEDULER ");
 
     pthread_create(&interface_thread, NULL, (void *) update_main_window, NULL);
 
@@ -119,14 +119,6 @@ WINDOW *janela_intro(){
   initscr();	
   if(has_colors() == FALSE){
     si = 1;
-  }else{ 
-    start_color();
-    use_default_colors();
-    //init_color(COLOR_GREEN, 69, 255, 133);
-    init_pair(1, COLOR_BLACK, COLOR_GREEN);
-    init_pair(2, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(3, COLOR_BLACK, COLOR_RED);
-    init_pair(0, COLOR_WHITE, COLOR_BLACK);
   }
   getmaxyx(stdscr, lin, col);
   curs_set(0);
@@ -186,15 +178,14 @@ WINDOW *init_menu_components(WINDOW *menu){
 }
 
 //testing
-char *update_dados(WINDOW *local, int par, char *message, ...){
+char *update_dados(WINDOW *local, char *message, ...){
   va_list args;
   pthread_mutex_lock(&dados_mutex);  
-    wattrset(local, COLOR_PAIR(par)); 
     va_start(args, message);
     vsnprintf(dados, MAX_OUTPUT_STR, message, args);
     va_end(args);
     selected_window = local;
-  pthread_mutex_unlock(&interface_mutex);
+    pthread_mutex_unlock(&interface_mutex);
     return dados;
 }
 

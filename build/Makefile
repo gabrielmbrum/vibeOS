@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mariatomain/vibeOS_2/main_com_cor
+CMAKE_SOURCE_DIR = /home/midori_torres/vibeOSmain/vibeOS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mariatomain/vibeOS_2/main_com_cor/build
+CMAKE_BINARY_DIR = /home/midori_torres/vibeOSmain/vibeOS/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles /home/mariatomain/vibeOS_2/main_com_cor/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/midori_torres/vibeOSmain/vibeOS/build/CMakeFiles /home/midori_torres/vibeOSmain/vibeOS/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/midori_torres/vibeOSmain/vibeOS/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

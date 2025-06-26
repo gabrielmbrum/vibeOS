@@ -8,16 +8,16 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/debug.c" "CMakeFiles/vibeOS.dir/src/debug.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/debug.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/instruction.c" "CMakeFiles/vibeOS.dir/src/instruction.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/instruction.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/interface.c" "CMakeFiles/vibeOS.dir/src/interface.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/interface.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/iohandler.c" "CMakeFiles/vibeOS.dir/src/iohandler.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/iohandler.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/kernel.c" "CMakeFiles/vibeOS.dir/src/kernel.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/kernel.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/main.c" "CMakeFiles/vibeOS.dir/src/main.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/main.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/memory.c" "CMakeFiles/vibeOS.dir/src/memory.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/memory.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/process.c" "CMakeFiles/vibeOS.dir/src/process.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/process.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/program.c" "CMakeFiles/vibeOS.dir/src/program.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/program.c.o.d"
-  "/home/mariatomain/vibeOS_2/main_com_cor/src/semaphore.c" "CMakeFiles/vibeOS.dir/src/semaphore.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/semaphore.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/debug.c" "CMakeFiles/vibeOS.dir/src/debug.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/debug.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/instruction.c" "CMakeFiles/vibeOS.dir/src/instruction.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/instruction.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/interface.c" "CMakeFiles/vibeOS.dir/src/interface.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/interface.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/iohandler.c" "CMakeFiles/vibeOS.dir/src/iohandler.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/iohandler.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/kernel.c" "CMakeFiles/vibeOS.dir/src/kernel.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/kernel.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/main.c" "CMakeFiles/vibeOS.dir/src/main.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/main.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/memory.c" "CMakeFiles/vibeOS.dir/src/memory.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/memory.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/process.c" "CMakeFiles/vibeOS.dir/src/process.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/process.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/program.c" "CMakeFiles/vibeOS.dir/src/program.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/program.c.o.d"
+  "/home/midori_torres/vibeOSmain/vibeOS/src/semaphore.c" "CMakeFiles/vibeOS.dir/src/semaphore.c.o" "gcc" "CMakeFiles/vibeOS.dir/src/semaphore.c.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

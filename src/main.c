@@ -35,7 +35,7 @@ int main() {
       strcat(aux, input);
       Program *prog1 = read_program(aux);
       if (prog1 == NULL) {
-        //! print_win(janela_OUTPUT, "Failed to read program");
+        update_dados(janela_OUTPUT, "Failed to read program.");
         break;
       } else {
         Process *p1 = create_process_from_program(prog1);

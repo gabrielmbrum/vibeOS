@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mariatomain/vibeOS_2/main_com_cor
+CMAKE_SOURCE_DIR = /home/midori_torres/vibeOSmain/vibeOS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mariatomain/vibeOS_2/main_com_cor/build
+CMAKE_BINARY_DIR = /home/midori_torres/vibeOSmain/vibeOS/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/vibeOS.dir/clean
 CMakeFiles/vibeOS.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vibeOS.dir/build.make CMakeFiles/vibeOS.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target vibeOS"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/midori_torres/vibeOSmain/vibeOS/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target vibeOS"
 .PHONY : CMakeFiles/vibeOS.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/vibeOS.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/midori_torres/vibeOSmain/vibeOS/build/CMakeFiles 11
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/vibeOS.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/midori_torres/vibeOSmain/vibeOS/build/CMakeFiles 0
 .PHONY : CMakeFiles/vibeOS.dir/rule
 
 # Convenience name for target.

@@ -1,7 +1,7 @@
 CMakeFiles/vibeOS.dir/src/interface.c.o: \
- /home/mariatomain/vibeOS_2/main_com_cor/src/interface.c \
+ /home/midori_torres/vibeOSmain/vibeOS/src/interface.c \
  /usr/include/stdc-predef.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/interface.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/interface.h \
  /usr/include/curses.h /usr/include/ncurses_dll.h \
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -36,12 +36,12 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/kernel.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/process.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/memory.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/instruction.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/program.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/commons.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/kernel.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/process.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/memory.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/instruction.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/program.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/commons.h \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
@@ -72,8 +72,8 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/debug.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/semaphore.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/debug.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/semaphore.h \
  /usr/include/pthread.h /usr/include/sched.h \
  /usr/include/x86_64-linux-gnu/bits/sched.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_sched_param.h \
@@ -85,5 +85,5 @@ CMakeFiles/vibeOS.dir/src/interface.c.o: \
  /usr/include/x86_64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h \
  /usr/include/x86_64-linux-gnu/bits/pthread_stack_min.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/../include/interface.h \
- /home/mariatomain/vibeOS_2/main_com_cor/src/../include/iohandler.h
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/../include/interface.h \
+ /home/midori_torres/vibeOSmain/vibeOS/src/../include/iohandler.h

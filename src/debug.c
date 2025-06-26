@@ -3,14 +3,14 @@
 
 void print_bcp(Process **BCP) {
   if (*BCP == NULL) {
-    update_dados(janela_process,0,"BCP is empty.");
+    update_dados(janela_SCHEDULER, "BCP is empty.");
     return;
   }
 
-  update_dados(janela_process,0,"Process Control Block (BCP):");
+  //update_dados(janela_process, "Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      update_dados(janela_process,0,"[BCP] PID: %d, Name: %s, Page Counter: %d", 
+      update_dados(janela_SCHEDULER, "PID: %d Name: %s, Page Counter: %d", 
              (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].page_table->page_count);  
     }
   }
@@ -18,15 +18,15 @@ void print_bcp(Process **BCP) {
 
 void print_SCHEDULER(Process **BCP) {
   if (*BCP == NULL) {
-    update_dados(janela_process, 0,"BCP is empty.");
+    update_dados(janela_SCHEDULER, "BCP is empty.");
     return;
   }
 
-  update_dados(janela_process,0,"Process Control Block (BCP):");
+  //update_dados(janela_process, "Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
-      update_dados(janela_SCHEDULER,0,"[BCP] PID: %d, Name: %s, State: %d", (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state);
-      update_dados(janela_SCHEDULER, 0,"[BCP] Priority: %d, Counter RW: %d, Time-Slice: %d",(*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
+      update_dados(janela_SCHEDULER, "PID: %d Name: %s, State: %d", (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state);
+      update_dados(janela_SCHEDULER, "PID: %d Priority: %d, Counter RW: %d, Time-Slice: %d", (*BCP)[i].pid, (*BCP)[i].priority, (*BCP)[i].counter_rw, (*BCP)[i].slice_time);
     }
   }
 }
