@@ -6,7 +6,7 @@ void print_bcp(Process **BCP) {
     return;
   }
 
-  //update_dados(janela_SCHEDULER, 0, "Process Control Block (BCP):");
+  //update_dados(janela_process, "Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       update_dados(janela_SCHEDULER, 0, "PID: %d, Name: %s, Page Counter: %d. ", 
@@ -21,7 +21,7 @@ void print_SCHEDULER(Process **BCP) {
     return;
   }
 
-  //update_dados(janela_SCHEDULER, 0, "Process Control Block (BCP):");
+  //update_dados(janela_process, "Process Control Block (BCP):");
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if ((*BCP)[i].pid != EMPTY_BCP_ENTRY) {
       update_dados(janela_SCHEDULER,0,"PID: %d, Name: %s, State: %d.", (*BCP)[i].pid, (*BCP)[i].name, (*BCP)[i].state);

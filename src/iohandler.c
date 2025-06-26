@@ -152,7 +152,7 @@ void exec_request(IOQueue *queue){
             sleep(IO_Quantum);
             pthread_cond_signal(&queue->iocond);
             fclose(buffer);
-            //update_dados(janela_I_O, 0,"File closed");
+            //update_dados(janela_OUTPUT,"file closed");
         break;
         default:
         

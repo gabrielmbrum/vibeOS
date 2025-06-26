@@ -359,7 +359,6 @@ int processExecute(Process *process){
   // Verifica se o processo já terminou (PC >= total_instructions)
   if (process->pc.global_index >= total_instructions) {
     if (current_pt->missing_instructions) {
-      //update_dados(janela_OUTPUT, 0, "Process with name %s finished!",  process->name);
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
       Program *program = read_program(program_name);
@@ -374,7 +373,6 @@ int processExecute(Process *process){
       process->pc.last_instruction = 0; // Reseta a última instrução
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
-      //update_dados(janela_OUTPUT, 0, "Process with name %s finished!",  process->name);
       change_process_state(&process, TERMINATED);
       return TERMINATED;
     }
@@ -420,7 +418,7 @@ int processExecute(Process *process){
     if (current_pt->missing_instructions) {
       char program_name[MAX_OUTPUT_STR] = "../programs/";
       strcat(program_name, process->name);
-      //update_dados(janela_OUTPUT, 0, "Process with name %s finished!",  process->name);
+
       Program *program = read_program(program_name);
       if (program == NULL) {
         update_dados(janela_memory, 3, "Failed to read program with the rest of instructions!");
@@ -457,7 +455,6 @@ void *io_thread_func() {
 
     free(disk->current_request);
     UNLOCK_BCP();
-    //update_dados(janela_SCHEDULER,"Processo PID %d liberado", req->process->pid);
   }
   return NULL;
 }

@@ -52,7 +52,7 @@ char* get_input(char *input){
    refresh();
      return NULL;
   }else{
-   update_dados(janela_OUTPUT, 0,"Valid Input");
+   update_dados(janela_OUTPUT,0, "Valid Input");
    refresh();
      return input;
   }
@@ -112,7 +112,7 @@ WINDOW *delete_window(WINDOW  *local_win){
 }
 
 WINDOW *janela_intro(){
-  int lin, col, si;
+int lin, col, si;
   initscr();	
   if(has_colors() == FALSE){
     si = 1;
@@ -122,7 +122,6 @@ WINDOW *janela_intro(){
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_BLACK, COLOR_YELLOW);
     init_pair(3, COLOR_BLACK, COLOR_RED);
-    init_pair(0, COLOR_WHITE, COLOR_BLACK);
   }
   getmaxyx(stdscr, lin, col);
   curs_set(0);
@@ -181,6 +180,7 @@ WINDOW *init_menu_components(WINDOW *menu){
   return menu;
 }
 
+//testing
 char *update_dados(WINDOW *local, int par, char *message, ...){
   va_list args;
   pthread_mutex_lock(&dados_mutex);  

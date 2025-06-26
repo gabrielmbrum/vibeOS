@@ -78,7 +78,7 @@ void sem_P(Process *process, char sem_name) {
         }
 
         sem->blocked_pids[sem->blocked_count++] = process->pid;
-        update_dados(janela_process, 3, "PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
+        update_dados(janela_process,3, "PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d).", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
         pthread_mutex_unlock(&sem->mutex);
         context_switch(process, "SEM_BLOCK");
         return;
