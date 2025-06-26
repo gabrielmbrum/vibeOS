@@ -46,6 +46,7 @@ int check_input(char *input){
 
 char* get_input(char *input){
   getstr(input);
+
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
    update_dados(janela_OUTPUT,0,"Invalid input. Try again");
    refresh();
@@ -167,7 +168,7 @@ WINDOW *init_menu_components(WINDOW *menu){
   }else{
     men = coluna/3;
     int alt = linha/4;
-    mvwprintw(menu, alt, men, "%s", " ___   _____       ____  ____ ");
+    mvwprintw(menu, alt, men, "%s", "   ___   _____       ____  ____ ");
     mvwprintw(menu, alt+1, men, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
     mvwprintw(menu, alt+2, men, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
     mvwprintw(menu, alt+3, men, "%s", " |___/_/_.__/\\__/\\____/___/ ");
@@ -213,34 +214,20 @@ void check_responsivity(int men, int lin, char *input){
 
 WINDOW *janela_exit(){
   initscr();	
-  int lin, col, si;
-  if(has_colors() == FALSE){
-    si = 1;
-  }else{ 
-    start_color();
-    use_default_colors();
-    //init_color(COLOR_GREEN, 69, 255, 133);
-    init_pair(1, COLOR_BLACK, COLOR_GREEN);
-    init_pair(2, COLOR_BLACK, COLOR_YELLOW);
-    init_pair(3, COLOR_BLACK, COLOR_RED);
-    init_pair(0, COLOR_WHITE, COLOR_BLACK);
-  }
+  int lin, col;
   getmaxyx(stdscr, lin, col);
   curs_set(0);
   noecho();
-  WINDOW *exit = newwin(10, 60, ((lin/2) - 5), ((col/2) - 30));
+  WINDOW *exit = newwin(10, 100, ((lin/2) - 5), ((col/2) - 5)-40);
   refresh();
 
   wborder (exit, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-  mvwprintw(exit, 0, 3, "%s", "         _  _             ____    _____           _/)");
-  mvwprintw(exit, 1, 3, "%s", "        (_)| |           / __ \\  / ____|       .-(_(=:");
-  mvwprintw(exit, 2, 3, "%s", " __   __ _ | |__    ___ | |  | || (___     |\\ |    \\)");
-  mvwprintw(exit, 3, 3, "%s", " \\ \\ / /| || '_ \\  / _ \\| |  | | \\___ \\    \\ ||");
-  mvwprintw(exit, 4, 3, "%s", "  \\ V / | || |_) ||  __/| |__| | ____) |    \\||");
-  mvwprintw(exit, 5, 3, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/      \\| ");
-  mvwprintw(exit, 6, 7, "%s", "                                          |");
-  mvwprintw(exit, 7, 7, "%s", "   Aperte qualquer tecla para sair        |");
-  if (si == 1) mvwprintw(exit, 9, 10, "%s", "Seu terminal não suporta cores T.T");
+  mvwprintw(exit, 0, 3, "%s", " __   _____  _   _   _  _____ _    _    ___ ___    _____ _  _ ___  __   _____ ___ ___ ");
+  mvwprintw(exit, 1, 3, "%s", " \\ \\ / / _ \\| | | | | |/ /_ _| |  | |  | __|   \\  |_   _| || | __| \\ \\ / /_ _| _ ) __|");
+  mvwprintw(exit, 2, 3, "%s", "  \\ V / (_) | |_| | | ' < | || |__| |__| _|| |) |   | | | __ | _|   \\ V / | || _ \\ _| ");
+  mvwprintw(exit, 3, 3, "%s", "   |_| \\___/ \\___/  |_|\\_\\___|____|____|___|___/    |_| |_||_|___|   \\_/ |___|___/___|");
+  mvwprintw(exit, 4, 3, "%s", "                                                                                      ");
+  mvwprintw(exit, 7, 7, "%s", "                         Aperte qualquer tecla para sair                              ");
   wrefresh(exit);
 
   getch();
@@ -253,6 +240,7 @@ WINDOW *janela_exit(){
 }
 
 void shutdown_interface(){
+  usleep(200);
   clear_main_windows();
   janela_exit();
   clear();
