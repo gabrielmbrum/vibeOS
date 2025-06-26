@@ -206,3 +206,13 @@ void *update_main_window() {
     pthread_mutex_unlock(&dados_mutex);    
   }
 }
+
+void check_responsivity(int men, int lin, char *input){
+    if(men <= 17){
+    clear_space(6, 33, strlen(input));
+    move(6, 33);
+    }else{
+    clear_space((lin/4) + 5, 33, strlen(input));
+    move((lin/4) + 5, 33);
+    }
+}

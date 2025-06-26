@@ -20,6 +20,7 @@
 #define DEF_WIN_MAX_PRINTS_BIG 8
 #define DEF_WIN_MAX_PRINTS_BIGGER 14
 #define SYNT 11
+#define PROGRAMS "../programs/"
 
 // Including external windows for referencing 
 extern WINDOW  *janela_menu;
@@ -43,5 +44,6 @@ WINDOW *janela_intro();
 WINDOW *close_window();
 void *update_main_window() ;
 char *update_dados(WINDOW *local, int par, char *message, ...);
+void check_responsivity(int men, int lin, char*input);
 
 #endif
