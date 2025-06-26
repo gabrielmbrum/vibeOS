@@ -7,7 +7,6 @@ Semaphore semaphores[MAX_SEMAPHORES];
 int total_semaphores = 0;
 
 void init_semaphores() {
-    //printf("Initializing semaphores...\n");
     total_semaphores = 0;  // Reseta
 
     for (int i = 0; i < MAX_SEMAPHORES; i++) {
@@ -50,8 +49,7 @@ Semaphore* find_or_create_semaphore(char name) {
         sem->value = 1;  // Start unlocked
         sem->blocked_count = 0;
         total_semaphores++;
-        //printf("Created new semaphore '%c' at slot %d\n", name, total_semaphores-1);
-        return sem;
+           return sem;
     }
     
     return NULL;
@@ -78,26 +76,9 @@ void sem_P(Process *process, char sem_name) {
             return; 
         }
 
-        // Bloqueia o processo s context_switch
-        // for (int i = 0; i < kernel->process_amount; i++) {
-        //     if (kernel->BCP[i].pid == process->pid) {
-        //         kernel->BCP[i].state = WAITING;
-        //         break;
-        //     }
-        // }
-
         sem->blocked_pids[sem->blocked_count++] = process->pid;
-
-        //attron(COLOR_PAIR(1));
-       //attron(janela_process, COLOR_PAIR(3));
-        update_dados(janela_process, "PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", 3, process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
-        //attroff(COLOR_PAIR(1));
-        //wattron(janela_process, COLOR_PAIR(3));
-
-        //update_dados(janela_process,"PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)\n", process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
-
+        update_dados(janela_process, "PID: %d blocked by semaphore '%c' (val=%d, blocked=%d/%d)", 3, process->pid, sem_name, sem->value, sem->blocked_count, MAX_BLOCKED_PROCESSES);
         pthread_mutex_unlock(&sem->mutex);
-        
         context_switch(process, "SEM_BLOCK");
         return;
     }
@@ -126,15 +107,8 @@ void sem_V(Process *process, char sem_name) {
         for (int i = 0; i < sem->blocked_count - 1; i++)
             sem->blocked_pids[i] = sem->blocked_pids[i + 1];
         sem->blocked_count--;
-
-        //attron(COLOR_PAIR(1));
-        //wattron(janela_process, COLOR_PAIR(2));
-        update_dados(janela_process, "PID: %d unblocked by semaphore %c, restam %d bloqueados\n", 2, unblocked_pid, sem_name, sem->blocked_count);
-        //attroff(COLOR_PAIR(1));
-        //wattroff(janela_process, COLOR_PAIR(2));
-
+        update_dados(janela_process, "PID: %d unblocked by semaphore %c, restam %d bloqueados", 2, unblocked_pid, sem_name, sem->blocked_count);
         pthread_mutex_unlock(&sem->mutex);
-
         context_switch(process, "SEM_UNBLOCK");
         return;
 

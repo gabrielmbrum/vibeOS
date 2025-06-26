@@ -35,14 +35,11 @@ int main() {
       strcat(aux, input);
       Program *prog1 = read_program(aux);
       if (prog1 == NULL) {
-        print_win(janela_OUTPUT, "Failed to read program");
+        //! print_win(janela_OUTPUT, "Failed to read program");
         break;
       } else {
         Process *p1 = create_process_from_program(prog1);
         add_process_to_BCP(p1);
-        /* print_win_args(janela_process,"PID: %d, Name: %s, Priority: %d,
-           Segment_id: %d, PC: %d, STATE: %d", p1->pid, p1->name, p1->priority,
-           p1->segment_id, p1->pc, p1->state);  */
       }
     }
   }

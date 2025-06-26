@@ -139,26 +139,22 @@ void exec_request(IOQueue *queue){
         case WRITE:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,  request->arg,SEEK_SET);
-            //fprintf(buffer, "%c", 'L');
-            //printf("%s %d\n", "Escrita da trilha", request->arg);
-            //print_win_args(janela_I_O,"Escrita da trilha %d.", request->arg);
+            //! update_dados(janela_I_O,"Escrita da trilha %d.", request->arg);
             sleep(IO_Quantum);
             fclose(buffer);
-            //puts("Arquivo fechado com sucesso!");
             //print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
         break;
         case READ:
             buffer = fopen("../src/buffer.txt", "r+");
             fseek(buffer,request->arg,SEEK_SET);
-            ////print_win_args(janela_OUTPUT,"Disk Current Trail: %d.", disk->current_trail);
+            //! update_dados(janela_OUTPUT,"Disk Current Trail: %d.", disk->current_trail);
             char data;
             fread(&data, 1, 1, buffer);
-            //printf("Leitura da trilha %d: %c\n", request->arg, data);
-            //print_win_args(janela_I_O,"Leitura da trilha %d.", request->arg, data);            
+            //! update_dados(janela_I_O,"Leitura da trilha %d.", request->arg, data);            
             sleep(IO_Quantum);
             pthread_cond_signal(&queue->iocond);
             fclose(buffer);
-            //print_win(janela_OUTPUT,"Arquivo fechado com sucesso!");
+            //! update_dados(janela_OUTPUT,"Arquivo fechado com sucesso!");
         break;
         default:
         

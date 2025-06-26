@@ -24,13 +24,6 @@ void clear_space(int y, int x,int size){
   }
 }
 
-void print_win(WINDOW *local_window, char *input){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s", input);
-    wrefresh(local_window);
-} //! DEPRICIATED
-
 void print_win_args(WINDOW *local_window, char*message, ...) {
   char buffer[MAX_OUTPUT_STR] = " ";
   va_list args;

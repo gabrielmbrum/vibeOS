@@ -19,8 +19,4 @@ typedef struct _instruction {
 
 Instruction* instruction_builder(const char *name, const char *runtime_str);
 
-// void print_instruction(const Instruction instruction);
-
-// void print_instructions(const Instruction *instructions, int total_instructions);
-
 #endif

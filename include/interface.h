@@ -32,35 +32,16 @@ extern WINDOW  *janela_PRINT;
 
 // input operations
 void clear_space(int y, int x,int size);
-
-//input operations
 char* get_input(char *input,WINDOW*out);
-
 int check_input(char *input);
-
-//* New print function - more stable, use in any file to print strings only
-void print_win(WINDOW *local_window, char*input);
-
-//* New print function - supports arguments, use in any file to print strings with variables
 void print_win_args(WINDOW *local_window, char*message, ...);
-
-
-// window operations
 void init_interface();
-
 WINDOW *create_newwin(int height, int width, int starty, int startx, char *title);
-
 WINDOW *delete_window(WINDOW *local_win);
-
 WINDOW *init_menu_components(WINDOW *menu);
-
 WINDOW *janela_intro();
-
 WINDOW *close_window();
-
-//coloquei
 void *update_main_window() ;
-
-char *update_dados(WINDOW *local, char *message, int *par, ...);
+char *update_dados(WINDOW *local, char *message, int *par, ...); //! change
 
 #endif
