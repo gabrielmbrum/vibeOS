@@ -6,7 +6,7 @@
 Instruction* instruction_builder(const char *name, const char *runtime_str) {
   Instruction *instruction = malloc(sizeof(Instruction));
   if (instruction == NULL) {
-    update_dados(janela_memory, 3, "Memory allocation failed");
+    update_dados(janela_memory, "Memory allocation failed.");
     return NULL;
   }
   

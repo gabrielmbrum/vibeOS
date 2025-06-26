@@ -9,7 +9,7 @@
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    update_dados(janela_OUTPUT, 3, "Error opening file: %s", filename);
+    update_dados(janela_OUTPUT, "Error opening file: %s.", filename);
     return NULL;
   }
 

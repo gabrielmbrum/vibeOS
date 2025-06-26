@@ -43,7 +43,7 @@ WINDOW *init_menu_components(WINDOW *menu);
 WINDOW *janela_intro();
 WINDOW *close_window();
 void *update_main_window() ;
-char *update_dados(WINDOW *local,int par, char *message, ...);
+char *update_dados(WINDOW *local, char *message, ...);
 void check_responsivity(int men, int lin, char*input);
 void shutdown_interface();
 WINDOW *janela_exit();
