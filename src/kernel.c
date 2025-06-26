@@ -28,7 +28,7 @@ void *printer_thread_func(){
       IORequest *print_request = dequeue(kernel->printer_queue);
       for(int i=0;i<print_request->arg;i++){
         if(i%10 == 0){
-          update_dados(janela_PRINT, "PID %d using printer...", print_request->process->pid);
+          update_dados(janela_PRINT, "PID (%d) using printer.", print_request->process->pid);
         }        
       }
     }
@@ -150,8 +150,9 @@ int add_process_to_BCP(Process *process) {
       free(process);
       kernel->process_amount++;
       pthread_cond_signal(&kernel->bcp_cond);
+      memory_status();
       UNLOCK_BCP();
-      //print_bcp(&kernel->BCP);
+      print_bcp(&kernel->BCP);
       if (kernel->process_amount == 1 && !kernel->scheduler_running)
         start_scheduler();
       return SUCCESS;
@@ -235,6 +236,7 @@ int rmv_process_of_BCP(int removing_pid) {
     // If PID present in BCP, get the index and remove;
     processFinish(&kernel->BCP[idx]);
     kernel->process_amount--;
+    memory_status();
     print_bcp(&kernel->BCP);
     return SUCCESS;
   }
@@ -271,7 +273,7 @@ void context_switch(Process *next, char *arg){
     change_process_state(&running_process, READY);
   }
   else if (strcmp(arg, "TERMINATED") == 0) {
-    update_dados(janela_SCHEDULER, "Process with PID: %d finished execution...", running_process->pid);
+    update_dados(janela_SCHEDULER, "PID %d finished execution.", running_process->pid);
     change_process_state(&running_process, TERMINATED);
     rmv_process_of_BCP(running_process->pid);
 
@@ -303,7 +305,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       request = make_request(process, opcode, arg);
       enqueue(kernel->queue_requests,request);
       pthread_cond_signal(&kernel->queue_requests->iocond);
-      update_dados(janela_process, "PID: %d request %s operation.", process->pid,opcode_to_string(opcode));
+      update_dados(janela_process, "PID %d request %s.", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     }
@@ -312,7 +314,7 @@ int exec_Instruction(Process *process, Opcode opcode, int arg){
       print_request = make_request(process, opcode, arg);
       enqueue(kernel->printer_queue, print_request);
       pthread_cond_signal(&kernel->printer_queue->iocond);
-      update_dados(janela_process, "PID: %d request %s operation.", process->pid,opcode_to_string(opcode));
+      update_dados(janela_process, "PID %d request %s.", process->pid,opcode_to_string(opcode));
       return IOException;
       break;
     case EXEC:
@@ -371,6 +373,7 @@ int processExecute(Process *process){
       process->pc.global_index = 0; // Reseta o índice global do PC
       process->pc.last_page = 0; // Reseta a última página
       process->pc.last_instruction = 0; // Reseta a última instrução
+      memory_status();
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
       change_process_state(&process, TERMINATED);
@@ -429,6 +432,7 @@ int processExecute(Process *process){
       process->pc.global_index = 0; // Reseta o índice global do PC
       process->pc.last_page = 0; // Reseta a última página
       process->pc.last_instruction = 0; // Reseta a última instrução
+      memory_status();
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
       change_process_state(&process, TERMINATED);

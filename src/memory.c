@@ -18,7 +18,6 @@ int sum_of_exec_time(Instruction *instructions, int instructions_count) {
       sum += instructions[i].value;
     }
   }
-  update_dados(janela_memory, "Sum time used: %d.", sum);
   return sum;
 }
 
@@ -133,4 +132,8 @@ void free_page_table(PageTable **page_table) {
   }
   free((*page_table)->pages);
   free(*page_table);
+}
+
+void memory_status() {
+  update_dados(janela_memory,"Pages allocated: %d page(s)\n Pages available: %d\n Memory Ocupation: %.2f%% [%d/%d]", page_counter , MEM_LENGTH - OS_MEMORY_SIZE - page_counter*PAGE_SIZE, ((float)page_counter*PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) * 100, page_counter*PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
 }

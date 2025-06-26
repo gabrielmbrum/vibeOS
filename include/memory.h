@@ -62,5 +62,6 @@ void free_page_table(PageTable **page_table);
   * Show the memory status, showin the total of pages allocated comparing to all the space available.
 
 */
+void memory_status();
 
 #endif 
