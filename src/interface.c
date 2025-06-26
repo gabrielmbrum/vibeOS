@@ -44,14 +44,15 @@ int check_input(char *input){
 return 0; 
 }
 
-char* get_input(char *input,WINDOW*out){
+char* get_input(char *input){
   getstr(input);
+
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   update_dados(out, 0, "Invalid input. Try again");
+   update_dados(janela_OUTPUT, 0, "Invalid input. Try again.");
    refresh();
      return NULL;
   }else{
-   update_dados(out, 0, "Valid Input");
+   update_dados(janela_OUTPUT, 0, "Valid Input.");
    refresh();
      return input;
   }
@@ -199,4 +200,70 @@ void *update_main_window() {
     print_win_args(selected_window,dados);
     pthread_mutex_unlock(&dados_mutex);    
   }
+}
+
+void check_responsivity(int men, int lin, char *input){
+    if(men <= 17){
+    clear_space(6, 33, strlen(input));
+    move(6, 33);
+    }else{
+    clear_space((lin/4) + 5, 33, strlen(input));
+    move((lin/4) + 5, 33);
+    }
+}
+
+WINDOW *janela_exit(){
+  initscr();	
+  int lin, col;
+  getmaxyx(stdscr, lin, col);
+  curs_set(0);
+  noecho();
+  WINDOW *exit = newwin(10, 100, ((lin/2) - 5), ((col/2) - 5)-40);
+  refresh();
+
+  wborder (exit, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+  mvwprintw(exit, 0, 3, "%s", " __   _____  _   _   _  _____ _    _    ___ ___    _____ _  _ ___  __   _____ ___ ___ ");
+  mvwprintw(exit, 1, 3, "%s", " \\ \\ / / _ \\| | | | | |/ /_ _| |  | |  | __|   \\  |_   _| || | __| \\ \\ / /_ _| _ ) __|");
+  mvwprintw(exit, 2, 3, "%s", "  \\ V / (_) | |_| | | ' < | || |__| |__| _|| |) |   | | | __ | _|   \\ V / | || _ \\ _| ");
+  mvwprintw(exit, 3, 3, "%s", "   |_| \\___/ \\___/  |_|\\_\\___|____|____|___|___/    |_| |_||_|___|   \\_/ |___|___/___|");
+  mvwprintw(exit, 4, 3, "%s", "                                                                                      ");
+  mvwprintw(exit, 7, 7, "%s", "                         Aperte qualquer tecla para sair                              ");
+  wrefresh(exit);
+
+  getch();
+  werase(exit);
+  wrefresh(exit);
+  delete_window(exit);
+
+  return exit;
+}
+
+void shutdown_interface(){
+  usleep(200);
+  clear_main_windows();
+  janela_exit();
+  clear();
+  refresh();
+  endwin();
+}
+
+void clear_main_windows(){
+  clear();
+  refresh();
+  wclear(janela_I_O);
+  wclear(janela_memory);
+  wclear(janela_menu);
+  wclear(janela_OUTPUT);
+  wclear(janela_PRINT);
+  wclear(janela_process);
+  wclear(janela_SCHEDULER);
+  wrefresh(janela_I_O);
+  wrefresh(janela_memory);
+  wrefresh(janela_menu);
+  wrefresh(janela_OUTPUT);
+  wrefresh(janela_PRINT);
+  wrefresh(janela_process);
+  wrefresh(janela_SCHEDULER);
+  endwin();
+
 }

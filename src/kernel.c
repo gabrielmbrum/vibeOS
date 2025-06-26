@@ -150,7 +150,7 @@ int add_process_to_BCP(Process *process) {
       kernel->process_amount++;
       pthread_cond_signal(&kernel->bcp_cond);
       UNLOCK_BCP();
-      //print_bcp(&kernel->BCP);
+      print_bcp(&kernel->BCP);
       if (kernel->process_amount == 1 && !kernel->scheduler_running)
         start_scheduler();
       return SUCCESS;

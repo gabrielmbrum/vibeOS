@@ -22,20 +22,13 @@ int main() {
 
   // input loop
   while (strcmp(input, "q")) {
-    if(men <= 17){
-    clear_space(6, 33, strlen(input));
-    move(6, 33);
-    }else{
-    clear_space((lin/4) + 5, 33, strlen(input));
-    move((lin/4) + 5, 33);
-    }
-    
-    if (get_input(input, janela_OUTPUT) != NULL) {
-      char aux[MAX_OUTPUT_STR] = "../programs/";
+    check_responsivity(men,lin,input);
+    if (get_input(input) != NULL) {
+      char aux[MAX_OUTPUT_STR] = PROGRAMS;
       strcat(aux, input);
       Program *prog1 = read_program(aux);
       if (prog1 == NULL) {
-        update_dados(janela_OUTPUT, 3, "Failed to read program");
+        update_dados(janela_OUTPUT, 3, "Failed to read program.");
         break;
       } else {
         Process *p1 = create_process_from_program(prog1);
@@ -43,17 +36,10 @@ int main() {
       }
     }
   }
-   if(men <= 17){
-    clear_space(6, 33, strlen(input));
-    move(6, 33);
-    }else{
-    clear_space((lin/4) + 5, 33, strlen(input));
-    move((lin/4) + 5, 33);
-    }
-
+  check_responsivity(men,lin,input);
   pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();
-  endwin();
-
+  free(input);
+  shutdown_interface();
   return 0;
 }
