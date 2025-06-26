@@ -13,23 +13,12 @@ WINDOW *selected_window;
 
 char dados[MAX_OUTPUT_STR];
 
-int PAR = 1;
-//init_color(COLOR_GREEN, 100, 700, 100);
-//init_pair(PAR, COLOR_GREEN, COLOR_BLACK);
-
 // support functions
 void clear_space(int y, int x,int size){
   for (int i = 0; i < size; i++) {
     mvaddch(y, x + i, ' ');
   }
 }
-
-void print_win(WINDOW *local_window, char *input){
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s", input);
-    wrefresh(local_window);
-} //! DEPRICIATED
 
 void print_win_args(WINDOW *local_window, char*message, ...) {
   char buffer[MAX_OUTPUT_STR] = " ";
@@ -58,11 +47,11 @@ return 0;
 char* get_input(char *input,WINDOW*out){
   getstr(input);
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   update_dados(out,"Invalid input. Try again", NULL);
+   update_dados(out, 0, "Invalid input. Try again");
    refresh();
      return NULL;
   }else{
-   update_dados(out,"Valid Input", NULL);
+   update_dados(out, 0, "Valid Input");
    refresh();
      return input;
   }
@@ -80,12 +69,12 @@ void init_interface(){
     janela_menu = create_newwin(col, largura, 0, 0," MENU ");
     janela_menu = init_menu_components(janela_menu);
     janela_OUTPUT = create_newwin(altura, largura, col, 0," OUTPUT ");
-    janela_SCHEDULER = create_newwin(lin - (col + altura), largura, (altura + col), 0," SCHEDULER ");
+    janela_process = create_newwin(lin - (col + altura), largura, (altura + col), 0," PROCESS ");
 
     janela_memory = create_newwin(altura, largura, 0, largura," MEMORY ");
     janela_I_O = create_newwin(altura, largura, altura, largura," I/O ");
     janela_PRINT = create_newwin(altura, largura, (altura*2), largura, " PRINTER ");
-    janela_process = create_newwin(lin - (altura*3), largura, (altura*3), largura, " PROCESS ");
+    janela_SCHEDULER = create_newwin(lin - (altura*3), largura, (altura*3), largura, " SCHEDULER ");
 
     pthread_create(&interface_thread, NULL, (void *) update_main_window, NULL);
 
@@ -129,7 +118,6 @@ WINDOW *janela_intro(){
   }else{ 
     start_color();
     use_default_colors();
-    //init_color(COLOR_GREEN, 69, 255, 133);
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_BLACK, COLOR_YELLOW);
     init_pair(3, COLOR_BLACK, COLOR_RED);
@@ -192,7 +180,7 @@ WINDOW *init_menu_components(WINDOW *menu){
 }
 
 //testing
-char *update_dados(WINDOW *local, char *message, int *par, ...){
+char *update_dados(WINDOW *local, int par, char *message, ...){
   va_list args;
   pthread_mutex_lock(&dados_mutex);  
     wattrset(local, COLOR_PAIR(par)); 

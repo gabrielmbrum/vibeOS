@@ -9,15 +9,14 @@
 Program* read_program(const char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    //fprintf(stderr, "Error opening file: %s\n", filename);
+    update_dados(janela_OUTPUT, 3, "Error opening file: %s", filename);
     return NULL;
   }
 
   Program *program = malloc(sizeof(Program));
 
   char line[BUFFER_READER_SIZE];
-  //puts("reading header....");
-  // reading header
+
   fgets(line, BUFFER_READER_SIZE, file);
   line[strcspn(line, "\n")] = '\0'; // remove newline character
   
@@ -36,7 +35,6 @@ Program* read_program(const char *filename) {
   program->header.segment_size = atoi(line);
   
   fgets(line, BUFFER_READER_SIZE, file);
-  //printf("\n\tsemaphores line: %s", line);
   line[strcspn(line, "\n")] = '\0';
   program->header.semaphores = malloc(sizeof(char) * (strlen(line) + 1));
   strcpy(program->header.semaphores, "");
@@ -44,16 +42,11 @@ Program* read_program(const char *filename) {
     if (line[i] != ' ') {
       char *aux = malloc(sizeof(char) * 2); aux[0] = line[i]; aux[1] = '\0';
       strcat(program->header.semaphores, aux);
-      //printf("\n\t\tsemaphore list in char %d -> sem: %s | aux: %s\n", i, program->header.semaphores, aux);
     }
   }
-  //printf("semaphores: %s[FIM]\n", program->header.semaphores);
-  //puts("header readed :>");
 
   fgets(line, BUFFER_READER_SIZE, file); //reading the empty line between the header and instructions
 
-  //puts("reading instructions....");
-  //printf("reading instructions of process %s\n", program->header.name);
   // reading instructions
   program->instructions = malloc(sizeof(Instruction) * MAX_INSTRUCTIONS);
   int instruction_count = 0;
@@ -68,7 +61,6 @@ Program* read_program(const char *filename) {
         break;
       }
       name[i] = line[i];
-      //printf("name[%d]: %c ", i, name[i]);
     }
     name[i] = '\0';
 
@@ -78,35 +70,29 @@ Program* read_program(const char *filename) {
       runtime_str[j] = line[i + j + 1];
     }
     runtime_str[j] = '\0';    
-    // printf("\n\tsizeofs: line(%d) %s, name(%d) %s, runtime_str(%d) %s\n", (int) strlen(line), line, (int) strlen(name), name, (int) strlen(runtime_str), runtime_str);
-    // printf("\n\n\t[instruction %d] name:%s & value: %s\n\n", instruction_count, name, runtime_str);
-
     Instruction *instruction = instruction_builder(name, runtime_str);
     program->instructions[instruction_count] = *instruction;
-    // print_instruction(program->instructions[instruction_count]);
     instruction_count++;
 
     free(name);
     free(runtime_str);
     free(instruction);
   }
-  //printf("instructions cont: %d\n", instruction_count);
+
   program->instructions_count = instruction_count;
-  //puts("instructions readed :>");
 
   fclose(file);
 
   return program;
 }
 
-void print_program(Program *program) {
+/* void print_program(Program *program) {
   if (program == NULL) {
-      printf("NULL program\n");
+    update_dados(janela_OUTPUT, 3, "NULL program!");
       return;
   }
 
   // Print header information
-  /* 
   print_win(janela_process,"--------------------------------------------------");
   print_win_args(janela_process,"Printing program: %s", program->header.name);
   print_win_args(janela_process,"Segment ID: %d", program->header.segment_id);
@@ -119,7 +105,7 @@ void print_program(Program *program) {
   print_win(janela_process,"Instructions:");
   //print_instructions(program->instructions, program->instructions_count);
   print_win(janela_process,"--------------------------------------------------");
- */}
+ } */
 
 void free_program(Program *program) {
   if (program == NULL) {
