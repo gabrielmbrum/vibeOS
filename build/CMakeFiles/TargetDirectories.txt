@@ -1,0 +1,3 @@
+/home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles/vibeOS.dir
+/home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles/edit_cache.dir
+/home/mariatomain/vibeOS_2/main_com_cor/build/CMakeFiles/rebuild_cache.dir
