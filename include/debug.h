@@ -14,6 +14,7 @@ void print_process(Process *proc);
 void print_instruction(Instruction inst);
 //void print_instructions(Instruction *instructions, int total_instructions);
 void print_all_semaphores();
+const char* process_state_to_string(ProcessState state);
 
 #endif
 
