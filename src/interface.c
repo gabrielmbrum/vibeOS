@@ -242,7 +242,7 @@ WINDOW *janela_exit(){
   mvwprintw(exit, 4, 3, "%s", "  \\ V / | || |_) ||  __/| |__| | ____) |    \\||");
   mvwprintw(exit, 5, 3, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/      \\| ");
   mvwprintw(exit, 6, 7, "%s", "                                          |");
-  mvwprintw(exit, 7, 7, "%s", "   Aperte qualquer tecla para sair       |");
+  mvwprintw(exit, 7, 7, "%s", "   Aperte qualquer tecla para sair        |");
   if (si == 1) mvwprintw(exit, 9, 10, "%s", "Seu terminal não suporta cores T.T");
   wrefresh(exit);
 

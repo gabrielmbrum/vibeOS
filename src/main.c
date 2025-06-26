@@ -39,6 +39,7 @@ int main() {
   check_responsivity(men,lin,input);
   pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();
+  free(input);
   shutdown_interface();
   return 0;
 }
