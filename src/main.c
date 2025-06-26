@@ -23,7 +23,7 @@ int main() {
   // input loop
   while (strcmp(input, "q")) {
     check_responsivity(men,lin,input);
-    if (get_input(input, janela_OUTPUT) != NULL) {
+    if (get_input(input) != NULL) {
       char aux[MAX_OUTPUT_STR] = PROGRAMS;
       strcat(aux, input);
       Program *prog1 = read_program(aux);
@@ -37,10 +37,8 @@ int main() {
     }
   }
   check_responsivity(men,lin,input);
-
   pthread_join(kernel->input_thread, NULL);
   shutdown_Kernel();
-  endwin();
-
+  shutdown_interface();
   return 0;
 }
