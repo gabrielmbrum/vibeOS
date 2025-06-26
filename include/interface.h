@@ -20,6 +20,7 @@
 #define DEF_WIN_MAX_PRINTS_BIG 8
 #define DEF_WIN_MAX_PRINTS_BIGGER 14
 #define SYNT 11
+#define PROGRAMS "../programs/"
 
 // Including external windows for referencing 
 extern WINDOW  *janela_menu;
@@ -32,7 +33,7 @@ extern WINDOW  *janela_PRINT;
 
 // input operations
 void clear_space(int y, int x,int size);
-char* get_input(char *input,WINDOW*out);
+char* get_input(char *input);
 int check_input(char *input);
 void print_win_args(WINDOW *local_window, char*message, ...);
 void init_interface();
@@ -43,5 +44,9 @@ WINDOW *janela_intro();
 WINDOW *close_window();
 void *update_main_window() ;
 char *update_dados(WINDOW *local, char *message, ...);
+void check_responsivity(int men, int lin, char*input);
+void shutdown_interface();
+WINDOW *janela_exit();
+void clear_main_windows();
 
 #endif

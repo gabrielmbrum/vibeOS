@@ -14,8 +14,6 @@ WINDOW *selected_window;
 char dados[MAX_OUTPUT_STR];
 
 int PAR = 1;
-//init_color(COLOR_GREEN, 100, 700, 100);
-//init_pair(PAR, COLOR_GREEN, COLOR_BLACK);
 
 // support functions
 void clear_space(int y, int x,int size){
@@ -30,10 +28,10 @@ void print_win_args(WINDOW *local_window, char*message, ...) {
 
   va_start(args, message); // initialize args after 'message'
   vsnprintf(buffer, MAX_OUTPUT_STR, message, args);
-    wmove(local_window,1,0);
-    winsertln(local_window);
-    mvwprintw(local_window,1,1,"%s",buffer);
-    wrefresh(local_window);
+  wmove(local_window,1,0);
+  winsertln(local_window);
+  mvwprintw(local_window,1,1,"%s",buffer);
+  wrefresh(local_window);
 }
 
 int check_input(char *input){
@@ -44,18 +42,18 @@ int check_input(char *input){
     if (strcmp(input, base) == 0) {
         return 1; 
     }
-}
-return 0; 
+  }
+  return 0; 
 }
 
-char* get_input(char *input,WINDOW*out){
+char* get_input(char *input){
   getstr(input);
   if(strlen(input)>MAX_INPUT_STR || check_input(input) == 0){
-   update_dados(out, "Invalid input. Try again");
+   update_dados(janela_OUTPUT, "Invalid input. Try again");
    refresh();
      return NULL;
   }else{
-   update_dados(out, "Valid Input");
+   update_dados(janela_OUTPUT, "Valid Input");
    refresh();
      return input;
   }
@@ -196,4 +194,72 @@ void *update_main_window() {
     print_win_args(selected_window,dados);
     pthread_mutex_unlock(&dados_mutex);    
   }
+}
+
+void check_responsivity(int men, int lin, char *input){
+    if(men <= 17){
+    clear_space(6, 33, strlen(input));
+    move(6, 33);
+    }else{
+    clear_space((lin/4) + 5, 33, strlen(input));
+    move((lin/4) + 5, 33);
+    }
+}
+
+WINDOW *janela_exit(){
+  initscr();	
+  int lin, col;
+  getmaxyx(stdscr, lin, col);
+  curs_set(0);
+  noecho();
+  WINDOW *exit = newwin(8, 60, ((lin/2) - 5), ((col/2) - 30));
+  refresh();
+
+  wborder (exit, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+  mvwprintw(exit, 0, 3, "%s", "         _  _             ____    _____           _/)");
+  mvwprintw(exit, 1, 3, "%s", "        (_)| |           / __ \\  / ____|       .-(_(=:");
+  mvwprintw(exit, 2, 3, "%s", " __   __ _ | |__    ___ | |  | || (___     |\\ |    \\)");
+  mvwprintw(exit, 3, 3, "%s", " \\ \\ / /| || '_ \\  / _ \\| |  | | \\___ \\    \\ ||");
+  mvwprintw(exit, 4, 3, "%s", "  \\ V / | || |_) ||  __/| |__| | ____) |    \\||");
+  mvwprintw(exit, 5, 3, "%s", "   \\_/  |_||_.__/  \\___| \\____/ |_____/      \\| ");
+  mvwprintw(exit, 6, 7, "%s", "                                          |");
+  mvwprintw(exit, 7, 7, "%s", "   Aperte qualquer tecla para sair        |");
+  wrefresh(exit);
+
+  getch();
+  werase(exit);
+  wrefresh(exit);
+  delete_window(exit);
+
+  return exit;
+
+}
+
+void shutdown_interface(){
+  clear_main_windows();
+  janela_exit();
+  clear();
+  refresh();
+  endwin();
+}
+
+void clear_main_windows(){
+  clear();
+  refresh();
+  wclear(janela_I_O);
+  wclear(janela_memory);
+  wclear(janela_menu);
+  wclear(janela_OUTPUT);
+  wclear(janela_PRINT);
+  wclear(janela_process);
+  wclear(janela_SCHEDULER);
+  wrefresh(janela_I_O);
+  wrefresh(janela_memory);
+  wrefresh(janela_menu);
+  wrefresh(janela_OUTPUT);
+  wrefresh(janela_PRINT);
+  wrefresh(janela_process);
+  wrefresh(janela_SCHEDULER);
+  endwin();
+
 }
