@@ -25,6 +25,9 @@ typedef struct __page_table {
   int last_instruction_loaded;
 } PageTable;
 
+#define LOCK_MEM() pthread_mutex_lock(&kernel->memory_mutex)
+#define UNLOCK_MEM() pthread_mutex_unlock(&kernel->memory_mutex)
+
 /*
 
   * Initializes a page with the given page number and instruction count.

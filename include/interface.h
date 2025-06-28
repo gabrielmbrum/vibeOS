@@ -48,5 +48,9 @@ void check_responsivity(int men, int lin, char*input);
 void shutdown_interface();
 WINDOW *janela_exit();
 void clear_main_windows();
+void init_all_pair_colors();
+//bool is_colorful_terminal();
+void init_win_color(WINDOW *local);
+void kill_win_color(WINDOW *local);
 
 #endif

@@ -31,10 +31,12 @@ int main() {
         update_dados(janela_OUTPUT, "Failed to read program.");
         break;
       } else {
+        update_dados(janela_OUTPUT, "Reading program '%s'.", input);
         Process *p1 = create_process_from_program(prog1);
         add_process_to_BCP(p1);
+        update_dados(janela_OUTPUT, "Read finished :)");
       }
-    }
+    } 
   }
   check_responsivity(men,lin,input);
   pthread_join(kernel->input_thread, NULL);

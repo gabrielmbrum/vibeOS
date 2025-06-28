@@ -150,7 +150,9 @@ int add_process_to_BCP(Process *process) {
       free(process);
       kernel->process_amount++;
       pthread_cond_signal(&kernel->bcp_cond);
+      LOCK_MEM();
       memory_status();
+      UNLOCK_MEM();
       UNLOCK_BCP();
       print_bcp(&kernel->BCP);
       if (kernel->process_amount == 1 && !kernel->scheduler_running)
@@ -187,6 +189,7 @@ void init_Kernel() {
     exit(EXIT_FAILURE);
   }
 
+  pthread_mutex_init(&kernel->memory_mutex, NULL);
   pthread_mutex_init(&kernel->bcp_mutex, NULL);
   pthread_cond_init(&kernel->bcp_cond, NULL);
   LOCK_BCP();
@@ -236,7 +239,9 @@ int rmv_process_of_BCP(int removing_pid) {
     // If PID present in BCP, get the index and remove;
     processFinish(&kernel->BCP[idx]);
     kernel->process_amount--;
+    LOCK_MEM();
     memory_status();
+    UNLOCK_MEM();
     print_bcp(&kernel->BCP);
     return SUCCESS;
   }
@@ -373,7 +378,9 @@ int processExecute(Process *process){
       process->pc.global_index = 0; // Reseta o índice global do PC
       process->pc.last_page = 0; // Reseta a última página
       process->pc.last_instruction = 0; // Reseta a última instrução
+      LOCK_MEM();
       memory_status();
+      UNLOCK_MEM();
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
       change_process_state(&process, TERMINATED);
@@ -432,7 +439,9 @@ int processExecute(Process *process){
       process->pc.global_index = 0; // Reseta o índice global do PC
       process->pc.last_page = 0; // Reseta a última página
       process->pc.last_instruction = 0; // Reseta a última instrução
+      LOCK_MEM();
       memory_status();
+      UNLOCK_MEM();
       processExecute(process); // Re-executa o processo após atualizar a tabela de páginas
     } else {
       change_process_state(&process, TERMINATED);

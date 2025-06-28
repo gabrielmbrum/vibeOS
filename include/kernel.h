@@ -5,6 +5,7 @@
 #include "commons.h"
 #include "debug.h"
 #include "iohandler.h"
+#include "memory.h"
 #include <pthread.h>
 #include <stdbool.h>
 typedef struct Scheduler{
@@ -20,6 +21,7 @@ typedef struct Kernel{
   bool shutdown_request;
   pthread_t scheduler_thread;
   pthread_mutex_t bcp_mutex;
+  pthread_mutex_t memory_mutex;
   pthread_cond_t bcp_cond;
   pthread_t io_thread;
   pthread_t input_thread;
