@@ -96,15 +96,7 @@ PageTable *build_page_table(Instruction *instructions, int instructions_count) {
   return page_table;
 }
 
-void refresh_page_table(PageTable **page_table, Instruction *instructions,
-                        int instructions_count, int last_instruction_loaded) {
-  /*
-    INITIAL ASSUMPTIONS
-      - this function will only be called when the page table is full
-      - the last instruction loaded is considered as read by complete
-      - if for example, only more 4 pages will be needed, the other 12 pages
-    MUST be freed
-  */
+void refresh_page_table(PageTable **page_table, Instruction *instructions, int instructions_count, int last_instruction_loaded) {
 
   int old_page_table_size = (*page_table)->page_count;
   (*page_table)->page_count = 0;
@@ -124,9 +116,7 @@ void refresh_page_table(PageTable **page_table, Instruction *instructions,
                        instructions[i].value >
                    1000
              : 1)) {
-      for (int j = 0; (j < instructions[i].value / 1000 || j == 0) &&
-                      (*page_table)->page_count < RESIDENT_SET;
-           j++) {
+      for (int j = 0; (j < instructions[i].value / 1000 || j == 0) && (*page_table)->page_count < RESIDENT_SET; j++) {
         // every new page created will have zero instructions initially
         num_of_instructions_per_page = 0;
 
@@ -190,19 +180,17 @@ void free_page_table(PageTable **page_table) {
 }
 
 void memory_status() {
-  werase(janela_memory);    // Limpa todo o conteúdo da janela
-  box(janela_memory, 0, 0); // Redesenha a borda, se necessário
-  mvwprintw(janela_memory, 0, 2,
-            " MEMORY ");   // Redesenha o título, se necessário
-  wrefresh(janela_memory); // Atualiza a janela limpa
+  // Limpa apenas o conteúdo interno (não a borda)
+  for (int i = 1; i < getmaxy(janela_memory) - 1; i++) {
+    wmove(janela_memory, i, 1);
+    wclrtoeol(janela_memory);
+  }
 
   // Agora imprime as informações atualizadas
+  init_win_color(janela_memory);
   mvwprintw(janela_memory, 1, 1, "Pages allocated: %d page(s)", page_counter);
-  mvwprintw(janela_memory, 2, 1, "Pages available: %d",
-            MEM_LENGTH - OS_MEMORY_SIZE - page_counter * PAGE_SIZE);
-  mvwprintw(janela_memory, 3, 1, "Memory Ocupation: %.2f%% [%d/%d]",
-            ((float)page_counter * PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) *
-                100,
-            page_counter * PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
-  wrefresh(janela_memory); // Atualiza a janela com as novas informações
+  mvwprintw(janela_memory, 2, 1, "Pages available: %d", MEM_LENGTH - OS_MEMORY_SIZE - page_counter * PAGE_SIZE);
+  mvwprintw(janela_memory, 3, 1, "Memory Ocupation: %.2f%% [%d/%d]", ((float)page_counter * PAGE_SIZE / (MEM_LENGTH - OS_MEMORY_SIZE)) * 100, page_counter * PAGE_SIZE, MEM_LENGTH - OS_MEMORY_SIZE);
+  wrefresh(janela_memory);
+  //kill_win_color(janela_memory);
 }

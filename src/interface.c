@@ -64,36 +64,36 @@ char *get_input(char *input) {
 // window operations
 int lin, col;
 void init_interface() {
-janela_intro();
-// Draw main window, sub-windows and components
-getmaxyx(stdscr, lin, col);
-int largura = col / 2;
-int altura = lin / 4.5;
-col = lin / 3.1;
-janela_menu = create_newwin(col, largura, 0, 0, " MENU ");
-janela_menu = init_menu_components(janela_menu);
-janela_OUTPUT = create_newwin(altura, largura, col, 0, " OUTPUT ");
-janela_process = create_newwin(lin - (col + altura), largura, (altura + col),
-0, " PROCESS ");
+  janela_intro();
+  // Draw main window, sub-windows and components
+  getmaxyx(stdscr, lin, col);
+  int largura = col / 2;
+  int altura = lin / 4.5;
+  col = lin / 3.1;
+  janela_menu = create_newwin(col, largura, 0, 0, " MENU ");
+  janela_menu = init_menu_components(janela_menu);
+  janela_OUTPUT = create_newwin(altura, largura, col, 0, " OUTPUT ");
+  janela_process = create_newwin(lin - (col + altura), largura, (altura + col),
+  0, " PROCESS ");
 
-janela_memory = create_newwin(altura, largura, 0, largura, " MEMORY ");
-janela_I_O = create_newwin(altura, largura, altura, largura, " I/O ");
-janela_PRINT =
-create_newwin(altura, largura, (altura * 2), largura, " PRINTER ");
-janela_SCHEDULER = create_newwin(lin - (altura * 3), largura, (altura * 3),
-largura, " SCHEDULER ");
+  janela_memory = create_newwin(altura, largura, 0, largura, " MEMORY ");
+  janela_I_O = create_newwin(altura, largura, altura, largura, " I/O ");
+  janela_PRINT =
+  create_newwin(altura, largura, (altura * 2), largura, " PRINTER ");
+  janela_SCHEDULER = create_newwin(lin - (altura * 3), largura, (altura * 3),
+  largura, " SCHEDULER ");
 
-pthread_create(&interface_thread, NULL, (void *)update_main_window, NULL);
+  pthread_create(&interface_thread, NULL, (void *)update_main_window, NULL);
 
-// change window to get user input
-int men = col / 3.4;
-curs_set(1);
-if (men <= 17) {
-move(6, 33);
-} else {
-move((lin / 4) + 5, 33);
-}
-echo();
+  // change window to get user input
+  int men = col / 3.4;
+  curs_set(1);
+  if (men <= 17) {
+  move(6, 33);
+  } else {
+  move((lin / 4) + 5, 33);
+  }
+  echo();
 }
 
 WINDOW *create_newwin(int height, int width, int starty, int startx,
@@ -164,30 +164,36 @@ WINDOW *init_menu_components(WINDOW *menu) {
   int men = coluna / 3.4;
 
   if (men <= 17) {
-    if (colorful_terminal) wattron(menu, COLOR_PAIR(1));
+    init_win_color(menu);
     mvwprintw(menu, 1, men, "%s", " ___   __ __       ____  ____ ");
     mvwprintw(menu, 2, men, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
     mvwprintw(menu, 3, men, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
     mvwprintw(menu, 4, men, "%s", " |___/_/_.__/\\__/\\____/___/ ");
+
+    kill_win_color(menu);
+
     mvwprintw(menu, 6, 2, "%s", "Insira a versão sint desejada:");
-    mvwprintw(menu, 7, 2, "%s",
-              "Ex. de programa: sint1 | Pressione q para sair");
-    if (colorful_terminal) wattroff(menu, COLOR_PAIR(1));
+    mvwprintw(menu, 7, 2, "%s", "Ex. de programa: sint1 | Pressione q para sair");
+
     wrefresh(menu);
     move(6, 33);
     curs_set(1);
   } else {
     men = coluna / 3;
     int alt = linha / 4;
-    if (colorful_terminal) wattron(menu, COLOR_PAIR(1));
+    
+    init_win_color(menu);
+
     mvwprintw(menu, alt, men, "%s",     " ___  __  __       ____   ____ ");
     mvwprintw(menu, alt + 1, men, "%s", " | | / (_) /  ___ / __ \\/ __/ ");
     mvwprintw(menu, alt + 2, men, "%s", " | |/ / / _ \\/ -_) /_/ /\\ \\   ");
     mvwprintw(menu, alt + 3, men, "%s", " |___/_/_.__/\\__/\\____/___/ ");
+
+    kill_win_color(menu);
+
     mvwprintw(menu, alt + 5, 2, "%s", "Insira a versão sint desejada:");
-    mvwprintw(menu, alt + 6, 2, "%s",
-              "Ex. de programa: sint1 | Pressione q para sair");
-    if (colorful_terminal) wattroff(menu, COLOR_PAIR(1));
+    mvwprintw(menu, alt + 6, 2, "%s", "Ex. de programa: sint1 | Pressione q para sair");
+
     wrefresh(menu);
     move(alt + 5, 33);
     curs_set(1);
@@ -205,7 +211,6 @@ char *update_dados(WINDOW *local, char *message, ...) {
   va_end(args);
   selected_window = local;
   pthread_mutex_unlock(&interface_mutex);
-  kill_win_color(local);
   return dados;
 }
 
@@ -251,6 +256,7 @@ WINDOW *janela_exit() {
   mvwprintw(exit, 3, 3, "%s", "   |_| \\___/ \\___/  |_|\\_\\___|____|____|___|___/    |_| |_||_|___|   \\_/ |___|___/___|");
   mvwprintw(exit, 4, 3, "%s", "                                                                                      ");
   mvwprintw(exit, 7, 7, "%s", "                         Aperte qualquer tecla para sair                              ");
+
   if (colorful_terminal) {
     wattroff(exit, COLOR_PAIR(2));
   }
@@ -314,10 +320,10 @@ void init_win_color(WINDOW* local) {
     if (local == janela_menu) wattron(janela_menu, COLOR_PAIR(1));
     if (local == janela_memory) wattron(janela_memory, COLOR_PAIR(5));
     if (local == janela_OUTPUT) wattron(janela_OUTPUT, COLOR_PAIR(4));
-    if (local == janela_SCHEDULER) wattron(janela_SCHEDULER, COLOR_PAIR(5));
-    if (local == janela_process) wattron(janela_process, COLOR_PAIR(6));
+    if (local == janela_SCHEDULER) wattron(janela_SCHEDULER, COLOR_PAIR(4));
+    if (local == janela_process) wattron(janela_process, COLOR_PAIR(5));
     if (local == janela_I_O) wattron(janela_I_O, COLOR_PAIR(7));
-    if (local == janela_PRINT) wattron(janela_PRINT, COLOR_PAIR(5));
+    if (local == janela_PRINT) wattron(janela_PRINT, COLOR_PAIR(6));
   }
 }
 
